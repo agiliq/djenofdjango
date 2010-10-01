@@ -41,7 +41,7 @@ __init__.py is an empty file required to recognize this project as a python modu
 manage.py is a script that is similar to django-admin.py which allows you to manage this project. It has 
 subcommands to start a development server, interact with database, backup/restore data etc.
 
-*Tip*
+.. note::
 
     manage.py also has --help switch and help with each subcommand similar to django-admin.py
 
@@ -73,7 +73,7 @@ settings would look like::
 We are specifying sqlite3 database backend and a file to store the sqlite database. Of course, you are free to change
 the settings to any other database you like. Just make sure the database exists.
 
-*Notes*
+.. note::
 
     It is advised to have a local_settings.py file with exclusively sensitive settings like database username/password,
     API keys or Secret Key etc and have settings.py import all these values.
@@ -108,7 +108,7 @@ If no, don't worry, we will see and use them in our application.
 views.py has all the 'action' of our website. This is similar to the Controller of MVC architecture. Each 'view' function
 takes a ``request`` object and returns a ``HttpResponse`` object.
 
-*Notes*
+.. note::
 
     It is recommended to have another urls.py (like the one in project) in the app and include them in the project urls.
     This reduces the clutter in the project urls and provides a namespace kind of resolution between urls. Also, it makes
@@ -168,7 +168,7 @@ So far, we have defined the CD model, now we need to get it rolling in django:
 
 First, let django know that ``cd_library`` is to be used in the project. To do this, edit the project settings.py and add::
 
-    ``cd_library``
+    'cd_library'
 
 to the INSTALLED_APPS list so that your settings.py looks like this::
 
@@ -183,7 +183,7 @@ to the INSTALLED_APPS list so that your settings.py looks like this::
         'cd_library',
     )
 
-*Notes*
+.. note::
 
     After modifying INSTALLED_APPS, it's always a good idea to run syncdb::
 
@@ -230,4 +230,10 @@ So, we have 'registered' our ``CD`` model with the admin interface.
 If you refresh the admin page, you can see the 'Cd_library' header and 'Cds' under it. Yes this is our app's model
 and we can add/edit/delete any instances of our CD model through the admin interface. This is one of the most 
 useful 'batteries' that django ships with.
+
+With this, we have built our own personal CD library. Of course, this application does not define any actions or urls yet
+but we have utilized django's admin interface to be able to interact with the database and store our model. Note how we 
+have used a contrib app and customized it to our needs in our application. Due to a reusable app like contrib.admin, we were
+able to reduce the duplicate effort required to write CRUD methods for our CD model. As we shall see, the admin app is very 
+flexible and can be easily customized to our needs.
 
