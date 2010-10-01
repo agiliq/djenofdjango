@@ -231,3 +231,9 @@ If you refresh the admin page, you can see the 'Cd_library' header and 'Cds' und
 and we can add/edit/delete any instances of our CD model through the admin interface. This is one of the most 
 useful 'batteries' that django ships with.
 
+With this, we have built our own personal CD library. Of course, this application does not define any actions or urls yet
+but we have utilized django's admin interface to be able to interact with the database and store our model. Note how we 
+have used a contrib app and customized it to our needs in our application. Due to a reusable app like contrib.admin, we were
+able to reduce the duplicate effort required to write CRUD methods for our CD model. As we shall see, the admin app is very 
+flexible and can be easily customized to our needs.
+
