@@ -1,0 +1,81 @@
+Starting a django project:
+==========================
+
+Now that we have installed django, we are ready to start our project.
+
+A project in django is analogous to a website. Once we have a project ready,
+we can host it using any wsgi supported server. More on deploying a django project
+later.
+
+django-admin.py is a project utility that ships with django. In addition to the `startproject`
+command, it also includes a lot of helper commands that can be useful while maintaining a django
+project.
+
+*Tip* 
+
+    To get a full listing of available subcommands in django-admin.py, use
+
+        django-admin.py --help
+
+    To get help on each subcommand, use
+
+        django-admin.py help <subcommand>
+
+    For example, here's the result of `django-admin.py help startproject`:
+
+        Creates a Django project directory structure for the given project name in the current directory.
+
+Lets create a project called djen_project:
+
+    django-admin.py startproject djen_project
+
+We can see that the command creates a folder called djen_project in the working directory with the following files:
+
+    __init__.py
+    manage.py
+    settings.py
+    urls.py
+
+__init__.py is an empty file required to recognize this project as a python module.
+
+manage.py is a script that is similar to django-admin.py which allows you to manage this project. It has 
+subcommands to start a development server, interact with database, backup/restore data etc.
+
+*Tip*
+
+    manage.py also has --help switch and help with each subcommand similar to django-admin.py
+
+settings.py is a list of project wide settings with sane default values. You will need to edit this often when
+installing new django applications, deployment etc.
+
+*Notes*
+
+    It is advised to have a local_settings.py file with exclusively sensitive settings like database username/password,
+    API keys or Secret Key etc and have settings.py import all these values.
+
+urls.py is a 'table of contents' of our project (or website). It includes a list of the paths that are to be processed
+and responded to.
+
+You are encouraged to go through settings.py and urls.py once to get an understanding of how settings and urls are defined.
+
+Getting started with the App:
+=============================
+
+Now that we have setup and understood the structure of our project, we can start our application.
+
+To start an application, cd into the project directory and use
+
+    manage.py startapp cd_library
+
+This will create a folder called cd_library with the  following files:
+
+    __init__.py
+    models.py
+    tests.py
+    views.py
+
+__init__.py is again the file that allows this app to be considered a python module
+models.py will hold the Models of our application. A model is an object of our interest which we want to 
+save to the database. If you are familiar with Model-View-Controller architecture, you know what models are.
+If no, don't worry, we will see and use them in our application.
+
