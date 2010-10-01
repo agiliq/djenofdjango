@@ -74,8 +74,45 @@ This will create a folder called cd_library with the  following files:
     tests.py
     views.py
 
-__init__.py is again the file that allows this app to be considered a python module
+__init__.py is again the file that allows this app to be considered a python module.
+
 models.py will hold the Models of our application. A model is an object of our interest which we want to 
-save to the database. If you are familiar with Model-View-Controller architecture, you know what models are.
+save to the database. If you are familiar with Model-View-Controller(MVC) architecture, you know what models are.
 If no, don't worry, we will see and use them in our application.
+
+views.py has all the 'action' of our website. This is similar to the Controller of MVC architecture. Each 'view' function
+takes a `request` object and returns a `HttpResponse` object.
+
+*Notes*
+
+    It is recommended to have another urls.py (like the one in project) in the app and include them in the project urls.
+    This reduces the clutter in the project urls and provides a namespace kind of resolution between urls. Also, it is
+    very useful for building reusable apps.
+
+Let us create our models first:
+
+Open models.py and define our `CD` model which will hold all information related to a CD. You can see that models.py has
+
+   from django.db import models
+
+   # Create your models here.
+
+So we define the `CD` model as
+
+    GENRE_CHOICES = (
+                     ('R', 'Rock'), 
+                     ('B', 'Blues'),
+                     ('J', 'Jazz'),
+                     ('P', 'Pop'),
+                    )
+
+    class CD(models.Model):
+        title = models.CharField(max_length=100)
+        artist = models.CharField(max_length=40)
+        date = models.DateField(auto_now_add=True)
+        genre = models.CharField(max_length=1, choices=GENRE_CHOICES)
+
+        def __unicode__(self):
+            return "%s by %s, %Y" %(self.title, self.artist, self.date.year)
+
 
