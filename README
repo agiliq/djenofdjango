@@ -1,1 +1,3 @@
 A Django book for people with intermediate level Django skills. Inspired by James Bennett's Practical Django projects.
+
+To create HTML documentation, run make html from withing the src folder.
