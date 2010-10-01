@@ -7,29 +7,29 @@ A project in django is analogous to a website. Once we have a project ready,
 we can host it using any wsgi supported server. More on deploying a django project
 later.
 
-django-admin.py is a project utility that ships with django. In addition to the `startproject`
+django-admin.py is a project utility that ships with django. In addition to the ``startproject``
 command, it also includes a lot of helper commands that can be useful while maintaining a django
 project.
 
-*Tip* 
+.. note::
 
-    To get a full listing of available subcommands in django-admin.py, use
+    To get a full listing of available subcommands in django-admin.py, use::
 
         django-admin.py --help
 
-    To get help on each subcommand, use
+    To get help on each subcommand, use::
 
         django-admin.py help <subcommand>
 
-    For example, here's the result of `django-admin.py help startproject`:
+    For example, here's the result of ``django-admin.py help startproject``::
 
         Creates a Django project directory structure for the given project name in the current directory.
 
-Lets create a project called djen_project:
+Lets create a project called djen_project::
 
     django-admin.py startproject djen_project
 
-We can see that the command creates a folder called djen_project in the working directory with the following files:
+We can see that the command creates a folder called djen_project in the working directory with the following files::
 
     __init__.py
     manage.py
@@ -46,7 +46,7 @@ subcommands to start a development server, interact with database, backup/restor
     manage.py also has --help switch and help with each subcommand similar to django-admin.py
 
 
-You can quickly checkout the development server at this point by running
+You can quickly checkout the development server at this point by running::
 
     python manage.py runserver
 
@@ -56,7 +56,7 @@ settings.py is a list of project wide settings with sane default values. You wil
 installing new django applications, deployment etc.
 
 You can change the DATABASES settings at this point to make sure your app can be sync'ed later. The easiest 
-settings would look like:
+settings would look like::
 
     DATABASES = {
         'default': {
@@ -92,7 +92,7 @@ To start an application, cd into the project directory and use
 
     manage.py startapp cd_library
 
-This will create a folder called cd_library with the  following files:
+This will create a folder called cd_library with the  following files::
 
     __init__.py
     models.py
@@ -106,7 +106,7 @@ save to the database. If you are familiar with Model-View-Controller(MVC) archit
 If no, don't worry, we will see and use them in our application.
 
 views.py has all the 'action' of our website. This is similar to the Controller of MVC architecture. Each 'view' function
-takes a `request` object and returns a `HttpResponse` object.
+takes a ``request`` object and returns a ``HttpResponse`` object.
 
 *Notes*
 
@@ -117,13 +117,13 @@ takes a `request` object and returns a `HttpResponse` object.
 
 Let us create our models first:
 
-Open models.py and define our `CD` model which will hold all information related to a CD. You can see that models.py has
+Open models.py and define our ``CD`` model which will hold all information related to a CD. You can see that models.py has::
 
    from django.db import models
 
    # Create your models here.
 
-So we define the `CD` model as
+So we define the ``CD`` model as::
 
     GENRE_CHOICES = (
                      ('R', 'Rock'), 
@@ -155,22 +155,22 @@ A little explanation:
 
 * A TextField can contain any number of characters and is suitable for fields such as description, summary, content etc.
 
-* To make the description field optional, we pass the `null` and `blank` arguments as True
+* To make the description field optional, we pass the ``null`` and ``blank`` arguments as True
 
 * DateField holds a date. If you need to store the time too, use DateTimeField instead.
 
-* The `genre` field should be restricted to a group of values and that can be accomplished by passing an iterable of 2-tuples
+* The ``genre`` field should be restricted to a group of values and that can be accomplished by passing an iterable of 2-tuples
   for the value and representation as the choices argument of the CharField.
 
 * The __unicode__ property of the model defines it's string representation which will be used in the Admin interface, shell etc.
 
 So far, we have defined the CD model, now we need to get it rolling in django:
 
-First, let django know that `cd_library` is to be used in the project. To do this, edit the project settings.py and add
+First, let django know that ``cd_library`` is to be used in the project. To do this, edit the project settings.py and add::
 
-    `cd_library`
+    ``cd_library``
 
-to the INSTALLED_APPS list so that your settings.py looks like this:
+to the INSTALLED_APPS list so that your settings.py looks like this::
 
     INSTALLED_APPS = ( 
         'django.contrib.auth',
@@ -185,7 +185,7 @@ to the INSTALLED_APPS list so that your settings.py looks like this:
 
 *Notes*
 
-    After modifying INSTALLED_APPS, it's always a good idea to run syncdb:
+    After modifying INSTALLED_APPS, it's always a good idea to run syncdb::
 
         python manage.py syncdb
 
@@ -210,7 +210,7 @@ Since the admin is an app, it needs to be added to INSTALLED_APPS as well. You w
 So just go ahead and uncomment the django.contrib.admin line in settings.py under INSTALLED_APPS. Don't forget to run syncdb.
 
 Now we have similar instructions in urls.py to uncomment a few lines to enable the admin. This will enable the urls beginning with
-`admin` to be mapped to the admin app's urls. Note that the admin app uses a urls.py to keep the app's urls separate from the project
+``admin`` to be mapped to the admin app's urls. Note that the admin app uses a urls.py to keep the app's urls separate from the project
 as discussed above.
 
 Just to confirm it, you can open http://127.0.0.1:8000/admin/ in your browser. You should see 'Site Administration' and actions for 'Auth'
@@ -218,14 +218,14 @@ and 'Sites' which are enabled by default.
 
 Now to enable our app's models:
 
-Go to the app's directory i.e. cd_library and create a file called admin.py and add the following lines:
+Go to the app's directory i.e. cd_library and create a file called admin.py and add the following lines::
 
     from django.contrib import admin
     from models import CD
 
     admin.site.register(CD)
 
-So, we have 'registered' our `CD` model with the admin interface.
+So, we have 'registered' our ``CD`` model with the admin interface.
 
 If you refresh the admin page, you can see the 'Cd_library' header and 'Cds' under it. Yes this is our app's model
 and we can add/edit/delete any instances of our CD model through the admin interface. This is one of the most 
