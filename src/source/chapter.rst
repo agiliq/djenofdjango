@@ -27,6 +27,9 @@ Inside Django
 
 Chapter 2. Building a personal CD library.
 --------------------------------------------
+
+.. include:: chapter2.rst
+
 (In this chapter we introduce Django ORM and Admin. We have not yet introduced Templates so we do not write any custom views.)
 Diving in. [Code listing]
 
