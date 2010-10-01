@@ -45,8 +45,33 @@ subcommands to start a development server, interact with database, backup/restor
 
     manage.py also has --help switch and help with each subcommand similar to django-admin.py
 
+
+You can quickly checkout the development server at this point by running
+
+    python manage.py runserver
+
+Now open http://127.0.0.1:8000 in your browser.
+
 settings.py is a list of project wide settings with sane default values. You will need to edit this often when
 installing new django applications, deployment etc.
+
+You can change the DATABASES settings at this point to make sure your app can be sync'ed later. The easiest 
+settings would look like:
+
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+            'NAME': 'cd.db',                      # Or path to database file if using sqlite3.
+            'USER': '',                      # Not used with sqlite3.
+            'PASSWORD': '',                  # Not used with sqlite3.
+            'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+            'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+        }
+    }
+
+
+We are specifying sqlite3 database backend and a file to store the sqlite database. Of course, you are free to change
+the settings to any other database you like. Just make sure the database exists.
 
 *Notes*
 
@@ -158,6 +183,18 @@ to the INSTALLED_APPS list so that your settings.py looks like this:
         'cd_library',
     )
 
+*Notes*
+
+    After modifying INSTALLED_APPS, it's always a good idea to run syncdb:
+
+        python manage.py syncdb
+
+    This lets django keep the database and your project in sync. Since we have added an app, 
+    django will create that app's tables in the database. If an app is removed from the above 
+    list, django will ask you whether to remove the 'stale' tables.
+
+    Also, make sure you have DATABASES settings correctly pointed to the database before syncing.
+
 Well, now that django knows about our app, let us add it to the Admin interface.
 
 A little bit about the admin interface first:
@@ -170,8 +207,27 @@ A little bit about the admin interface first:
 
 Since the admin is an app, it needs to be added to INSTALLED_APPS as well. You would have noticed this in the commented lines above.
 
-So just go ahead and uncomment the django.contrib.admin line in settings.py under INSTALLED_APPS
+So just go ahead and uncomment the django.contrib.admin line in settings.py under INSTALLED_APPS. Don't forget to run syncdb.
 
 Now we have similar instructions in urls.py to uncomment a few lines to enable the admin. This will enable the urls beginning with
 `admin` to be mapped to the admin app's urls. Note that the admin app uses a urls.py to keep the app's urls separate from the project
 as discussed above.
+
+Just to confirm it, you can open http://127.0.0.1:8000/admin/ in your browser. You should see 'Site Administration' and actions for 'Auth'
+and 'Sites' which are enabled by default.
+
+Now to enable our app's models:
+
+Go to the app's directory i.e. cd_library and create a file called admin.py and add the following lines:
+
+    from django.contrib import admin
+    from models import CD
+
+    admin.site.register(CD)
+
+So, we have 'registered' our `CD` model with the admin interface.
+
+If you refresh the admin page, you can see the 'Cd_library' header and 'Cds' under it. Yes this is our app's model
+and we can add/edit/delete any instances of our CD model through the admin interface. This is one of the most 
+useful 'batteries' that django ships with.
+
