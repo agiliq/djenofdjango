@@ -108,11 +108,33 @@ So we define the `CD` model as
 
     class CD(models.Model):
         title = models.CharField(max_length=100)
+        description = models.TextField(null=True, blank=True)
         artist = models.CharField(max_length=40)
-        date = models.DateField(auto_now_add=True)
+        date = models.DateField()
         genre = models.CharField(max_length=1, choices=GENRE_CHOICES)
 
         def __unicode__(self):
-            return "%s by %s, %Y" %(self.title, self.artist, self.date.year)
+            return "%s by %s, %s" %(self.title, self.artist, self.date.year)
 
+A little explanation:
+
+* All models should be a subclass of django.db.models.Model
+
+* Each model has a list of fields which will define that model
+
+* We have used CharField, TextField and DateField in this model.
+
+* Each CharField requires a max_length argument which specifies the maximum length of the characters that 
+  the field can hold.
+
+* A TextField can contain any number of characters and is suitable for fields such as description, summary, content etc.
+
+* To make the description field optional, we pass the `null` and `blank` arguments as True
+
+* DateField holds a date. If you need to store the time too, use DateTimeField instead.
+
+* The `genre` field should be restricted to a group of values and that can be accomplished by passing an iterable of 2-tuples
+  for the value and representation as the choices argument of the CharField.
+
+* The __unicode__ property of the model defines it's string representation which will be used in the Admin interface, shell etc.
 
