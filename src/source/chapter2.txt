@@ -86,8 +86,9 @@ takes a `request` object and returns a `HttpResponse` object.
 *Notes*
 
     It is recommended to have another urls.py (like the one in project) in the app and include them in the project urls.
-    This reduces the clutter in the project urls and provides a namespace kind of resolution between urls. Also, it is
-    very useful for building reusable apps.
+    This reduces the clutter in the project urls and provides a namespace kind of resolution between urls. Also, it makes
+    it easier to redistribute the app to other projects. As you would expect, reusable apps will depend on the project as 
+    little as possible.
 
 Let us create our models first:
 
@@ -138,3 +139,39 @@ A little explanation:
 
 * The __unicode__ property of the model defines it's string representation which will be used in the Admin interface, shell etc.
 
+So far, we have defined the CD model, now we need to get it rolling in django:
+
+First, let django know that `cd_library` is to be used in the project. To do this, edit the project settings.py and add
+
+    `cd_library`
+
+to the INSTALLED_APPS list so that your settings.py looks like this:
+
+    INSTALLED_APPS = ( 
+        'django.contrib.auth',
+        'django.contrib.contenttypes',
+        'django.contrib.sessions',
+        'django.contrib.sites',
+        'django.contrib.messages',
+        # Uncomment the next line to enable the admin:
+        # 'django.contrib.admin',
+        'cd_library',
+    )
+
+Well, now that django knows about our app, let us add it to the Admin interface.
+
+A little bit about the admin interface first:
+
+* The admin interface is itself a django app.
+
+* It is a contrib app, which means it is a community contributed app
+
+* It is flexible enough to accomodate any other app's models and have admin actions for them.
+
+Since the admin is an app, it needs to be added to INSTALLED_APPS as well. You would have noticed this in the commented lines above.
+
+So just go ahead and uncomment the django.contrib.admin line in settings.py under INSTALLED_APPS
+
+Now we have similar instructions in urls.py to uncomment a few lines to enable the admin. This will enable the urls beginning with
+`admin` to be mapped to the admin app's urls. Note that the admin app uses a urls.py to keep the app's urls separate from the project
+as discussed above.
