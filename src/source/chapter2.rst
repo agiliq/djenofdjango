@@ -41,7 +41,7 @@ __init__.py is an empty file required to recognize this project as a python modu
 manage.py is a script that is similar to django-admin.py which allows you to manage this project. It has 
 subcommands to start a development server, interact with database, backup/restore data etc.
 
-*Tip*
+.. note::
 
     manage.py also has --help switch and help with each subcommand similar to django-admin.py
 
@@ -73,7 +73,7 @@ settings would look like::
 We are specifying sqlite3 database backend and a file to store the sqlite database. Of course, you are free to change
 the settings to any other database you like. Just make sure the database exists.
 
-*Notes*
+.. note::
 
     It is advised to have a local_settings.py file with exclusively sensitive settings like database username/password,
     API keys or Secret Key etc and have settings.py import all these values.
@@ -108,7 +108,7 @@ If no, don't worry, we will see and use them in our application.
 views.py has all the 'action' of our website. This is similar to the Controller of MVC architecture. Each 'view' function
 takes a ``request`` object and returns a ``HttpResponse`` object.
 
-*Notes*
+.. note::
 
     It is recommended to have another urls.py (like the one in project) in the app and include them in the project urls.
     This reduces the clutter in the project urls and provides a namespace kind of resolution between urls. Also, it makes
@@ -168,7 +168,7 @@ So far, we have defined the CD model, now we need to get it rolling in django:
 
 First, let django know that ``cd_library`` is to be used in the project. To do this, edit the project settings.py and add::
 
-    ``cd_library``
+    'cd_library'
 
 to the INSTALLED_APPS list so that your settings.py looks like this::
 
@@ -183,7 +183,7 @@ to the INSTALLED_APPS list so that your settings.py looks like this::
         'cd_library',
     )
 
-*Notes*
+.. note::
 
     After modifying INSTALLED_APPS, it's always a good idea to run syncdb::
 
