@@ -8,7 +8,7 @@ we can host it using any wsgi supported server. More on deploying a django proje
 later.
 
 django-admin.py is a project utility that ships with django. In addition to the ``startproject``
-command, it also includes a lot of helper commands that can be useful while maintaining a django
+subcommand, it also includes a lot of helper subcommands that can be useful while maintaining a django
 project.
 
 .. note::
@@ -29,7 +29,7 @@ Lets create a project called djen_project::
 
     django-admin.py startproject djen_project
 
-We can see that the command creates a folder called djen_project in the working directory with the following files::
+We can see that the subcommand creates a folder called djen_project in the working directory with the following files::
 
     __init__.py
     manage.py
@@ -69,8 +69,20 @@ settings would look like::
         }
     }
 
+or for a mysql::
 
-We are specifying sqlite3 database backend and a file to store the sqlite database. Of course, you are free to change
+    DATABASES = { 
+        'default': {
+            'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+            'NAME': 'djen_database',                      # Or path to database file if using sqlite3.
+            'USER': 'root',                      # Not used with sqlite3.
+            'PASSWORD': '****',                  # Not used with sqlite3.
+            'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+            'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+        }   
+    }
+
+We will be using mysql database for examples in this book. Of course, you are free to change
 the settings to any other database you like. Just make sure the database exists.
 
 .. note::
@@ -228,9 +240,13 @@ Go to the app's directory i.e. cd_library and create a file called admin.py and 
 So, we have 'registered' our ``CD`` model with the admin interface.
 
 If you refresh the admin page, you can see the 'Cd_library' header and 'Cds' under it. Yes this is our app's model
-and we can add/edit/delete any instances of our CD model through the admin interface. 
+and we can add/edit/delete any instances of our CD model through the admin interface. Try adding a few entries using the
+``Add`` action. You can edit entries using the ``Change`` action which will take you to the change list page. Try editing and
+deleting entries.
 
 Did you notice?:
+
+* Django uses the models __unicode__ property to display the CD in the change list
 
 * Django used our model field types (CharField, TextField, DateField) to create HTML widgets in the admin page
 
@@ -240,9 +256,66 @@ Did you notice?:
 
 * Description is optional, so it is not highlighted like the rest of the fields
 
-* Django provides automatic form validation. Try entering blank values, or wrong dates and submitting the form.
+* Django provides automatic form validation. Try entering blank values, or wrong dates and submitting the form
 
-* In accordance with the DRY principle, models.py is the only place where you specified the fields.
+* In accordance with the DRY principle, models.py is the only place where you specified the fields
 
 With this, we have built our own personal CD library.
+
+
+An Introduction to the Django ORM
+=================================
+
+Now, lets take a look at the raw data that django stores for us.
+
+We have configured the database django uses in 'DATABASES' attribute of settings.py. Notice that
+you can enter multiple database settings and use them by providing the ``--database`` switch 
+to manage.py subcommands.
+
+To go to the database shell and view the database, use::
+
+    python manage.py dbshell
+
+'dbshell' is a handy manage.py subcommand that will give you access to the database using your DATABASES settings
+You can check the tables in the database by doing::
+
+    .tables for  sqlite
+    show tables for mysql
+    \dt for pgsql
+
+Since we are using mysql for this example, the result is::
+
+    mysql> show tables;
+    +----------------------------+
+    | Tables_in_djen_database    |
+    +----------------------------+
+    | auth_group                 |
+    | auth_group_permissions     |
+    | auth_message               |
+    | auth_permission            |
+    | auth_user                  |
+    | auth_user_groups           |
+    | auth_user_user_permissions |
+    | cd_library_cd              |
+    | django_admin_log           |
+    | django_content_type        |
+    | django_session             |
+    | django_site                |
+    +----------------------------+
+    12 rows in set (0.00 sec)
+
+
+Each table generally represents a model from an app. You can see that the ``CD`` model is saved as
+``cd_library_cd`` table. I have added a few entries to the CD model, so lets see if they are here::
+
+    mysql> SELECT * FROM cd_library_cd;
+    +----+-------+-------------+-----------+------------+-------+
+    | id | title | description | artist    | date       | genre |
+    +----+-------+-------------+-----------+------------+-------+
+    |  1 | Kid A |             | Radiohead | 2010-01-01 | R     |
+    +----+-------+-------------+-----------+------------+-------+
+    1 row in set (0.01 sec)
+
+Djangos Object Relational Mapper (ORM) worked behind the scenes to create the tables, sync them with the models, and  add/edit/delete
+entries to the tables. Now lets try out the ORM first hand.
 
