@@ -317,5 +317,43 @@ Each table generally represents a model from an app. You can see that the ``CD``
     1 row in set (0.01 sec)
 
 Djangos Object Relational Mapper (ORM) worked behind the scenes to create the tables, sync them with the models, and  add/edit/delete
-entries to the tables. Now lets try out the ORM first hand.
+entries to the tables. 
+
+Now lets try out the ORM first hand. Use the ``shell`` subcommand of ``manage.py``::
+
+    python manage.py shell
+
+.. note::
+
+    use ipython shell for tab-completion, reverse history search and more. django will automatically use
+    ipython shell if available
+
+
+This will take you to the python shell, but within the django environment. So now you can interact with your project
+
+A few examples::
+
+    from cd_library.models import CD
+
+retreive all cds::
+
+    cds = CD.objects.all()
+
+loop through the cds and print their names::
+
+    for cd in cds:
+        print cd
+
+add a new CD::
+
+    new_cd = CD()
+    cd.title = "OK Computer"
+    cd.artist = "Radiohead"
+    cd.date = "2000-01-01"
+    cd.genre = "R"
+    cd.save()
+
+.. note::
+
+    a model is never saved to the database until the save method is explicitly called
 
