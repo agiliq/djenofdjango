@@ -87,11 +87,11 @@ the settings to any other database you like. Just make sure the database exists.
 
 .. note::
 
-    To verify your database settings run
+    To verify your database settings run::
         
         python manage.py validate
 
-    Django will validate your settings and show you errors, if any. If you get this error
+    Django will validate your settings and show you errors, if any. If you get this error::
 
         _mysql_exceptions.OperationalError: (1049, "Unknown database...
 
