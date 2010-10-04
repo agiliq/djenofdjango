@@ -405,13 +405,62 @@ the object manager::
 objects refers to the default object manager. A manager provides the way of dealing with the database.
 Custom managers can be used to provide different 'views' of the model. More on that later.
 
-the get method::
+the get method - to get a single object::
 
-    cds.objects.get(pk=1)
+    CD.objects.get(pk=1)
+
+returns::
+
+    <CD: OK Computer by Radiohead, 2000>
+
+that is, a single instance of our CD model
 
 .. note::
 
-    parameters to the manager methods include pk for primary key, all model fields and some operators on
-    the fields
+    arguments to the manager methods include pk for primary key, all model fields and some operators 
+    called lookups
+
 
 Use the get method on when you want to retrieve one record based on the given criteria.
+
+the filter method - to filter the list using given criteria::
+
+    CD.objects.filter(artist='Radiohead')
+
+to get all CDs by Radiohead, returns::
+
+    [<CD: OK Computer by Radiohead, 2000>, <CD: Kid A by Radiohead, 2010>]
+
+which is a list of model instances
+
+the exclude method - equal to all-filter::
+
+    CD.objects.exclude(title='OK Computer')
+
+returns::
+
+    [<CD: Kid A by Radiohead, 2010>]
+
+Now on to the lookups:
+
+How do we get all CDs of the year 2000?
+
+The object manager methods have some special arguments to operate on the fields
+
+to pass date.year as the argument::
+
+    CD.objects.filter(date__year='2000')
+
+Or, get the CDs in genres 'Rock' and 'Pop'::
+
+    CD.objects.filter(genre__in=['R', 'P'])
+
+A few other useful lookups::
+
+    title__startswith
+    title__endswith
+    date__lte
+    date__gte
+    title__contains
+
+Use shell to experiment with object manager methods and lookups.
