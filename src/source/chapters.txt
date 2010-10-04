@@ -1,5 +1,5 @@
 Chapter 1: Introduction
--------------
+------------------------
 Downloading and Installing.
     Backwards compatibility, python version compatiblity, common issues etc.
 What is Django?
@@ -196,9 +196,9 @@ Using Django with Appengine
   How Appengine differs from Django.
   Introduction to Appengine ORM.
   Rewriting sessions to use Appengine ORM.
-    How other constructs be ported to Appengine ORM.
+  How other constructs be ported to Appengine ORM.
   Using Appengine User class instead of Django User.
-    Getting back login_required decorator, and why you might not need it.
+  Getting back login_required decorator, and why you might not need it.
 
 Django for the PHP programmer
 --------------------------------
@@ -207,7 +207,7 @@ Django for the PHP programmer
   Mapping PHP constructs to Django.
 
 Django for the JSP/Sevelet programmer.
----------------------------------
+---------------------------------------
   How JSP differs from Django.
   How Servelets differ from Django.
   How do doGet, and other do* map to Django.
@@ -217,8 +217,8 @@ Hacking Django Django internals.
 -------------------------------------
 [Here we would some of what goes on behind the scenes.]
 Templates. 
-  How they work.
-  Swapping out Django template to use another templating engine.
+How they work.
+Swapping out Django template to use another templating engine.
   
 ORM.
   How does Django use metaclasses to generate a class from Model class declared by you.
