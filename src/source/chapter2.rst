@@ -87,6 +87,19 @@ the settings to any other database you like. Just make sure the database exists.
 
 .. note::
 
+    To verify your database settings run
+        
+        python manage.py validate
+
+    Django will validate your settings and show you errors, if any. If you get this error
+
+        _mysql_exceptions.OperationalError: (1049, "Unknown database...
+
+    make sure the database given in the settings exists.
+
+
+.. note::
+
     It is advised to have a local_settings.py file with exclusively sensitive settings like database username/password,
     API keys or Secret Key etc and have settings.py import all these values.
 
