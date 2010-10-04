@@ -38,7 +38,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'djenofdjango'
-copyright = u'2010, Shabda Raaj'
+copyright = u'2010, Agiliq'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -173,7 +173,7 @@ htmlhelp_basename = 'djenofdjangodoc'
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
   ('index', 'djenofdjango.tex', u'djenofdjango Documentation',
-   u'Shabda Raaj', 'manual'),
+   u'Agiliq', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
