@@ -72,6 +72,7 @@ So lets get started::
 In pastebin/models.py
 
 .. literalinclude:: djen_project/pastebin/models.py
+    :lines: 1-14
 
 .. note::
 
@@ -109,6 +110,7 @@ our app take control of the urls and direct them to generic views. Here's how
 Lets create urls.py in our app. Now our pastebin/urls.py should look like
 
 .. literalinclude:: djen_project/pastebin/urls.py
+    :lines: 1-6, 8-9
 
 Notes:
 
