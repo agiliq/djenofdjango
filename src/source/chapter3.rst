@@ -114,9 +114,9 @@ Notes:
 
 * Each urlpatterns line is a mapping of urls to views
 
-  ``(r'$', 'django.views.generic.create_update.create_object', { 'model': Paste }),``
+  ``(r'^$', 'django.views.generic.create_update.create_object', { 'model': Paste }),``
 
-* Here the url is r'$' which is a regular expression that will be matched with the incoming request.
+* Here the url is r'^$' which is a regular expression that will be matched with the incoming request.
   If a match is found, the request is forwarded to the corresponding view.
 
 * The third value is the arguments passed to the create_object view. The view will use the ``model``
@@ -127,16 +127,16 @@ Notes:
   you only need to pass the function path relative to the given path. For example::
 
         urlpatterns = patterns('',
-            (r'$', 'django.views.generic.create_update.create_object', { 'model': Paste }),
+            (r'^$', 'django.views.generic.create_update.create_object', { 'model': Paste }),
         )
 
   and::
 
         urlpatterns = patterns('django.views.generic.create_update',
-            (r'$', 'create_object', { 'model': Paste }),
+            (r'^$', 'create_object', { 'model': Paste }),
         )
 
-  are equivivalent.
+  are equivalent.
 
 Lets tell the project to include our app's urls
 
@@ -169,8 +169,8 @@ Observe that:
 
 * to display the form, all you have to do is render the ``form`` variable
 
-* form has a method ``as_table`` that will render it as table, other options are as_p, as_ul
-  for enclosing the form in ``<p>`` and ``<ul>>`` tags respectively
+* form has a method ``as_table`` that will render it as table, other options are ``as_p``, ``as_ul``
+  for enclosing the form in ``<p>`` and ``<ul>`` tags respectively
 
 * form does not output the form tags or the submit button, so we will have to write them down
   in the template
@@ -204,8 +204,8 @@ Now, that we have a create view and a detail view, we just need to glue them tog
 
 * pass the ``post_save_redirect`` argument in ``create_object`` view
 
-* set the ``get_absolute_url`` property of our Paste model to its detail view. ``create_object`` view will call the objects
-  absolute_url by default
+* set the ``get_absolute_url`` property of our Paste model to its detail view. ``create_object`` view will call the object's
+  ``get_absolute_url`` by default
 
 I would choose the latter because it is more general. To do this, change your Paste model and add the get_absolute_url property:
 
@@ -213,8 +213,8 @@ I would choose the latter because it is more general. To do this, change your Pa
 
 Note that:
 
-* We could have returned ``'/pastebin/paste/%s' %(self.id)'`` but it would mean defining the same url twice and violates the DRY principle.
-  Using the models.permalink decorator, we can tell django to call the url named ``pastebin_paste_detail`` with the parameter ``id``
+* We could have returned ``'/pastebin/paste/%s' %(self.id)'`` but it would mean defining the same url twice and it violates the DRY principle.
+  Using the ``models.permalink`` decorator, we can tell django to call the url named ``pastebin_paste_detail`` with the parameter ``id``
 
 And so, we are ready with the create object and object detail views. Try submitting any pastes and you should be redirected to the details of 
 your paste.
