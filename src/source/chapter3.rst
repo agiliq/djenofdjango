@@ -154,3 +154,22 @@ Lets create this template. In ``pastebin/templates/pastebin/paste_form.html``:
 
 .. literalinclude:: djen_project/pastebin/templates/pastebin/paste_form.html
 
+.. TODO::
+
+    This is not the right place to discuss templates, introduce templates, context, RequestContext in first chapter
+
+Observe that:
+
+* The create_object generic view has provided a ``form`` context variable.
+
+* To display the form, all you have to do is render the form variable
+
+* form has a method ``as_table`` that will render it as table, other options are as_p, as_ul
+  for enclosing the form in ``<p>`` and ``<ul>>`` tags respectively
+
+* form does not output the form tags or the submit button, so we will have to write them down
+  in the template
+
+* you need to include ``csrf_token`` tag in every form posted to a local view. Django uses this to prevent
+  cross site request forgery
+

@@ -1,5 +1,7 @@
 <form action="" method="POST">
     {% csrf_token %}
-    {{ form }}
-    <input type="submit" value="Create" />
+    <table>
+        {{ form.as_table }}
+    </table>
+    <input type="submit" name="create" value="Create">
 </form>
