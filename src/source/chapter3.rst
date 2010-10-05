@@ -106,5 +106,50 @@ Configuring urls:
 We have already seen how to include the admin urls in urls.py. But now, we want to have
 our app take control of the urls and direct them to generic views. Here's how
 
-Lets create urls.py in our app.
+Lets create urls.py in our app. Now our pastebin/urls.py should look like
+
+.. literalinclude:: djen_project/pastebin/urls.py
+
+Notes:
+
+* Each urlpatterns line is a mapping of urls to views
+
+  ``(r'$', 'django.views.generic.list_detail.object_list', {'queryset': Paste.objects.all()}),``
+
+* Here the url is r'$' which is a regular expression that will be matched with the incoming request.
+  If a match is found, the request is forwarded to the corresponding view.
+
+* The view is passed as a string representing a function present in PYTHONPATH. You can also
+  specify where to look for the view by providing the first argument of ``patterns``. If so,
+  you only need to pass the function path relative to the given path. For example::
+
+        urlpatterns = patterns('',
+            (r'$', 'django.views.generic.list_detail.object_list', { 'queryset': Paste.objects.all() }),
+        )
+
+  and::
+
+        urlpatterns = patterns('django.views.generic.list_detail',
+            (r'$', 'object_list', { 'queryset': Paste.objects.all() }),
+        )
+
+  are equivivalent.
+
+Lets tell the project to include our app's urls
+
+.. literalinclude:: djen_project/urls.py
+
+ow django knows to forward urls starting with ``/pastebin`` to the pastebin app. All urls relative to this url
+will be handled by the pastebin app. That's great for reusability.
+
+If you try to open http://127.0.0.1/pastebin at this point, you will be greeted with a TemplateDoesNotExist error.
+If you observe, it says that django cannot find ``pastebin/paste_list.html``. Usually getting this error means that
+django was not able to find that file. Don't worry, this just needs one more step.
+
+Django will usually look for templates in TEMPLATE_DIRS  of settings.py and inside ``templates`` directory of each app.
+
+The default template used by object_list is '<app>/<model>_list.html'. In our case this would be ``pastebin/paste_list.html``.
+
+Lets create this template. In ``pastebin/templates/pastebin/paste_list.html``:
+
 
