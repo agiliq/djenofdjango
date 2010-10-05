@@ -152,4 +152,5 @@ The default template used by object_list is '<app>/<model>_list.html'. In our ca
 
 Lets create this template. In ``pastebin/templates/pastebin/paste_list.html``:
 
+.. literalinclude:: djen_project/pastebin/templates/pastebin/paste_list.html
 
