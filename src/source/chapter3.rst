@@ -38,11 +38,11 @@ Our workflow for this app would be
 
     * sketch the models
 
+    * route urls to generic views
+
     * use generic views with our models
 
     * write the templates to use generic views
-
-    * route urls to generic views
 
 So lets dive in:
 
@@ -99,4 +99,12 @@ which returns::
     No fixtures found.
 
 There, we have our pastebin models ready.
+
+Configuring urls:
+=================
+
+We have already seen how to include the admin urls in urls.py. But now, we want to have
+our app take control of the urls and direct them to generic views. Here's how
+
+Lets create urls.py in our app.
 
