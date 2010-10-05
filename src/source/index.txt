@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
 
 Welcome to Djen of django's documentation!
-========================================
+==========================================
 
 Contents:
 

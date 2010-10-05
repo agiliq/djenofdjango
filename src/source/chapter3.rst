@@ -1,7 +1,7 @@
 Designing a pastebin app:
 =========================
 
-In this chapter we will be designing a simple pastebin. Our pastebin will be able to::
+In this chapter we will be designing a simple pastebin. Our pastebin will be able to
 
     * Allow users to paste some text
 
@@ -11,7 +11,7 @@ In this chapter we will be designing a simple pastebin. Our pastebin will be abl
 
     * Clean up texts older than a day
 
-Some 'views' that the user will see are::
+Some 'views' that the user will see are
 
     * A list view of all recent texts
 
@@ -24,7 +24,7 @@ Some 'views' that the user will see are::
 Since the list and detail views are fairly common in most apps,
 django ships with a set of 'generic views' that can be used in
 our app. We would be particularly interested in the following generic
-views::
+views
 
     * django.views.generic.create_update.create_object
 
@@ -34,7 +34,7 @@ views::
 
     * django.views.generic.list_detail
 
-Our workflow for this app would be::
+Our workflow for this app would be
 
     * sketch the models
 
@@ -52,7 +52,7 @@ Sketch the models:
 We have only one object to store to the database which is 
 the text pasted by the user. Lets call this Paste.
 
-Some things our Paste model would need to handle are::
+Some things our Paste model would need to handle are
 
     * Text pasted by the user
 
@@ -69,7 +69,7 @@ So lets get started::
 
     python manage.py startapp pastebin
 
-In pastebin/models.py::
+In pastebin/models.py
 
 .. literalinclude:: djen_project/pastebin/models.py
 
@@ -81,7 +81,10 @@ In pastebin/models.py::
     * auto_now is similar to the above, but it adds the current time to
       the updated_on field each time an object is saved.
 
-Adding our app to the project::
+    * the id field is primary key which is autocreated by django. Since
+      name is optional, we fall back to the id which is guaranteed.
+
+Adding our app to the project
 
 .. literalinclude:: djen_project/settings.py
     :lines: 86-96
