@@ -26,13 +26,13 @@ django ships with a set of 'generic views' that can be used in
 our app. We would be particularly interested in the following generic
 views
 
-    * django.views.generic.create_update.create_object
+    * ``django.views.generic.create_update.create_object``
 
-    * django.views.generic.create_update.update_object
+    * ``django.views.generic.create_update.update_object``
 
-    * django.views.generic.object_list
+    * ``django.views.generic.object_list``
 
-    * django.views.generic.list_detail
+    * ``django.views.generic.list_detail``
 
 Our workflow for this app would be
 
