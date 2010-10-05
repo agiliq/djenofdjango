@@ -216,7 +216,7 @@ Django for the JSP/Sevelet programmer.
   How do doGet, and other do* map to Django.
   Mapping JSP/Servelt constructs to Django.
 
-Hacking Django Django internals.
+Hacking Django internals.
 -------------------------------------
 [Here we would some of what goes on behind the scenes.]
 Templates. 
