@@ -221,3 +221,16 @@ Note that:
 And so, we are ready with the create object and object detail views. Try submitting any pastes and you should be redirected to the details of 
 your paste.
 
+Now, on to our next generic view, which is object list:
+
+.. literalinclude:: djen_project/pastebin/urls.py
+
+This is simpler than the detail view, since it does not take any arguments in the url. The default template for this view is ``pastebin/paste_list.html``
+so lets fill that up with:
+
+.. literalinclude:: djen_project/pastebin/templates/pastebin/paste_list.html
+
+Note that
+
+* We have used the ``url`` template tag and passed our named view i.e. ``pastebin_paste_detail`` to get the url to a specific paste
+
