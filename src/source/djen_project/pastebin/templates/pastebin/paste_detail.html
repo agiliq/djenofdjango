@@ -1,3 +1,15 @@
+{% if messages %}
+    <div class="messages">
+    <ul>
+    {% for message in messages %}
+        <li class="{{ message.tag }}">
+            {{ message }} 
+        </li>
+        {% endfor %}
+    </ul>
+    </div>
+{% endif %}
+
 <h1>Paste Details: </h1>
 <p>
     <div>
@@ -21,5 +33,15 @@
         <span>{{ object.updated_on }}</span>
     </div>
 </p>
+
+<h2>Actions</h2>
+    <ul>
+        <li>
+            <a href="{% url pastebin_paste_edit object.id %}">Edit this paste</a>
+        </li>
+        <li>
+            <a href="{% url pastebin_paste_delete object.id %}">Delete this paste</a>
+        </li>
+    </ul>
 
 <a href="{% url pastebin_paste_list %}">View All</a>

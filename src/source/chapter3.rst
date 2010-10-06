@@ -234,3 +234,30 @@ Note that
 
 * We have used the ``url`` template tag and passed our named view i.e. ``pastebin_paste_detail`` to get the url to a specific paste
 
+Similarly, our update and delete generic views would look like:
+
+.. literalinclude:: djen_project/pastebin/urls.py
+
+Note that the ``delete_object`` generic view requires an argument called ``post_delete_redirect`` which will be used to redirect the user
+after deleting the object.
+
+We have used update_object, delete_object for the update/delete views respectively. Lets link these urls from the detail page:
+
+.. literalinclude:: djen_project/pastebin/templates/pastebin/paste_detail.html
+
+Note that the delete view redirects to a confirmation page whose template name is ``paste_confirm_delete.html`` if called using GET method.
+Once in the confirmation page, we need need to call the same view with a POST method. The view will delete the object a pass a message using 
+the messages framework.
+
+.. literalinclude:: djen_project/pastebin/templates/pastebin/paste_confirm_delete.html
+
+Let's handle the message and display it in the redirected page.
+
+.. literalinclude:: djen_project/pastebin/templates/pastebin/paste_list.html
+
+While we are at it, lets also include the messages in paste detail page, where create/update view sends the messages:
+
+.. literalinclude:: djen_project/pastebin/templates/pastebin/paste_detail.html
+
+So we now have pages to create, update, delete and view all pastes.
+

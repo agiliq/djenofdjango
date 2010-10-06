@@ -1,3 +1,15 @@
+{% if messages %}
+    <div class="messages">
+    <ul>
+    {% for message in messages %}
+        <li class="{{ message.tag }}">
+            {{ message }} 
+        </li>
+        {% endfor %}
+    </ul>
+    </div>
+{% endif %}
+
 {% if object_list %}
     <h1>Recent Pastes:</h1>
 <ul>
