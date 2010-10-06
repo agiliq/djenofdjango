@@ -158,6 +158,7 @@ The default template used by create_object is '<app>/<model>_form.html'. In our 
 Lets create this template. In ``pastebin/templates/pastebin/paste_form.html``:
 
 .. literalinclude:: djen_project/pastebin/templates/pastebin/paste_form.html
+    :language: django
 
 .. TODO::
 
@@ -201,6 +202,7 @@ Using this generic view we will be able to display the details about the paste o
 In ``pastebin/templates/pastebin/paste_detail.html``:
 
 .. literalinclude:: djen_project/pastebin/templates/pastebin/paste_detail.html
+    :language: django
 
 Now, that we have a create view and a detail view, we just need to glue them together. We can do this in two ways:
 
@@ -229,6 +231,7 @@ This is simpler than the detail view, since it does not take any arguments in th
 so lets fill that up with:
 
 .. literalinclude:: djen_project/pastebin/templates/pastebin/paste_list.html
+    :language: django
 
 Note that
 
@@ -244,20 +247,24 @@ after deleting the object.
 We have used update_object, delete_object for the update/delete views respectively. Lets link these urls from the detail page:
 
 .. literalinclude:: djen_project/pastebin/templates/pastebin/paste_detail.html
+    :language: django
 
 Note that the delete view redirects to a confirmation page whose template name is ``paste_confirm_delete.html`` if called using GET method.
 Once in the confirmation page, we need need to call the same view with a POST method. The view will delete the object a pass a message using 
 the messages framework.
 
 .. literalinclude:: djen_project/pastebin/templates/pastebin/paste_confirm_delete.html
+    :language: django
 
 Let's handle the message and display it in the redirected page.
 
 .. literalinclude:: djen_project/pastebin/templates/pastebin/paste_list.html
+    :language: django
 
 While we are at it, lets also include the messages in paste detail page, where create/update view sends the messages:
 
 .. literalinclude:: djen_project/pastebin/templates/pastebin/paste_detail.html
+    :language: django
 
 So we now have pages to create, update, delete and view all pastes.
 
