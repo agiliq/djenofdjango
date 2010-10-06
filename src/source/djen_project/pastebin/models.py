@@ -12,3 +12,7 @@ class Paste(models.Model):
     def __unicode__(self):
         return self.name or str(self.id)
 
+    @models.permalink
+    def get_absolute_url(self):
+        return ('pastebin_paste_detail', [self.id])
+
