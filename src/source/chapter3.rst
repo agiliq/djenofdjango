@@ -303,7 +303,7 @@ Here:
 * ``handle_noargs`` will be called when the script runs. This would be ``handle`` for other Command types.
 
 * We have used the ``lte`` lookup on ``updated_on`` field to get all posts older than a day. Then we delete them using ``delete`` method
-on the queryset.
+  on the queryset.
 
 You can test if the subcommand works by doing::
 
