@@ -10,8 +10,5 @@ class Paste(models.Model):
     updated_on = models.DateTimeField(auto_now=True)
 
     def __unicode__(self):
-        return self.name or self.id
+        return self.name or str(self.id)
 
-    @models.permalink
-    def get_absolute_url(self):
-        return ('pastebin_paste_detail', [self.id])
