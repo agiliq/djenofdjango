@@ -286,11 +286,21 @@ For our subcommand to be registered with manage.py, we need the following struct
 
 All scripts inside ``management/commands/`` will be used as custom subcommands. Lets create ``delete_old.py`` subcommand:
 
-..literalinclude:: djen_project/pastebin/management/commands/delete_old.py
+.. literalinclude:: djen_project/pastebin/management/commands/delete_old.py
 
-Here we have used the ``lte`` lookup on ``updated_on`` field to get all posts older than a day. Then we delete them using ``delete`` method
+Here:
+
+* We subclass either of the ``NoArgsCommand``, ``LabelCommand`` or ``AppCommand`` from ``django.core.management.base``. ``NoArgsCommand``
+  suits our need because we dont need to pass any arguments to this subcommand.
+
+* ``handle_noargs`` will be called when the script runs. This would be ``handle`` for other Command types.
+
+* We have used the ``lte`` lookup on ``updated_on`` field to get all posts older than a day. Then we delete them using ``delete`` method
 on the queryset.
 
 You can test if the subcommand works by doing::
 
     python manage.py delete_old
+
+Now we can configure this script to run daily using cronjob or something similar.
+
