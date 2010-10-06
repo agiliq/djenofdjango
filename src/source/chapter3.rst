@@ -72,7 +72,7 @@ So lets get started::
 In pastebin/models.py
 
 .. literalinclude:: djen_project/pastebin/models.py
-    :commit: 53af62f8299d1779f936
+    :commit: a9ffd8d6d733fc62afb7
 
 .. note::
 
@@ -216,7 +216,7 @@ Now, that we have a create view and a detail view, we just need to glue them tog
 I would choose the latter because it is more general. To do this, change your Paste model and add the get_absolute_url property:
 
 .. literalinclude:: djen_project/pastebin/models.py
-    :commit: 5013afc980dd97950b5c
+    :commit: c0c759bd1cc6d2596c8b
 
 Note that:
 
