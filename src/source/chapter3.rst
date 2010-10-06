@@ -261,3 +261,36 @@ While we are at it, lets also include the messages in paste detail page, where c
 
 So we now have pages to create, update, delete and view all pastes.
 
+Now, for better maintenance, we would like to delete all pastes that have not been updated in a day using an script.
+We will use django's custom management scripts for this.
+
+Writing custom management scrips:
+=================================
+
+Just like other manage.py subcommands such as ``syncdb``, ``shell``, ``startapp`` and ``runserver``, we can have custom subcommands to
+help us maintain the app.
+
+For our subcommand to be registered with manage.py, we need the following structure in our app::
+
+    .
+    |-- __init__.py
+    |-- management
+    |   |-- commands
+    |   |   `-- __init__.py
+    |   `-- __init__.py
+    |-- models.py
+    |-- templates
+    |-- tests.py
+    |-- urls.py
+    `-- views.py
+
+All scripts inside ``management/commands/`` will be used as custom subcommands. Lets create ``delete_old.py`` subcommand:
+
+..literalinclude:: djen_project/pastebin/management/commands/delete_old.py
+
+Here we have used the ``lte`` lookup on ``updated_on`` field to get all posts older than a day. Then we delete them using ``delete`` method
+on the queryset.
+
+You can test if the subcommand works by doing::
+
+    python manage.py delete_old
