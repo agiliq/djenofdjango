@@ -84,9 +84,39 @@ any html yet. Well, since we used the admin app, we were able to rely on the adm
 templates supplied with django.
 
 A template is a structure of webpage that will be *rendered* using a *context* and returned as response if
-you want it to.
+you want it to. A ``django.template.Template`` object can be rendered using the ``render`` method.
 
-Normally templates are html files with some extra django content, such as templatetags and variables.
+Normally templates are html files with some extra django content, such as templatetags and variables. Note that our
+templates need to be publicly accessible(infact they shouldn't be) from a webserver. They are not meant to be displayed
+directly, django will process them based on the request, context etc and respond with the rendered templates.
+
+In case you want a template to be directly accesible (e.g. static html files), you could use the ``django.views.generic.simple.direct_to_template`` 
+generic view.
+
+Template Loaders:
++++++++++++++++++
+
+Django will usually look for templates in ``TEMPLATE_DIRS``  of settings.py and inside ``templates`` directory of each app.
+This is because of the ``TEMPLATE_LOADERS`` in the default settings.py::
+
+    # List of callables that know how to import templates from various sources.
+    TEMPLATE_LOADERS = (
+        'django.template.loaders.filesystem.Loader',
+        'django.template.loaders.app_directories.Loader',
+    #     'django.template.loaders.eggs.Loader',
+    )
+
+These functions fetch the template based on a given template path. To let django locate your ``hello_world.html``
+you would have to place it in ``<app>/templates`` or place it in any directory and set the ``TEMPLATE_DIRS``::
+
+    TEMPLATE_DIRS = (
+        # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
+        # Always use forward slashes, even on Windows.
+        # Don't forget to use absolute paths, not relative paths.
+    )
+
+
+to the absolute path of that directory.
 
 Context:
 ++++++++
@@ -156,6 +186,63 @@ One of the core django philosphy is that templates are meant for rendering the c
 optionally making a few aesthetic changes only. Templates should not be used for handling 
 complex queries or operations. This is also useful to keep the programming and designing aspects
 of the website separate. Template language should be easy enough to be written by designers.
+
+Generic views - commonly used views:
+====================================
+
+Views:
+++++++
+
+Views are just functions which take the ``HttpRequest`` object,  and some optional arguments,
+then do some work and return a ``HttpResponse`` object.
+
+By convention, all of an app's views would be written in <app>/views.py
+
+A simple example to return "Hello World!" string response:
+
+.. sourcecode:: python
+
+    from django.http import HttpResponse
+
+    def hello_world(request):
+        return HttpResponse("Hello World!")
+
+To render a template to response one would do:
+
+.. sourcecode:: python
+
+    from django.http import HttpResponse
+    from django.template import Context, loader
+
+    def hello_world(request):
+        template = loader.get_template("hello_world.html")
+        context = Context({"username": "Monty Python"})
+        return HttpResponse(template.render(context))
+
+But there's a simpler way:
+
+.. sourcecode:: python
+
+    from django.shortcuts import render_to_response
+
+    def hello_world(request):
+        return render_to_response("hello_world.html", { "username": "Monty Python" })
+
+
+``django.views.generic.create_update.create_object``
++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+.. note:: reference: http://docs.djangoproject.com/en/dev/ref/generic-views/#django-views-generic-create-update-create-object
+
+
+``django.views.generic.create_update.update_object``
++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+``django.views.generic.list_detail.object_list``
++++++++++++++++++++++++++++++++++++++++++++++++++
+
+``django.views.generic.list_detail.object_detail``
++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 Designing a pastebin app:
 =========================
@@ -293,8 +380,6 @@ will be handled by the pastebin app. That's great for reusability.
 If you try to open http://127.0.0.1/pastebin at this point, you will be greeted with a TemplateDoesNotExist error.
 If you observe, it says that django cannot find ``pastebin/paste_form.html``. Usually getting this error means that
 django was not able to find that file. 
-
-Django will usually look for templates in TEMPLATE_DIRS  of settings.py and inside ``templates`` directory of each app.
 
 The default template used by create_object is '<app>/<model>_form.html'. In our case this would be ``pastebin/paste_form.html``.
 
