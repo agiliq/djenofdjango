@@ -1,0 +1,126 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Chapter 5. Building a Wiki &mdash; djenofdjango v0.1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="djenofdjango v0.1 documentation" href="index.html" />
+    <link rel="next" title="Chapter 6. Building a Yahoo Answer’s like site" href="chapter6.html" />
+    <link rel="prev" title="Chapter 4. Building a Blog" href="chapter4.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="chapter6.html" title="Chapter 6. Building a Yahoo Answer’s like site"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="chapter4.html" title="Chapter 4. Building a Blog"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">djenofdjango v0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="chapter-5-building-a-wiki">
+<h1>Chapter 5. Building a Wiki<a class="headerlink" href="#chapter-5-building-a-wiki" title="Permalink to this headline">¶</a></h1>
+<p>(Topics introduced: Managing user registration using django-regsitration. Advanced ORM tricks. Overriding save for Entities. Signals. Websearches using Yahoo Devloper API.)</p>
+<p>Diving in. [Code listing]</p>
+<dl class="docutils">
+<dt>Managing user registration using django-regsitration.</dt>
+<dd>In the previous chapters we did not allow external users to create a user. Here a user can create an account on the wiki. This is managed using django-registration.
+Explanation of Django registration, its views and templates.
+Discussion of making reusable Django applications, taking Django-registration as example.</dd>
+<dt>Advanced ORM</dt>
+<dd>model.extra, How to use it to handle complex queries.
+Defining customer manager for models. (With a wiki, we reattach model.objects to a manager which only gets the latest object. Another custom manager, model.allobjects gets us all the elements.)
+Manager methods vs. classmethods.
+Overiding save, delete amd other model objects to enable versioning for objects.
+Introduce signals. (However we would not have used this in our code.)
+Show how signals could have been used for the same purpose, and compare.</dd>
+<dt>Websearches using Yahoo Developer API.</dt>
+<dd>We want to make the wiki searchable, so instead of going via a local search system like Lucene, we use Yahoo Developer API. In this we can explain to use django.util.simplejson, to talk to external APIs which provide a JSON interface.</dd>
+</dl>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="chapter4.html"
+                        title="previous chapter">Chapter 4. Building a Blog</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="chapter6.html"
+                        title="next chapter">Chapter 6. Building a Yahoo Answer&#8217;s like site</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/chapter5.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="chapter6.html" title="Chapter 6. Building a Yahoo Answer’s like site"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="chapter4.html" title="Chapter 4. Building a Blog"
+             >previous</a> |</li>
+        <li><a href="index.html">djenofdjango v0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, Agiliq.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1pre.
+    </div>
+  </body>
+</html>
