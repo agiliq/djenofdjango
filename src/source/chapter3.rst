@@ -179,6 +179,10 @@ For example in our previous template:
 
 Here ``capfirst`` is a filter that will capitalize the first char our ``username``
 
+
+.. note:: Reference of built-in templatetags and filters:
+          http://docs.djangoproject.com/en/1.2/ref/templates/builtins/
+
 Templates are not meant for programming:
 ++++++++++++++++++++++++++++++++++++++++
 
@@ -485,7 +489,7 @@ We have used update_object, delete_object for the update/delete views respective
     :language: django
 
 Note that the delete view redirects to a confirmation page whose template name is ``paste_confirm_delete.html`` if called using GET method.
-Once in the confirmation page, we need need to call the same view with a POST method. The view will delete the object a pass a message using 
+Once in the confirmation page, we need need to call the same view with a POST method. The view will delete the object and pass a message using 
 the messages framework.
 
 .. literalinclude:: djen_project/pastebin/templates/pastebin/paste_confirm_delete.html
