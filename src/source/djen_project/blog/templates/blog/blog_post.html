@@ -10,6 +10,7 @@
 </div>
 
 {% if post.comment_set.all %}
+<h2>Comments</h2>
 <div class="comments">
     {% for comment in post.comment_set.all %}
         <span>
@@ -21,4 +22,16 @@
     {% endfor %}
 </div>
 {% endif %}
+
+<br />
+
+<h2>Add Comment</h2>
+
+<form action="" method="POST">
+    {% csrf_token %}
+    <table>
+        {{ form.as_table }}
+    </table>
+    <input type="submit" name="submit" value="Submit" />
+</form>
 

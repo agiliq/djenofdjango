@@ -33,6 +33,7 @@ class Comment(models.Model):
     website = models.URLField(max_length=200, null=True, blank=True)
     text = models.TextField()
     post = models.ForeignKey(Post)
+    created_on = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
         return self.text
