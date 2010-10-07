@@ -249,10 +249,19 @@ But there's a simpler way:
         return render_to_response("hello_world.html", { "username": "Monty Python" })
 
 
+Generic Views:
++++++++++++++++
+
+Generic views are commonly used view patterns that are shipped with django to make
+common operations such a list, detail, create, update delete easy. To do these operations,
+we need not even write any views, we can use generic views by passing the proper arugments.
+
+We will be using the ``create_update`` and ``list_detail`` generic views in this chapter
+
 .. note:: reference: http://docs.djangoproject.com/en/dev/ref/generic-views/
 
-``create_object``
-+++++++++++++++++
+``create_update.create_object``
++++++++++++++++++++++++++++++++
 
 The ``create_object`` generic view is used to render the object creation page with the
 object form, perform form validation and save valid objects to the database.
@@ -264,8 +273,8 @@ argument. (this applies to all generic views listed here)
 The view provides ``form`` variable in the context. This is the generated ModelForm of the ``model``.
 
 
-``update_object``
-+++++++++++++++++
+``create_update.update_object``
++++++++++++++++++++++++++++++++
 
 In addition to the ``model`` argument, the ``update_object`` generic view also requires a ``object_id``
 argument which is the ``id`` of the object to be updated. This also renders to ``<app>/<model>_form.html`` template.
@@ -273,8 +282,8 @@ argument which is the ``id`` of the object to be updated. This also renders to `
 In addition to the ``form`` variable, this view also provides the ``object`` that is being edited to the context.
 
 
-``delete_object``
-+++++++++++++++++
+``create_update.delete_object``
++++++++++++++++++++++++++++++++
 
 In addition to both the above arguments, this view also requires a ``post_delete_redirect`` argument
 which is the url to redirect after deleting. If called using the ``GET`` method, this view will
@@ -282,8 +291,8 @@ redirect to ``<app>/<model>_confirm_delete.html`` template. To actually delete t
 view needs to be called using the ``POST`` method. This is in accordance with the best practices that
 ``GET`` requests should not modify any data.
 
-``object_list``
-+++++++++++++++
+``list_detail.object_list``
+++++++++++++++++++++++++++++
 
 The ``object_list`` generic view shows the list of the ``queryset``, where ``queryset`` is the 
 queryset containing the objects we want to list.
@@ -291,8 +300,8 @@ queryset containing the objects we want to list.
 It renders the ``<app>/<model>_list.html`` template and provides ``object_list`` context
 variable by default.
 
-``object_detail``
-+++++++++++++++++
+``list_detail.object_detail``
++++++++++++++++++++++++++++++
 
 The ``object_detail`` generic view show details about a particular object. It takes the ``queryset`` to fetch
 the ``object_id`` from and returns ``object`` in the context.
@@ -331,6 +340,8 @@ views
 
     * ``django.views.generic.create_update.update_object``
 
+    * ``django.views.generic.create_update.delete_object``
+
     * ``django.views.generic.list_detail.object_list``
 
     * ``django.views.generic.list_detail.object_detail``
@@ -345,13 +356,13 @@ Our workflow for this app would be
 
     * write the templates to use generic views
 
-So lets dive in:
+So let's dive in:
 
 Sketch the models:
 ==================
 
 We have only one object to store to the database which is 
-the text pasted by the user. Lets call this Paste.
+the text pasted by the user. Let's call this Paste.
 
 Some things our Paste model would need to handle are
 
@@ -366,7 +377,7 @@ Some things our Paste model would need to handle are
 The time fields would be useful for getting 'latest' or 'recently updated'
 pastes.
 
-So lets get started::
+So let's get started::
 
     python manage.py startapp pastebin
 
@@ -408,7 +419,7 @@ Configuring urls:
 We have already seen how to include the admin urls in urls.py. But now, we want to have
 our app take control of the urls and direct them to generic views. Here's how
 
-Lets create urls.py in our app. Now our pastebin/urls.py should look like
+Let's create urls.py in our app. Now our pastebin/urls.py should look like
 
 .. literalinclude:: djen_project/pastebin/urls.py
     :commit: 749380e3986665022283
@@ -425,7 +436,7 @@ Notes:
 * The third value is the arguments passed to the ``create_object`` view. The view will use the ``model``
   argument to generate a form and save it to the database. In our case, this is the ``Paste`` model
 
-Lets tell the project to include our app's urls
+Let's tell the project to include our app's urls
 
 .. literalinclude:: djen_project/urls.py
 
@@ -438,7 +449,7 @@ django was not able to find that file.
 
 The default template used by create_object is '<app>/<model>_form.html'. In our case this would be ``pastebin/paste_form.html``.
 
-Lets create this template. In ``pastebin/templates/pastebin/paste_form.html``:
+Let's create this template. In ``pastebin/templates/pastebin/paste_form.html``:
 
 .. literalinclude:: djen_project/pastebin/templates/pastebin/paste_form.html
     :language: django
@@ -515,7 +526,7 @@ Now, on to our next generic view, which is object list:
     :commit: dee14b3013b9f84bfd18
 
 This is simpler than the detail view, since it does not take any arguments in the url. The default template for this view is ``pastebin/paste_list.html``
-so lets fill that up with:
+so let's fill that up with:
 
 .. literalinclude:: djen_project/pastebin/templates/pastebin/paste_list.html
     :commit: dee14b3013b9f84bfd18
@@ -533,7 +544,7 @@ Similarly, our update and delete generic views would look like:
 Note that the ``delete_object`` generic view requires an argument called ``post_delete_redirect`` which will be used to redirect the user
 after deleting the object.
 
-We have used update_object, delete_object for the update/delete views respectively. Lets link these urls from the detail page:
+We have used update_object, delete_object for the update/delete views respectively. Let's link these urls from the detail page:
 
 .. literalinclude:: djen_project/pastebin/templates/pastebin/paste_detail.html
     :commit: 17c5062a18dc4e9edfbc
@@ -553,7 +564,7 @@ Let's handle the message and display it in the redirected page.
     :commit: 17c5062a18dc4e9edfbc
     :language: django
 
-While we are at it, lets also include the messages in paste detail page, where create/update view sends the messages:
+While we are at it, Let's also include the messages in paste detail page, where create/update view sends the messages:
 
 .. literalinclude:: djen_project/pastebin/templates/pastebin/paste_detail.html
     :language: django
@@ -583,7 +594,7 @@ For our subcommand to be registered with manage.py, we need the following struct
     |-- urls.py
     `-- views.py
 
-All scripts inside ``management/commands/`` will be used as custom subcommands. Lets create ``delete_old.py`` subcommand:
+All scripts inside ``management/commands/`` will be used as custom subcommands. Let's create ``delete_old.py`` subcommand:
 
 .. literalinclude:: djen_project/pastebin/management/commands/delete_old.py
 
