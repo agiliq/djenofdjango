@@ -76,6 +76,87 @@ and::
 
 are equivalent.
 
+Templates - skeletons of our website:
+======================================
+
+You must be wondering where all those pages came from, since we have not touched
+any html yet. Well, since we used the admin app, we were able to rely on the admin
+templates supplied with django.
+
+A template is a structure of webpage that will be *rendered* using a *context* and returned as response if
+you want it to.
+
+Normally templates are html files with some extra django content, such as templatetags and variables.
+
+Context:
+++++++++
+
+A context is a dict that will be used to render a page from a template. All context keys are valid template
+variables.
+
+To display a user name in your template, suppose you provide the ``username`` in your context, you could do:
+
+.. sourcecode:: django
+
+    Hello {{ username }}
+
+When this template is rendered using (e.g. using ``render_to_response``), ``username`` will be replaced with its value
+
+You can pass any variable to the context, so you can call a dict's key, or an objects property. However you cannot pass
+any arguments to the property.
+
+Templatetags:
++++++++++++++
+
+Templatetags are helpers to the template. Suppose you have an ``iterable`` with a list of objects in your context:
+
+.. sourcecode:: django
+
+    {% for object in objects %}
+        {{ object }}
+    {% endfor %}
+
+would render them. If this is a html template, we would prefer:
+
+.. sourcecode:: django
+
+    {% if objects %}
+    <ul>
+        {% for object in objects %}
+            <li>
+                {{ object }}
+            </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+which would render the objects in html unordered list.
+
+Note that ``{% if %}`` ``{% for %}`` ``{% endif %}`` ``{% endfor %}`` are all built-in templatetags.
+If and for behave very much like their python counterparts.
+We will see later how to add custom templatetags.
+
+Filters:
+++++++++
+
+Filters are simple functions which operate on a template variable and manipulate them.
+
+For example in our previous template:
+
+.. sourcecode:: django
+
+    Hello {{ username|capfirst }}
+
+Here ``capfirst`` is a filter that will capitalize the first char our ``username``
+
+Templates are not meant for programming:
+++++++++++++++++++++++++++++++++++++++++
+
+One of the core django philosphy is that templates are meant for rendering the context and
+optionally making a few aesthetic changes only. Templates should not be used for handling 
+complex queries or operations. This is also useful to keep the programming and designing aspects
+of the website separate. Template language should be easy enough to be written by designers.
+
 Designing a pastebin app:
 =========================
 
