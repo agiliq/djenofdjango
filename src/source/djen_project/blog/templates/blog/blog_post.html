@@ -9,9 +9,9 @@
     </span>
 </div>
 
-{% if post.comment_set %}
+{% if post.comment_set.all %}
 <div class="comments">
-    {% for comment in post.comment_set %}
+    {% for comment in post.comment_set.all %}
         <span>
             <a href="{{ comment.website }}">{{ comment.name }}</a> said on {{ comment.created_on }}
         </span>

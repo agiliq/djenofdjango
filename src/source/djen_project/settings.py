@@ -93,4 +93,5 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'cd_library',
     'pastebin',
+    'blog',
 )

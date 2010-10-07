@@ -13,7 +13,7 @@ def add_post(request):
         post = form.save(commit=False)
         post.author = request.user
         post.save()
-        redirect(post)
+        return redirect(post)
     return render_to_response('blog/add_post.html', 
                               { 'form': form },
                               context_instance=RequestContext(request))
