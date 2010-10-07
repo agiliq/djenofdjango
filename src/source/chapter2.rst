@@ -1,3 +1,6 @@
+Chapter 2. Building a personal CD library.
+--------------------------------------------
+
 Starting a django project:
 ==========================
 

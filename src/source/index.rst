@@ -11,7 +11,24 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-   chapters
+   chapter1
+   chapter2
+   chapter3
+   chapter4
+   chapter5
+   chapter6
+   chapter7
+   chapter8
+
+Appendices:
+
+.. toctree::
+   :maxdepth: 2
+
+   appendix1 
+   appendix2 
+   appendix3 
+   appendix4 
 
 Indices and tables
 ==================

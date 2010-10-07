@@ -1,3 +1,6 @@
+Chapter 3. Building a Pastebin.
+--------------------------------
+
 URL configuration - entry points:
 =================================
 
