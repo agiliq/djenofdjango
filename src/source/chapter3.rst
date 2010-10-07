@@ -1,3 +1,80 @@
+URL configuration - entry points:
+=================================
+
+We have already noticed urls.py in our project. This controls our website's
+points of entry. All incoming urls will be matched with the regexes in the 
+``urlpatterns`` and the view corresponding to the first match will get to handle
+the request. A request url that does not match any urlconf entry will be 404'ed.
+
+.. note:: brush up regexes in python from `python docs 
+          <http://docs.python.org/library/re.html>`_ or 
+          `diveintopython <http://diveintopython.org/regular_expressions/index.html>`_
+
+As an example from our previous app:
+
+.. literalinclude:: djen_project/urls.py
+
+Now when we call http://127.0.0.1:8000/admin/ django matches that to the first regex. This urlconf
+has included ``admin.urls`` which means that all further regex matches will be done with the ``admin.urls``
+module. Once again, the first match will get to handle the request. You can think of this as 'mounting' the 
+admin app at ``/admin/``. You are of course free to change the 'mount point' to anything else you like.
+
+A typical urlconf entry looks like this::
+
+    (r'<regex>', <view_function>, <arg_dict>),
+
+``regex`` is any valid python regex that has to be processed. This would be absolute in the project
+urls.py and relative to the mount point in an app's urls.py
+
+``view_function`` is a function that corresponds to this url. The funtion **must** return a ``HttpResponse``
+object. Usually, shortcuts such as ``render_to_response``, are used though. More about views later.
+
+``arg_dict`` is an optional dict of arguments that will be passed to the ``view_function``. In addition, options
+can be declared from the url regex too. For example::
+
+    (r'^object/?P<object_id>(\d+)$', 'objects.views.get_object'),
+
+will match all urls having an integer after ``object/``. Also, the value will be passed as ``object_id`` to the 
+``get_object`` function.
+
+Named urls:
+------------
+
+Usually, we would want an easier way to remember the urls so that we could refer them in views or templates.
+We could *name* our urls by using the ``url`` constructor. For example::
+
+    url(r'^welcome/$', 'app.views.welcome', name='welcome'),
+
+This line is similar to the previous urls, but we have an option of passing a ``name`` argument. 
+
+To get back the url from its name, django provide:
+
+* ``django.core.urlresolvers.reverse`` function for use in views
+
+* ``url`` templatetag for use in templates
+
+We will see how to use the templatetag in our templates.
+
+
+Grouped urls:
+--------------
+
+Sometimes, we would want to group together logically related urls. Or just avoid writing the full function path
+over and over. We can do this by putting the common path to the view function in the first argument of
+urlpatterns::
+
+        urlpatterns = patterns('',
+            (r'^$', 'django.views.generic.create_update.create_object', { 'model': Paste }),
+        )
+
+  and::
+
+        urlpatterns = patterns('django.views.generic.create_update',
+            (r'^$', 'create_object', { 'model': Paste }),
+        )
+
+  are equivalent.
+
 Designing a pastebin app:
 =========================
 
@@ -123,22 +200,6 @@ Notes:
 
 * The third value is the arguments passed to the create_object view. The view will use the ``model``
   argument to generate a form and save it to the database. In our case, this is the ``Paste`` model
-
-* The view is passed as a string representing a function present in PYTHONPATH. You can also
-  specify where to look for the view by providing the first argument of ``patterns``. If so,
-  you only need to pass the function path relative to the given path. For example::
-
-        urlpatterns = patterns('',
-            (r'^$', 'django.views.generic.create_update.create_object', { 'model': Paste }),
-        )
-
-  and::
-
-        urlpatterns = patterns('django.views.generic.create_update',
-            (r'^$', 'create_object', { 'model': Paste }),
-        )
-
-  are equivalent.
 
 Lets tell the project to include our app's urls
 

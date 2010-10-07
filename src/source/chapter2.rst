@@ -235,8 +235,8 @@ Since the admin is an app, it needs to be added to INSTALLED_APPS as well. You w
 So just go ahead and uncomment the django.contrib.admin line in settings.py under INSTALLED_APPS. Don't forget to run syncdb.
 
 Now we have similar instructions in urls.py to uncomment a few lines to enable the admin. This will enable the urls beginning with
-``admin`` to be mapped to the admin app's urls. Note that the admin app uses a urls.py to keep the app's urls separate from the project
-as discussed above.
+``admin`` to be mapped to the admin app's urls. Note that the admin app uses a urls.py to keep its urls separate from the project
+(as discussed in the note above).
 
 Just to confirm it, you can open http://127.0.0.1:8000/admin/ in your browser. You should see 'Site Administration' and actions for 'Auth'
 and 'Sites' which are enabled by default.
