@@ -419,10 +419,10 @@ Notes:
 
   ``(r'^$', 'django.views.generic.create_update.create_object', { 'model': Paste }),``
 
-* Here the url is r'^$' which is a regular expression that will be matched with the incoming request.
+* Here the url is ``r'^$'`` which is a regular expression that will be matched with the incoming request.
   If a match is found, the request is forwarded to the corresponding view.
 
-* The third value is the arguments passed to the create_object view. The view will use the ``model``
+* The third value is the arguments passed to the ``create_object`` view. The view will use the ``model``
   argument to generate a form and save it to the database. In our case, this is the ``Paste`` model
 
 Lets tell the project to include our app's urls
@@ -433,7 +433,7 @@ Now django knows to forward urls starting with ``/pastebin`` to the pastebin app
 will be handled by the pastebin app. That's great for reusability.
 
 If you try to open http://127.0.0.1/pastebin at this point, you will be greeted with a TemplateDoesNotExist error.
-If you observe, it says that django cannot find ``pastebin/paste_form.html``. Usually getting this error means that
+If you observe, the error message says that django cannot find ``pastebin/paste_form.html``. Usually getting this error means that
 django was not able to find that file. 
 
 The default template used by create_object is '<app>/<model>_form.html'. In our case this would be ``pastebin/paste_form.html``.

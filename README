@@ -1,3 +1,7 @@
 A Django book for people with intermediate level Django skills. Inspired by James Bennett's Practical Django projects.
 
+Generating documentation requires sphinx from:
+
+https://bitbucket.org/agiliq/sphinx
+
 To create HTML documentation, run make html from withing the src folder.
