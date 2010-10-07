@@ -38,7 +38,7 @@ will match all urls having an integer after ``object/``. Also, the value will be
 ``get_object`` function.
 
 Named urls:
-------------
++++++++++++
 
 Usually, we would want an easier way to remember the urls so that we could refer them in views or templates.
 We could *name* our urls by using the ``url`` constructor. For example::
@@ -47,7 +47,7 @@ We could *name* our urls by using the ``url`` constructor. For example::
 
 This line is similar to the previous urls, but we have an option of passing a ``name`` argument. 
 
-To get back the url from its name, django provide:
+To get back the url from its name, django provides:
 
 * ``django.core.urlresolvers.reverse`` function for use in views
 
@@ -55,9 +55,10 @@ To get back the url from its name, django provide:
 
 We will see how to use the templatetag in our templates.
 
+.. note:: Also see http://agiliq.com/books/djangodesignpatterns/urls.html#naming-urls
 
 Grouped urls:
---------------
+++++++++++++++
 
 Sometimes, we would want to group together logically related urls. Or just avoid writing the full function path
 over and over. We can do this by putting the common path to the view function in the first argument of
@@ -67,13 +68,13 @@ urlpatterns::
             (r'^$', 'django.views.generic.create_update.create_object', { 'model': Paste }),
         )
 
-  and::
+and::
 
         urlpatterns = patterns('django.views.generic.create_update',
             (r'^$', 'create_object', { 'model': Paste }),
         )
 
-  are equivalent.
+are equivalent.
 
 Designing a pastebin app:
 =========================
