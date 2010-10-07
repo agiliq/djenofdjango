@@ -135,6 +135,22 @@ When this template is rendered using (e.g. using ``render_to_response``), ``user
 You can pass any variable to the context, so you can call a dict's key, or an objects property. However you cannot pass
 any arguments to the property.
 
+For example:
+
+.. sourcecode:: django
+
+    Hello {{ user.username }}
+
+can be used to get ``user['username']`` or ``user.username``
+
+Similarly:
+
+.. sourcecode:: django
+
+    <a hef="{{ user.get_absolute_url }}">{{ user.username }}</a>
+
+can be used to get ``user.get_absolute_url()``
+
 Templatetags:
 +++++++++++++
 
@@ -233,20 +249,55 @@ But there's a simpler way:
         return render_to_response("hello_world.html", { "username": "Monty Python" })
 
 
-``django.views.generic.create_update.create_object``
-+++++++++++++++++++++++++++++++++++++++++++++++++++++
+.. note:: reference: http://docs.djangoproject.com/en/dev/ref/generic-views/
 
-.. note:: reference: http://docs.djangoproject.com/en/dev/ref/generic-views/#django-views-generic-create-update-create-object
+``create_object``
++++++++++++++++++
+
+The ``create_object`` generic view is used to render the object creation page with the
+object form, perform form validation and save valid objects to the database.
+
+It takes a ``model`` argument which is the model that has to be created. By default, it renders
+to template with the name ``<app>/<model>_form.html``. This can be changed using the ``template_name``
+argument. (this applies to all generic views listed here)
+
+The view provides ``form`` variable in the context. This is the generated ModelForm of the ``model``.
 
 
-``django.views.generic.create_update.update_object``
-+++++++++++++++++++++++++++++++++++++++++++++++++++++
+``update_object``
++++++++++++++++++
 
-``django.views.generic.list_detail.object_list``
-+++++++++++++++++++++++++++++++++++++++++++++++++
+In addition to the ``model`` argument, the ``update_object`` generic view also requires a ``object_id``
+argument which is the ``id`` of the object to be updated. This also renders to ``<app>/<model>_form.html`` template.
 
-``django.views.generic.list_detail.object_detail``
-+++++++++++++++++++++++++++++++++++++++++++++++++++
+In addition to the ``form`` variable, this view also provides the ``object`` that is being edited to the context.
+
+
+``delete_object``
++++++++++++++++++
+
+In addition to both the above arguments, this view also requires a ``post_delete_redirect`` argument
+which is the url to redirect after deleting. If called using the ``GET`` method, this view will
+redirect to ``<app>/<model>_confirm_delete.html`` template. To actually delete the object, this
+view needs to be called using the ``POST`` method. This is in accordance with the best practices that
+``GET`` requests should not modify any data.
+
+``object_list``
++++++++++++++++
+
+The ``object_list`` generic view shows the list of the ``queryset``, where ``queryset`` is the 
+queryset containing the objects we want to list.
+
+It renders the ``<app>/<model>_list.html`` template and provides ``object_list`` context
+variable by default.
+
+``object_detail``
++++++++++++++++++
+
+The ``object_detail`` generic view show details about a particular object. It takes the ``queryset`` to fetch
+the ``object_id`` from and returns ``object`` in the context.
+
+It renders to ``<app>/<model>_detail.html`` by default.
 
 Designing a pastebin app:
 =========================
