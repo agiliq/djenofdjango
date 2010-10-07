@@ -1,0 +1,24 @@
+<h2>{{ post.title }}</h2>
+
+<div class="content">
+    <p>
+        {{ post.text }}
+    </p>
+    <span>
+        Written by {{ post.author }}  on {{ post.created_on }}
+    </span>
+</div>
+
+{% if post.comment_set %}
+<div class="comments">
+    {% for comment in post.comment_set %}
+        <span>
+            <a href="{{ comment.website }}">{{ comment.name }}</a> said on {{ comment.created_on }}
+        </span>
+        <p>
+            {{ comment.text }}
+        </p>
+    {% endfor %}
+</div>
+{% endif %}
+
