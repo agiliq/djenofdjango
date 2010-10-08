@@ -404,7 +404,8 @@ Custom managers can be used to provide different &#8216;views&#8217; of the mode
 <p>returns:</p>
 <div class="highlight-python"><pre>&lt;CD: OK Computer by Radiohead, 2000&gt;</pre>
 </div>
-<p>that is, a single instance of our CD model</p>
+<p>that is, a single instance of our CD model. The arguments <strong>must</strong> return a unique object or else
+this method will raise <tt class="docutils literal"><span class="pre">MultipleObjectsReturned</span></tt> error.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">arguments to the manager methods include pk for primary key, all model fields and some operators

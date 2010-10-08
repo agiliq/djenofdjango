@@ -79,6 +79,7 @@ the request. A request url that does not match any urlconf entry will be 404&#82
     <span class="c"># Uncomment the next line to enable the admin:</span>
     <span class="p">(</span><span class="s">r&#39;^admin/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">urls</span><span class="p">)),</span>
     <span class="p">(</span><span class="s">r&#39;^pastebin/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s">&#39;pastebin.urls&#39;</span><span class="p">)),</span>
+    <span class="p">(</span><span class="s">r&#39;^blog/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s">&#39;blog.urls&#39;</span><span class="p">)),</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -412,18 +413,18 @@ name is optional, we fall back to the id which is guaranteed.</li>
 </ul>
 </div>
 <p>Adding our app to the project</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="s">&#39;django.contrib.auth&#39;</span><span class="p">,</span>
-    <span class="s">&#39;django.contrib.contenttypes&#39;</span><span class="p">,</span>
-    <span class="s">&#39;django.contrib.sessions&#39;</span><span class="p">,</span>
-    <span class="s">&#39;django.contrib.sites&#39;</span><span class="p">,</span>
-    <span class="s">&#39;django.contrib.messages&#39;</span><span class="p">,</span>
-    <span class="c"># Uncomment the next line to enable the admin:</span>
-    <span class="s">&#39;django.contrib.admin&#39;</span><span class="p">,</span>
-    <span class="s">&#39;cd_library&#39;</span><span class="p">,</span>
-    <span class="s">&#39;pastebin&#39;</span><span class="p">,</span>
-<span class="p">)</span>
-</pre></div>
+<div class="highlight-python"><pre>INSTALLED_APPS = (
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.sites',
+    'django.contrib.messages',
+    # Uncomment the next line to enable the admin:
+    'django.contrib.admin',
+    'cd_library',
+    'pastebin',
+    'blog',
+</pre>
 </div>
 <p>And syncdb&#8217;ing:</p>
 <div class="highlight-python"><pre>python manage.py syncdb</pre>
@@ -478,6 +479,7 @@ argument to generate a form and save it to the database. In our case, this is th
     <span class="c"># Uncomment the next line to enable the admin:</span>
     <span class="p">(</span><span class="s">r&#39;^admin/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">urls</span><span class="p">)),</span>
     <span class="p">(</span><span class="s">r&#39;^pastebin/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s">&#39;pastebin.urls&#39;</span><span class="p">)),</span>
+    <span class="p">(</span><span class="s">r&#39;^blog/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s">&#39;blog.urls&#39;</span><span class="p">)),</span>
 <span class="p">)</span>
 </pre></div>
 </div>

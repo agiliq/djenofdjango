@@ -429,7 +429,8 @@ returns::
 
     <CD: OK Computer by Radiohead, 2000>
 
-that is, a single instance of our CD model
+that is, a single instance of our CD model. The arguments **must** return a unique object or else
+this method will raise ``MultipleObjectsReturned`` error.
 
 .. note::
 

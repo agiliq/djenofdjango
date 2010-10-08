@@ -50,26 +50,110 @@
             
   <div class="section" id="chapter-4-building-a-blog">
 <h1>Chapter 4. Building a Blog<a class="headerlink" href="#chapter-4-building-a-blog" title="Permalink to this headline">¶</a></h1>
-<p>(Topics introduced: Authentication, Session management, NewForms, Generating simple RSS feeds. Date based generic views.)</p>
-<p>Diving in. [Code listing]</p>
-<dl class="docutils">
-<dt>Authentication. [In chapter 2, all views were managed by Admin, so we did not need to handle authentication. In chapter 3, all views would be public, so no authentication was needed. In this chapter we need to restrict access to only logged in user, so we introduce it here.]</dt>
-<dd>Using django.contrib.auth
-Using login_required decorator to restrict access to logged in users.
-Using request.user in views, for finer control over views.
-Using context processors to use logged in users in templates.</dd>
-<dt>Session Management. [So once user has commented, their name/email information is stored.]</dt>
-<dd>The machinery behind sessions framework.
-Using cookies.
-Using session to abstract handling cookies.</dd>
-<dt>Newforms. [Comment, Post, Settings form]</dt>
-<dd>Using newforms.
-Using model form to auto generate forms for model.
-Creating complex forms programatically. (Instead of defining them.)</dd>
-<dt>Generating RSS feeds.</dt>
-<dd>Using django.contrib.syndication to generate feeds for the Blog.</dd>
-</dl>
-<p>Using date based generic views to generate monthly and weekly archives for the blog.</p>
+<div class="section" id="topics-in-this-chapter">
+<h2>Topics in this chapter:<a class="headerlink" href="#topics-in-this-chapter" title="Permalink to this headline">¶</a></h2>
+<p>So far, we have seen how to use django&#8217;s admin interface, and generic views. In this chapter we
+will write our own admin page for creating a blog entry, store some user details in the session
+and use date based generic views for our blog archives.</p>
+</div>
+<div class="section" id="our-blog-app">
+<h2>Our blog app:<a class="headerlink" href="#our-blog-app" title="Permalink to this headline">¶</a></h2>
+<p>Let&#8217;s list out the features we would want to see in our blog:</p>
+<ul class="simple">
+<li>Create/Edit blog post (restricted to admin)</li>
+<li>View blog post (public)</li>
+<li>Comment on a blog post (anonymous)</li>
+<li>Store anonymous user details in session</li>
+<li>Show month based blog archives</li>
+<li>Generate RSS feeds</li>
+</ul>
+<p>We have two models here: <tt class="docutils literal"><span class="pre">Post</span></tt> and <tt class="docutils literal"><span class="pre">Comment</span></tt>. The data we would like store are:</p>
+<p>For Post:</p>
+<ul class="simple">
+<li>Title</li>
+<li>Text Content</li>
+<li>Slug</li>
+<li>Created Date</li>
+<li>Author</li>
+</ul>
+<p>For Comment:</p>
+<ul class="simple">
+<li>Name</li>
+<li>Website</li>
+<li>Email</li>
+<li>Text Content</li>
+<li>Post related to this comment</li>
+<li>Created Date</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Since we want anonymous to be able to comment on a post, we are not relating the comment poster
+to a registered user.</p>
+</div>
+<p>We want the <tt class="docutils literal"><span class="pre">author</span></tt> field of the post to be mapped to a registered user and the <tt class="docutils literal"><span class="pre">post</span></tt> field
+to be mapped to a valid <tt class="docutils literal"><span class="pre">Post</span></tt>. As we shall see, we will ForeignKeys to the appropriate models
+to manage these.</p>
+<p>We have already seen how to create and integrate an app into our project, so I will start with the models</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+<span class="kn">from</span> <span class="nn">django.template.defaultfilters</span> <span class="kn">import</span> <span class="n">slugify</span>
+
+<span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">User</span>
+
+<span class="c"># Create your models here.</span>
+
+<span class="k">class</span> <span class="nc">Post</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">slug</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">SlugField</span><span class="p">(</span><span class="n">unique</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+    <span class="n">created_on</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">auto_now_add</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">author</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">User</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span>
+
+    <span class="nd">@models.permalink</span>
+    <span class="k">def</span> <span class="nf">get_absolute_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="s">&#39;blog_post_detail&#39;</span><span class="p">,</span> <span class="p">(),</span> 
+                <span class="p">{</span>
+                    <span class="s">&#39;slug&#39;</span> <span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">slug</span><span class="p">,</span>
+                <span class="p">})</span>
+
+    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">slug</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">slug</span> <span class="o">=</span> <span class="n">slugify</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Post</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Comment</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+    <span class="n">email</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">EmailField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">75</span><span class="p">)</span>
+    <span class="n">website</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">URLField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+    <span class="n">post</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Post</span><span class="p">)</span>
+    <span class="n">created_on</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">auto_now_add</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span>
+</pre></div>
+</div>
+<p>Quite a few new things here, let&#8217;s analyze them:</p>
+<ul class="simple">
+<li>slug field - it is used for storing slugs (e.g. this-is-a-slug). SEO or something.</li>
+<li>We will be using slugs in the url to fetch a blog post, so this must be unique.</li>
+<li><tt class="docutils literal"><span class="pre">slugify</span></tt> is a helper function to get slug from a string. We won&#8217;t need to get the slug from the form,
+we will generate it ourself using <tt class="docutils literal"><span class="pre">slugify</span></tt></li>
+<li>To autogenerate the slug, we override the <tt class="docutils literal"><span class="pre">model</span></tt> save method, whose signature is <tt class="docutils literal"><span class="pre">save(self,</span> <span class="pre">*args,</span> <span class="pre">**kwargs)</span></tt>
+We set <tt class="docutils literal"><span class="pre">self.slug</span></tt> to the slug generated by <tt class="docutils literal"><span class="pre">slugify</span></tt> and call the parent <tt class="docutils literal"><span class="pre">save</span></tt> method.</li>
+<li>This ensures that every time a model is saved, it will have a slug field.</li>
+<li>The <tt class="docutils literal"><span class="pre">get_absolute_url</span></tt> of the <tt class="docutils literal"><span class="pre">Post</span></tt> model points to the <tt class="docutils literal"><span class="pre">blog_post_detail</span></tt> which takes a <tt class="docutils literal"><span class="pre">slug</span></tt> parameter.
+This is the <tt class="docutils literal"><span class="pre">Post</span></tt> detail view, and it fetches the post based on the <tt class="docutils literal"><span class="pre">slug</span></tt>. We will soon see how this is implemented.</li>
+<li><tt class="docutils literal"><span class="pre">model.ForeignKey</span></tt> is a ForeignKey field which can be used to link this model to any other model. Here we want to link the <tt class="docutils literal"><span class="pre">author</span></tt>
+field to a <tt class="docutils literal"><span class="pre">User</span></tt>, which is django&#8217;s model for a user. It comes from <tt class="docutils literal"><span class="pre">django.contrib.auth</span></tt> app, which is another useful package
+shipped with django.</li>
+<li>Similarly to link a <tt class="docutils literal"><span class="pre">Comment</span></tt> to a <tt class="docutils literal"><span class="pre">Post</span></tt> we have a ForeignKey from in the <tt class="docutils literal"><span class="pre">post</span></tt> field of the comment.</li>
+<li>We won&#8217;t need the <tt class="docutils literal"><span class="pre">author</span></tt> field from the <tt class="docutils literal"><span class="pre">Post</span></tt> form either, but we will fill it up in the view, where we have access to the
+logged in user details</li>
+</ul>
+</div>
 </div>
 
 
@@ -78,6 +162,15 @@ Creating complex forms programatically. (Instead of defining them.)</dd>
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Chapter 4. Building a Blog</a><ul>
+<li><a class="reference internal" href="#topics-in-this-chapter">Topics in this chapter:</a></li>
+<li><a class="reference internal" href="#our-blog-app">Our blog app:</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
   <p class="topless"><a href="chapter3.html"
                         title="previous chapter">Chapter 3. Building a Pastebin.</a></p>
