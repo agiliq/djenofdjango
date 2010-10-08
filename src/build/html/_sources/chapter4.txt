@@ -119,3 +119,39 @@ Quite a few new things here, let's analyze them:
 * We won't need the ``author`` field from the ``Post`` form either, but we will fill it up in the view, where we have access to the 
   logged in user details
 
+The views we would need are:
+
+* Admin should be able to login
+
+* Add/Edit a post - restricted to admin
+
+* View a blog post
+
+* Comment on a blog post
+
+For login, we will use ``django.contrib.auth.views.login`` view which is included in the ``contrib.auth`` app. It expects a ``registration/login.html``
+which we will steal from ``django/contrib/admin/templates/admin/login.html``. We will include the login url in the project urls.
+
+.. literalinclude:: djen_project/urls.py
+    :language: python
+    :commit: 69314584982bbf27530a
+
+For the others, we will write custom views in blog/views.py.
+
+.. literalinclude:: djen_project/blog/views.py
+    :language: python
+    :commit: 69314584982bbf27530a
+
+Note:
+
+* The ``user_passes_test`` decorator whether the user is admin or not. If not, it will redirect the user to login page.
+
+* We are using the ``ModelForms`` defined in ``forms.py`` to autogenerate forms from our Models.
+
+* ``ModelForm`` includes a ``save`` method (just like a ``Models`` save method) which saves the model data to the database.
+
+* ``commit=False`` on a form save gives us the temporary ``Model`` object so that we can modify it and save permanently.
+  Here, we have used it to autofill the ``author`` of ``Post`` and ``post`` of ``Comment``
+
+* ``redirect`` is a shortcut that redirects the request to another url or a model's ``get_absolute_url`` property.
+
