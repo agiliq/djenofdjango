@@ -1,13 +1,13 @@
 # Create your views here.
 
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import redirect, render_to_response, get_object_or_404
 from django.template import RequestContext
 
 from models import Post
 from forms import PostForm, CommentForm
 
-@login_required
+@user_passes_test(lambda u: u.is_superuser)
 def add_post(request):
     form = PostForm(request.POST or None)
     if form.is_valid():
@@ -33,3 +33,4 @@ def view_post(request, slug):
                                   'form': form,
                               },
                               context_instance=RequestContext(request))
+
