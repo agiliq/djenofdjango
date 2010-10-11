@@ -140,7 +140,7 @@ For the others, we will write custom views in blog/views.py.
 
 .. literalinclude:: djen_project/blog/views.py
     :language: python
-    :commit: 69314584982bbf27530a
+    :commit: abd13c713c1918bfd836
 
 Note:
 

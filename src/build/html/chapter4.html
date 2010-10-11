@@ -213,7 +213,7 @@ which we will steal from <tt class="docutils literal"><span class="pre">django/c
         <span class="n">comment</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">commit</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
         <span class="n">comment</span><span class="o">.</span><span class="n">post</span> <span class="o">=</span> <span class="n">post</span>
         <span class="n">comment</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-        <span class="n">redirect</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">&#39;blog/blog_post.html&#39;</span><span class="p">,</span>
                               <span class="p">{</span>
                                   <span class="s">&#39;post&#39;</span><span class="p">:</span> <span class="n">post</span><span class="p">,</span>
