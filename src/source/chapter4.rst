@@ -331,3 +331,5 @@ We will use date based generic views to get weekly/monthly archives for our blog
     :language: django
     :commit: 087f567
 
+Now, blog archives should be acessible from ``/blog/archive/month/2010/oct`` or ``/blog/archive/week/2010/41``
+
