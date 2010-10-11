@@ -26,7 +26,7 @@ def view_post(request, slug):
         comment = form.save(commit=False)
         comment.post = post
         comment.save()
-        redirect(request.path)
+        return redirect(request.path)
     return render_to_response('blog/blog_post.html',
                               {
                                   'post': post,
