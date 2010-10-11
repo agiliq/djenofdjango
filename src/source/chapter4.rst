@@ -136,6 +136,12 @@ which we will steal from ``django/contrib/admin/templates/admin/login.html``. We
     :language: python
     :commit: 69314584982bbf27530a
 
+In blog/templates/registration/login.html
+
+.. literalinclude:: djen_project/blog/templates/registration/login.html
+    :language: django
+    :commit: 394382886e3f98ba6e5f
+
 For the others, we will write custom views in blog/views.py.
 
 .. literalinclude:: djen_project/blog/views.py
@@ -153,5 +159,28 @@ Note:
 * ``commit=False`` on a form save gives us the temporary ``Model`` object so that we can modify it and save permanently.
   Here, we have used it to autofill the ``author`` of ``Post`` and ``post`` of ``Comment``
 
-* ``redirect`` is a shortcut that redirects the request to another url or a model's ``get_absolute_url`` property.
+* ``redirect`` is a shortcut that redirects using ``HttpResponseRedirect`` to another url or a model's ``get_absolute_url`` property.
+
+The corresponding templates for these views would look like:
+
+``blog/templates/blog/add_post.html``:
+
+.. literalinclude:: djen_project/blog/templates/blog/add_post.html
+    :language: django
+    :commit: 394382886e3f98ba6e5f
+
+``blog/templates/blog/blog_post.html``:
+
+.. literalinclude:: djen_project/blog/templates/blog/blog_post.html
+    :language: django
+    :commit: 394382886e3f98ba6e5f
+
+.. note::
+
+    Since ``Comment`` has a ForeignKey to ``Post``, each ``Post`` object automatically gets a 
+    ``comment_set`` property which provides an interface to that particular ``Post``'s comments.
+
+So far we have most of the blog actions covered. Next, let's look into sessions:
+
+
 

@@ -219,8 +219,61 @@ any arguments to the property.</p>
 </div>
 <p>which would render the objects in html unordered list.</p>
 <p>Note that <tt class="docutils literal"><span class="pre">{%</span> <span class="pre">if</span> <span class="pre">%}</span></tt> <tt class="docutils literal"><span class="pre">{%</span> <span class="pre">for</span> <span class="pre">%}</span></tt> <tt class="docutils literal"><span class="pre">{%</span> <span class="pre">endif</span> <span class="pre">%}</span></tt> <tt class="docutils literal"><span class="pre">{%</span> <span class="pre">endfor</span> <span class="pre">%}</span></tt> are all built-in templatetags.
-If and for behave very much like their python counterparts.
-We will see later how to add custom templatetags.</p>
+If and for behave very much like their python counterparts.</p>
+</div>
+<div class="section" id="common-templatetags-and-template-inheritance">
+<h3>Common templatetags and template inheritance:<a class="headerlink" href="#common-templatetags-and-template-inheritance" title="Permalink to this headline">¶</a></h3>
+<p>Some templatetags we will use in our application:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">url</span></tt></li>
+</ul>
+<p>This templatetag takes a named url or view function and renders the url as found by <tt class="docutils literal"><span class="pre">reverse</span></tt></p>
+<blockquote>
+For example:</blockquote>
+<div class="highlight-django"><div class="highlight"><pre><span class="x">&lt;a href=&quot;</span><span class="cp">{%</span> <span class="k">url</span> <span class="nv">pastebin_paste_list</span> <span class="cp">%}</span><span class="x">&quot;&gt;View All&lt;/a&gt;</span>
+</pre></div>
+</div>
+<p>would output</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;/pastebin/pastes/&quot;</span><span class="nt">&gt;</span>View All<span class="nt">&lt;/a&gt;</span>
+</pre></div>
+</div>
+<p>It also takes arguments:</p>
+<div class="highlight-django"><div class="highlight"><pre><span class="x">&lt;a href=&quot;</span><span class="cp">{%</span> <span class="k">url</span> <span class="nv">pastebin_paste_detail</span> <span class="nv">paste.id</span>  <span class="cp">%}</span><span class="x">&quot;&gt;</span><span class="cp">{{</span> <span class="nv">paste</span> <span class="cp">}}</span><span class="x">&lt;/a&gt;</span>
+</pre></div>
+</div>
+<p>would output</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;/pastebin/paste/9&quot;</span><span class="nt">&gt;</span>Sample Paste<span class="nt">&lt;/a&gt;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You must make sure the correct urlconf entry for the give url exists. If the url entry
+does not exist, or the number of arguments does not match, this templatetag will raise a
+<tt class="docutils literal"><span class="pre">NoReverseMatch</span></tt> exception.</p>
+</div>
+<ul>
+<li><p class="first"><tt class="docutils literal"><span class="pre">csrf_token</span></tt></p>
+<p>This is a security related tag used in forms to prevent cross site request forgery.</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">include</span> <span class="pre">&lt;template&gt;</span></tt></p>
+<p>This will simply include any file that can be found by the <tt class="docutils literal"><span class="pre">TEMPLATE_LOADERS</span></tt> where it is called</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">extends</span> <span class="pre">&lt;template&gt;</span></tt></p>
+<p>This will extend another template and provides template inheritance. You can have a <tt class="docutils literal"><span class="pre">base</span></tt> template and
+have other specific template extend the <tt class="docutils literal"><span class="pre">base</span></tt> template.</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">block</span></tt> and <tt class="docutils literal"><span class="pre">endblock</span></tt></p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">blocks</span></tt> are used to customize the <tt class="docutils literal"><span class="pre">base</span></tt> page from a <tt class="docutils literal"><span class="pre">child</span></tt> page. If the <tt class="docutils literal"><span class="pre">base</span></tt> page defines a block called</dt>
+<dd><p class="first last"><tt class="docutils literal"><span class="pre">head</span></tt>, the child page can override that block with its own contents.</p>
+</dd>
+</dl>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">load</span></tt></p>
+<p>This is used to load custom templatetags. More about writing and using custom templatetags later.</p>
+</li>
+</ul>
+<p>We will see later how to add custom templatetags.</p>
 </div>
 <div class="section" id="filters">
 <h3>Filters:<a class="headerlink" href="#filters" title="Permalink to this headline">¶</a></h3>
@@ -249,7 +302,8 @@ of the website separate. Template language should be easy enough to be written b
 <div class="section" id="views">
 <h3>Views:<a class="headerlink" href="#views" title="Permalink to this headline">¶</a></h3>
 <p>Views are just functions which take the <tt class="docutils literal"><span class="pre">HttpRequest</span></tt> object,  and some optional arguments,
-then do some work and return a <tt class="docutils literal"><span class="pre">HttpResponse</span></tt> object.</p>
+then do some work and return a <tt class="docutils literal"><span class="pre">HttpResponse</span></tt> page. Use <tt class="docutils literal"><span class="pre">HttpResponseRedirect</span></tt> to redirect
+to some other <tt class="docutils literal"><span class="pre">url</span></tt> or <tt class="docutils literal"><span class="pre">HttpResponseForbidden</span></tt> to return a <tt class="docutils literal"><span class="pre">403</span> <span class="pre">Forbidden</span></tt> response.</p>
 <p>By convention, all of an app&#8217;s views would be written in &lt;app&gt;/views.py</p>
 <p>A simple example to return &#8220;Hello World!&#8221; string response:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span>
@@ -862,6 +916,7 @@ on the queryset.</li>
 <li><a class="reference internal" href="#template-loaders">Template Loaders:</a></li>
 <li><a class="reference internal" href="#context">Context:</a></li>
 <li><a class="reference internal" href="#templatetags">Templatetags:</a></li>
+<li><a class="reference internal" href="#common-templatetags-and-template-inheritance">Common templatetags and template inheritance:</a></li>
 <li><a class="reference internal" href="#filters">Filters:</a></li>
 <li><a class="reference internal" href="#templates-are-not-meant-for-programming">Templates are not meant for programming:</a></li>
 </ul>

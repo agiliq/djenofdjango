@@ -183,6 +183,67 @@ which would render the objects in html unordered list.
 
 Note that ``{% if %}`` ``{% for %}`` ``{% endif %}`` ``{% endfor %}`` are all built-in templatetags.
 If and for behave very much like their python counterparts.
+
+Common templatetags and template inheritance:
+++++++++++++++++++++++++++++++++++++++++++++++
+
+Some templatetags we will use in our application:
+
+* ``url`` 
+  
+This templatetag takes a named url or view function and renders the url as found by ``reverse``
+
+  For example:
+  
+.. sourcecode:: django
+
+    <a href="{% url pastebin_paste_list %}">View All</a>
+
+would output
+
+.. sourcecode:: html
+
+    <a href="/pastebin/pastes/">View All</a>
+
+It also takes arguments:
+
+.. sourcecode:: django
+
+    <a href="{% url pastebin_paste_detail paste.id  %}">{{ paste }}</a>
+
+would output
+
+.. sourcecode:: html
+
+    <a href="/pastebin/paste/9">Sample Paste</a>
+
+.. note:: You must make sure the correct urlconf entry for the give url exists. If the url entry
+          does not exist, or the number of arguments does not match, this templatetag will raise a 
+          ``NoReverseMatch`` exception.
+
+
+* ``csrf_token`` 
+
+  This is a security related tag used in forms to prevent cross site request forgery.
+
+* ``include <template>``
+
+  This will simply include any file that can be found by the ``TEMPLATE_LOADERS`` where it is called
+
+* ``extends <template>``
+
+  This will extend another template and provides template inheritance. You can have a ``base`` template and
+  have other specific template extend the ``base`` template.
+
+* ``block`` and ``endblock``
+
+  ``blocks`` are used to customize the ``base`` page from a ``child`` page. If the ``base`` page defines a block called
+   ``head``, the child page can override that block with its own contents.
+
+* ``load``
+
+  This is used to load custom templatetags. More about writing and using custom templatetags later.
+
 We will see later how to add custom templatetags.
 
 Filters:
@@ -217,7 +278,8 @@ Views:
 ++++++
 
 Views are just functions which take the ``HttpRequest`` object,  and some optional arguments,
-then do some work and return a ``HttpResponse`` object.
+then do some work and return a ``HttpResponse`` page. Use ``HttpResponseRedirect`` to redirect
+to some other ``url`` or ``HttpResponseForbidden`` to return a ``403 Forbidden`` response.
 
 By convention, all of an app's views would be written in <app>/views.py
 

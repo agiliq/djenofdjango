@@ -184,6 +184,43 @@ which we will steal from <tt class="docutils literal"><span class="pre">django/c
 <span class="p">)</span>
 </pre></div>
 </div>
+<p>In blog/templates/registration/login.html</p>
+<div class="highlight-django"><div class="highlight"><pre><span class="cp">{%</span> <span class="k">extends</span> <span class="s2">&quot;admin/base_site.html&quot;</span> <span class="cp">%}</span><span class="x"></span>
+<span class="cp">{%</span> <span class="k">load</span> <span class="nv">i18n</span> <span class="cp">%}</span><span class="x"></span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">extrastyle</span> <span class="cp">%}{%</span> <span class="k">load</span> <span class="nv">adminmedia</span> <span class="cp">%}{{</span> <span class="nb">block</span><span class="nv">.super</span> <span class="cp">}}</span><span class="x">&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;</span><span class="cp">{%</span> <span class="k">admin_media_prefix</span> <span class="cp">%}</span><span class="x">css/login.css&quot; /&gt;</span><span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span><span class="x"></span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">bodyclass</span> <span class="cp">%}</span><span class="x">login</span><span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span><span class="x"></span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">content_title</span> <span class="cp">%}{%</span> <span class="k">endblock</span> <span class="cp">%}</span><span class="x"></span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">breadcrumbs</span> <span class="cp">%}{%</span> <span class="k">endblock</span> <span class="cp">%}</span><span class="x"></span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span><span class="x"></span>
+<span class="cp">{%</span> <span class="k">if</span> <span class="nv">error_message</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">&lt;p class=&quot;errornote&quot;&gt;</span><span class="cp">{{</span> <span class="nv">error_message</span> <span class="cp">}}</span><span class="x">&lt;/p&gt;</span>
+<span class="cp">{%</span> <span class="k">endif</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">&lt;div id=&quot;content-main&quot;&gt;</span>
+<span class="x">&lt;form action=&quot;</span><span class="cp">{{</span> <span class="nv">app_path</span> <span class="cp">}}</span><span class="x">&quot; method=&quot;post&quot; id=&quot;login-form&quot;&gt;</span><span class="cp">{%</span> <span class="k">csrf_token</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">  &lt;div class=&quot;form-row&quot;&gt;</span>
+<span class="x">    &lt;label for=&quot;id_username&quot;&gt;</span><span class="cp">{%</span> <span class="k">trans</span> <span class="s1">&#39;Username:&#39;</span> <span class="cp">%}</span><span class="x">&lt;/label&gt; &lt;input type=&quot;text&quot; name=&quot;username&quot; id=&quot;id_username&quot; /&gt;</span>
+<span class="x">  &lt;/div&gt;</span>
+<span class="x">  &lt;div class=&quot;form-row&quot;&gt;</span>
+<span class="x">    &lt;label for=&quot;id_password&quot;&gt;</span><span class="cp">{%</span> <span class="k">trans</span> <span class="s1">&#39;Password:&#39;</span> <span class="cp">%}</span><span class="x">&lt;/label&gt; &lt;input type=&quot;password&quot; name=&quot;password&quot; id=&quot;id_password&quot; /&gt;</span>
+<span class="x">    &lt;input type=&quot;hidden&quot; name=&quot;this_is_the_login_form&quot; value=&quot;1&quot; /&gt;</span>
+<span class="x">  &lt;/div&gt;</span>
+<span class="x">  &lt;div class=&quot;submit-row&quot;&gt;</span>
+<span class="x">    &lt;label&gt;&amp;nbsp;&lt;/label&gt;&lt;input type=&quot;submit&quot; value=&quot;</span><span class="cp">{%</span> <span class="k">trans</span> <span class="s1">&#39;Log in&#39;</span> <span class="cp">%}</span><span class="x">&quot; /&gt;</span>
+<span class="x">  &lt;/div&gt;</span>
+<span class="x">&lt;/form&gt;</span>
+
+<span class="x">&lt;script type=&quot;text/javascript&quot;&gt;</span>
+<span class="x">document.getElementById(&#39;id_username&#39;).focus()</span>
+<span class="x">&lt;/script&gt;</span>
+<span class="x">&lt;/div&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span><span class="x"></span>
+</pre></div>
+</div>
 <p>For the others, we will write custom views in blog/views.py.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="c"># Create your views here.</span>
 
@@ -229,8 +266,62 @@ which we will steal from <tt class="docutils literal"><span class="pre">django/c
 <li><tt class="docutils literal"><span class="pre">ModelForm</span></tt> includes a <tt class="docutils literal"><span class="pre">save</span></tt> method (just like a <tt class="docutils literal"><span class="pre">Models</span></tt> save method) which saves the model data to the database.</li>
 <li><tt class="docutils literal"><span class="pre">commit=False</span></tt> on a form save gives us the temporary <tt class="docutils literal"><span class="pre">Model</span></tt> object so that we can modify it and save permanently.
 Here, we have used it to autofill the <tt class="docutils literal"><span class="pre">author</span></tt> of <tt class="docutils literal"><span class="pre">Post</span></tt> and <tt class="docutils literal"><span class="pre">post</span></tt> of <tt class="docutils literal"><span class="pre">Comment</span></tt></li>
-<li><tt class="docutils literal"><span class="pre">redirect</span></tt> is a shortcut that redirects the request to another url or a model&#8217;s <tt class="docutils literal"><span class="pre">get_absolute_url</span></tt> property.</li>
+<li><tt class="docutils literal"><span class="pre">redirect</span></tt> is a shortcut that redirects using <tt class="docutils literal"><span class="pre">HttpResponseRedirect</span></tt> to another url or a model&#8217;s <tt class="docutils literal"><span class="pre">get_absolute_url</span></tt> property.</li>
 </ul>
+<p>The corresponding templates for these views would look like:</p>
+<p><tt class="docutils literal"><span class="pre">blog/templates/blog/add_post.html</span></tt>:</p>
+<div class="highlight-django"><div class="highlight"><pre><span class="x">&lt;h2&gt;Hello </span><span class="cp">{{</span> <span class="nv">user.username</span> <span class="cp">}}</span><span class="x">&lt;/h2&gt;</span>
+<span class="x">&lt;br /&gt;</span>
+<span class="x">&lt;h2&gt;Add new post&lt;/h2&gt;</span>
+<span class="x">&lt;form action=&quot;&quot; method=&quot;POST&quot;&gt;</span>
+<span class="x">    </span><span class="cp">{%</span> <span class="k">csrf_token</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">    &lt;table&gt;</span>
+<span class="x">        </span><span class="cp">{{</span> <span class="nv">form.as_table</span> <span class="cp">}}</span><span class="x"></span>
+<span class="x">    &lt;/table&gt;</span>
+<span class="x">    &lt;input type=&quot;submit&quot; name=&quot;add&quot; value=&quot;Add&quot; /&gt;</span>
+<span class="x">&lt;/form&gt;</span>
+</pre></div>
+</div>
+<p><tt class="docutils literal"><span class="pre">blog/templates/blog/blog_post.html</span></tt>:</p>
+<div class="highlight-django"><div class="highlight"><pre><span class="x">&lt;h2&gt;</span><span class="cp">{{</span> <span class="nv">post.title</span> <span class="cp">}}</span><span class="x">&lt;/h2&gt;</span>
+
+<span class="x">&lt;div class=&quot;content&quot;&gt;</span>
+<span class="x">    &lt;p&gt;</span>
+<span class="x">        </span><span class="cp">{{</span> <span class="nv">post.text</span> <span class="cp">}}</span><span class="x"></span>
+<span class="x">    &lt;/p&gt;</span>
+<span class="x">    &lt;span&gt;</span>
+<span class="x">        Written by </span><span class="cp">{{</span> <span class="nv">post.author</span> <span class="cp">}}</span><span class="x">  on </span><span class="cp">{{</span> <span class="nv">post.created_on</span> <span class="cp">}}</span><span class="x"></span>
+<span class="x">    &lt;/span&gt;</span>
+<span class="x">&lt;/div&gt;</span>
+
+<span class="cp">{%</span> <span class="k">if</span> <span class="nv">post.comment_set.all</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">&lt;h2&gt;Comments&lt;/h2&gt;</span>
+<span class="x">&lt;div class=&quot;comments&quot;&gt;</span>
+<span class="x">    </span><span class="cp">{%</span> <span class="k">for</span> <span class="nv">comment</span> <span class="k">in</span> <span class="nv">post.comment_set.all</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">        &lt;span&gt;</span>
+<span class="x">            &lt;a href=&quot;</span><span class="cp">{{</span> <span class="nv">comment.website</span> <span class="cp">}}</span><span class="x">&quot;&gt;</span><span class="cp">{{</span> <span class="nv">comment.name</span> <span class="cp">}}</span><span class="x">&lt;/a&gt; said on </span><span class="cp">{{</span> <span class="nv">comment.created_on</span> <span class="cp">}}</span><span class="x"></span>
+<span class="x">        &lt;/span&gt;</span>
+<span class="x">        &lt;p&gt;</span>
+<span class="x">            </span><span class="cp">{{</span> <span class="nv">comment.text</span> <span class="cp">}}</span><span class="x"></span>
+<span class="x">        &lt;/p&gt;</span>
+<span class="x">    </span><span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">&lt;/div&gt;</span>
+<span class="cp">{%</span> <span class="k">endif</span> <span class="cp">%}</span><span class="x"></span>
+
+<span class="x">&lt;br /&gt;</span>
+
+<span class="x">&lt;h2&gt;Add Comment&lt;/h2&gt;</span>
+
+<span class="x">&lt;form action=&quot;&quot; method=&quot;POST&quot;&gt;</span>
+<span class="x">    </span><span class="cp">{%</span> <span class="k">csrf_token</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">    &lt;table&gt;</span>
+<span class="x">        </span><span class="cp">{{</span> <span class="nv">form.as_table</span> <span class="cp">}}</span><span class="x"></span>
+<span class="x">    &lt;/table&gt;</span>
+<span class="x">    &lt;input type=&quot;submit&quot; name=&quot;submit&quot; value=&quot;Submit&quot; /&gt;</span>
+<span class="x">&lt;/form&gt;</span>
+</pre></div>
+</div>
+<p>So far we have most of the blog actions covered. Next, let&#8217;s look into sessions:</p>
 </div>
 </div>
 
