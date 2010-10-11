@@ -319,6 +319,7 @@ Date based generic views:
 We will use date based generic views to get weekly/monthly archives for our blog posts:
 
 .. literalinclude:: djen_project/blog/urls.py
+    :commit: 087f567
 
 ``archive_month`` generic views outputs to ``post_archive_month.html`` and ``archive_week`` to ``post_archive_week.html``
 
