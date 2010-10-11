@@ -171,6 +171,8 @@ to a registered user.</p>
 <p>We want the <tt class="docutils literal"><span class="pre">author</span></tt> field of the post to be mapped to a registered user and the <tt class="docutils literal"><span class="pre">post</span></tt> field
 to be mapped to a valid <tt class="docutils literal"><span class="pre">Post</span></tt>. As we shall see, we will ForeignKeys to the appropriate models
 to manage these.</p>
+<div class="section" id="models">
+<h3>Models:<a class="headerlink" href="#models" title="Permalink to this headline">¶</a></h3>
 <p>We have already seen how to create and integrate an app into our project, so I will start with the models</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
 <span class="kn">from</span> <span class="nn">django.template.defaultfilters</span> <span class="kn">import</span> <span class="n">slugify</span>
@@ -231,6 +233,9 @@ shipped with django.</li>
 <li>We won&#8217;t need the <tt class="docutils literal"><span class="pre">author</span></tt> field from the <tt class="docutils literal"><span class="pre">Post</span></tt> form either, but we will fill it up in the view, where we have access to the
 logged in user details</li>
 </ul>
+</div>
+<div class="section" id="views">
+<h3>Views:<a class="headerlink" href="#views" title="Permalink to this headline">¶</a></h3>
 <p>The views we would need are:</p>
 <ul class="simple">
 <li>Admin should be able to login</li>
@@ -364,6 +369,9 @@ which we will steal from <tt class="docutils literal"><span class="pre">django/c
 Here, we have used it to autofill the <tt class="docutils literal"><span class="pre">author</span></tt> of <tt class="docutils literal"><span class="pre">Post</span></tt> and <tt class="docutils literal"><span class="pre">post</span></tt> of <tt class="docutils literal"><span class="pre">Comment</span></tt></li>
 <li><tt class="docutils literal"><span class="pre">redirect</span></tt> is a shortcut that redirects using <tt class="docutils literal"><span class="pre">HttpResponseRedirect</span></tt> to another url or a model&#8217;s <tt class="docutils literal"><span class="pre">get_absolute_url</span></tt> property.</li>
 </ul>
+</div>
+<div class="section" id="templates">
+<h3>Templates:<a class="headerlink" href="#templates" title="Permalink to this headline">¶</a></h3>
 <p>The corresponding templates for these views would look like:</p>
 <p><tt class="docutils literal"><span class="pre">blog/templates/blog/add_post.html</span></tt>:</p>
 <div class="highlight-django"><div class="highlight"><pre><span class="x">&lt;h2&gt;Hello </span><span class="cp">{{</span> <span class="nv">user.username</span> <span class="cp">}}</span><span class="x">&lt;/h2&gt;</span>
@@ -422,8 +430,11 @@ Here, we have used it to autofill the <tt class="docutils literal"><span class="
 <p class="last">Since <tt class="docutils literal"><span class="pre">Comment</span></tt> has a ForeignKey to <tt class="docutils literal"><span class="pre">Post</span></tt>, each <tt class="docutils literal"><span class="pre">Post</span></tt> object automatically gets a
 <tt class="docutils literal"><span class="pre">comment_set</span></tt> property which provides an interface to that particular <tt class="docutils literal"><span class="pre">Post</span></tt>&#8216;s comments.</p>
 </div>
+</div>
+<div class="section" id="sessions">
+<h3>Sessions:<a class="headerlink" href="#sessions" title="Permalink to this headline">¶</a></h3>
 <p>So far we have most of the blog actions covered. Next, let&#8217;s look into sessions:</p>
-<p>Suppose we want to store the commenter&#8217;s details in the session so that he does not have to fill them again.</p>
+<p>Suppose we want to store the commenter&#8217;s details in the session so that he/she does not have to fill them again.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="c"># Create your views here.</span>
 
 <span class="kn">from</span> <span class="nn">django.contrib.auth.decorators</span> <span class="kn">import</span> <span class="n">user_passes_test</span>
@@ -472,6 +483,7 @@ clears the cookies (e.g. by closing the browser). django identifies the session 
 <p>The default session backend is <tt class="docutils literal"><span class="pre">django.contrib.sessions.backends.db</span></tt> i.e. database backend, but it can be configured to <tt class="docutils literal"><span class="pre">file</span></tt> or <tt class="docutils literal"><span class="pre">cache</span></tt> backend as well.</p>
 </div>
 </div>
+</div>
 
 
           </div>
@@ -488,7 +500,13 @@ clears the cookies (e.g. by closing the browser). django identifies the session 
 <li><a class="reference internal" href="#custom-views-with-forms-and-decorators">Custom views with forms and decorators:</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#our-blog-app">Our blog app:</a></li>
+<li><a class="reference internal" href="#our-blog-app">Our blog app:</a><ul>
+<li><a class="reference internal" href="#models">Models:</a></li>
+<li><a class="reference internal" href="#views">Views:</a></li>
+<li><a class="reference internal" href="#templates">Templates:</a></li>
+<li><a class="reference internal" href="#sessions">Sessions:</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

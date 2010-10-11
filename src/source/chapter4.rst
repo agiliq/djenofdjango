@@ -186,6 +186,9 @@ We want the ``author`` field of the post to be mapped to a registered user and t
 to be mapped to a valid ``Post``. As we shall see, we will ForeignKeys to the appropriate models
 to manage these.
 
+Models:
++++++++
+
 We have already seen how to create and integrate an app into our project, so I will start with the models
 
 .. literalinclude:: djen_project/blog/models.py
@@ -217,6 +220,9 @@ Quite a few new things here, let's analyze them:
 
 * We won't need the ``author`` field from the ``Post`` form either, but we will fill it up in the view, where we have access to the 
   logged in user details
+
+Views:
+++++++
 
 The views we would need are:
 
@@ -267,6 +273,9 @@ Note:
 
 * ``redirect`` is a shortcut that redirects using ``HttpResponseRedirect`` to another url or a model's ``get_absolute_url`` property.
 
+Templates:
+++++++++++
+
 The corresponding templates for these views would look like:
 
 ``blog/templates/blog/add_post.html``:
@@ -286,9 +295,12 @@ The corresponding templates for these views would look like:
     Since ``Comment`` has a ForeignKey to ``Post``, each ``Post`` object automatically gets a 
     ``comment_set`` property which provides an interface to that particular ``Post``'s comments.
 
+Sessions:
++++++++++
+
 So far we have most of the blog actions covered. Next, let's look into sessions:
 
-Suppose we want to store the commenter's details in the session so that he does not have to fill them again. 
+Suppose we want to store the commenter's details in the session so that he/she does not have to fill them again. 
 
 .. literalinclude:: djen_project/blog/views.py
     :language: python
