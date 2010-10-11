@@ -311,3 +311,22 @@ clears the cookies (e.g. by closing the browser). django identifies the session 
 
 The default session backend is ``django.contrib.sessions.backends.db`` i.e. database backend, but it can be configured to ``file`` or ``cache`` backend as well.
 
+Date based generic views:
+=========================
+
+.. note:: reference: http://docs.djangoproject.com/en/1.2/ref/generic-views/#date-based-generic-views
+
+We will use date based generic views to get weekly/monthly archives for our blog posts:
+
+.. literalinclude:: djen_project/blog/urls.py
+
+``archive_month`` generic views outputs to ``post_archive_month.html`` and ``archive_week`` to ``post_archive_week.html``
+
+.. literalinclude:: djen_project/blog/templates/blog/post_archive_month.html
+    :language: django
+    :commit: 087f567
+
+.. literalinclude:: djen_project/blog/templates/blog/post_archive_week.html
+    :language: django
+    :commit: 087f567
+

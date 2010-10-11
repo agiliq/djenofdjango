@@ -483,6 +483,67 @@ clears the cookies (e.g. by closing the browser). django identifies the session 
 <p>The default session backend is <tt class="docutils literal"><span class="pre">django.contrib.sessions.backends.db</span></tt> i.e. database backend, but it can be configured to <tt class="docutils literal"><span class="pre">file</span></tt> or <tt class="docutils literal"><span class="pre">cache</span></tt> backend as well.</p>
 </div>
 </div>
+<div class="section" id="date-based-generic-views">
+<h2>Date based generic views:<a class="headerlink" href="#date-based-generic-views" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">reference: <a class="reference external" href="http://docs.djangoproject.com/en/1.2/ref/generic-views/#date-based-generic-views">http://docs.djangoproject.com/en/1.2/ref/generic-views/#date-based-generic-views</a></p>
+</div>
+<p>We will use date based generic views to get weekly/monthly archives for our blog posts:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.conf.urls.defaults</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="kn">from</span> <span class="nn">models</span> <span class="kn">import</span> <span class="n">Post</span>
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="n">patterns</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^post/(?P&lt;slug&gt;[-\w]+)$&#39;</span><span class="p">,</span> 
+        <span class="s">&#39;blog.views.view_post&#39;</span><span class="p">,</span>
+        <span class="n">name</span><span class="o">=</span><span class="s">&#39;blog_post_detail&#39;</span><span class="p">),</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^add/post$&#39;</span><span class="p">,</span> 
+        <span class="s">&#39;blog.views.add_post&#39;</span><span class="p">,</span> 
+        <span class="n">name</span><span class="o">=</span><span class="s">&#39;blog_add_post&#39;</span><span class="p">),</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^archive/month/(?P&lt;year&gt;\d+)/(?P&lt;month&gt;\w+)$&#39;</span><span class="p">,</span>
+        <span class="s">&#39;django.views.generic.date_based.archive_month&#39;</span><span class="p">,</span>
+        <span class="p">{</span>
+            <span class="s">&#39;queryset&#39;</span><span class="p">:</span> <span class="n">Post</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">(),</span> 
+            <span class="s">&#39;date_field&#39;</span><span class="p">:</span> <span class="s">&#39;created_on&#39;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="n">name</span><span class="o">=</span><span class="s">&#39;blog_archive_month&#39;</span><span class="p">,</span>
+       <span class="p">),</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^archive/week/(?P&lt;year&gt;\d+)/(?P&lt;week&gt;\d+)$&#39;</span><span class="p">,</span>
+        <span class="s">&#39;django.views.generic.date_based.archive_week&#39;</span><span class="p">,</span>
+        <span class="p">{</span>
+            <span class="s">&#39;queryset&#39;</span><span class="p">:</span> <span class="n">Post</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">(),</span> 
+            <span class="s">&#39;date_field&#39;</span><span class="p">:</span> <span class="s">&#39;created_on&#39;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="n">name</span><span class="o">=</span><span class="s">&#39;blog_archive_week&#39;</span><span class="p">,</span>
+       <span class="p">),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><tt class="docutils literal"><span class="pre">archive_month</span></tt> generic views outputs to <tt class="docutils literal"><span class="pre">post_archive_month.html</span></tt> and <tt class="docutils literal"><span class="pre">archive_week</span></tt> to <tt class="docutils literal"><span class="pre">post_archive_week.html</span></tt></p>
+<div class="highlight-django"><div class="highlight"><pre><span class="x">&lt;h2&gt;Post archives for </span><span class="cp">{{</span> <span class="nv">month</span><span class="o">|</span><span class="nf">date</span><span class="s2">:&quot;F&quot;</span> <span class="cp">}}</span><span class="x">, </span><span class="cp">{{</span> <span class="nv">month</span><span class="o">|</span><span class="nf">date</span><span class="s2">:&quot;Y&quot;</span> <span class="cp">}}</span><span class="x">&lt;/h2&gt;</span>
+
+<span class="x">&lt;ul&gt;</span>
+<span class="x">    </span><span class="cp">{%</span> <span class="k">for</span> <span class="nv">post</span> <span class="k">in</span> <span class="nv">object_list</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">        &lt;li&gt;</span>
+<span class="x">        &lt;a href=&quot;</span><span class="cp">{%</span> <span class="k">url</span> <span class="nv">blog_post_detail</span> <span class="nv">post.slug</span> <span class="cp">%}</span><span class="x">&quot;&gt;</span><span class="cp">{{</span> <span class="nv">post.title</span> <span class="cp">}}</span><span class="x">&lt;/a&gt;</span>
+<span class="x">        &lt;/li&gt;</span>
+<span class="x">    </span><span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">&lt;/ul&gt;</span>
+</pre></div>
+</div>
+<div class="highlight-django"><div class="highlight"><pre><span class="x">&lt;h2&gt;Post archives for week </span><span class="cp">{{</span> <span class="nv">week</span><span class="o">|</span><span class="nf">date</span><span class="s2">:&quot;W&quot;</span> <span class="cp">}}</span><span class="x">, </span><span class="cp">{{</span> <span class="nv">week</span><span class="o">|</span><span class="nf">date</span><span class="s2">:&quot;Y&quot;</span> <span class="cp">}}</span><span class="x">&lt;/h2&gt;</span>
+
+<span class="x">&lt;ul&gt;</span>
+<span class="x">    </span><span class="cp">{%</span> <span class="k">for</span> <span class="nv">post</span> <span class="k">in</span> <span class="nv">object_list</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">        &lt;li&gt;</span>
+<span class="x">        &lt;a href=&quot;</span><span class="cp">{%</span> <span class="k">url</span> <span class="nv">blog_post_detail</span> <span class="nv">post.slug</span> <span class="cp">%}</span><span class="x">&quot;&gt;</span><span class="cp">{{</span> <span class="nv">post.title</span> <span class="cp">}}</span><span class="x">&lt;/a&gt;</span>
+<span class="x">        &lt;/li&gt;</span>
+<span class="x">    </span><span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">&lt;/ul&gt;</span>
+</pre></div>
+</div>
+</div>
 </div>
 
 
@@ -507,6 +568,7 @@ clears the cookies (e.g. by closing the browser). django identifies the session 
 <li><a class="reference internal" href="#sessions">Sessions:</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#date-based-generic-views">Date based generic views:</a></li>
 </ul>
 </li>
 </ul>
