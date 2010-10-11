@@ -30,7 +30,7 @@ Topics in this chapter:
 =======================
 
 So far, we have seen how to use django's admin interface, and generic views. In this chapter we
-will write our own admin page for creating a blog entry, store some user details in the session
+will write custom views and blog entry admin page, store some user details in the session
 and use date based generic views for our blog archives.
 
 
@@ -59,7 +59,7 @@ on the linked Model.
         ...
         ...
 
-would relate each ``Post`` to multiple ``Comment`` s
+would relate each ``Post`` to multiple ``Comment``
 
 Now, to fetch all comments related to a Post, we can use
 
@@ -287,4 +287,15 @@ The corresponding templates for these views would look like:
     ``comment_set`` property which provides an interface to that particular ``Post``'s comments.
 
 So far we have most of the blog actions covered. Next, let's look into sessions:
+
+Suppose we want to store the commenter's details in the session so that he does not have to fill them again. 
+
+.. literalinclude:: djen_project/blog/views.py
+    :language: python
+    :commit: 134bb63144dfc1f94785
+
+Note that the ``form.initial`` attribute is a ``dict`` that holds initial data of the form. A session lasts until the user logs out or 
+clears the cookies (e.g. by closing the browser). django identifies the session using ``sessionid`` cookie.
+
+The default session backend is ``django.contrib.sessions.backends.db`` i.e. database backend, but it can be configured to ``file`` or ``cache`` backend as well.
 

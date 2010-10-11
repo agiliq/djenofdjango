@@ -53,7 +53,7 @@
 <div class="section" id="topics-in-this-chapter">
 <h2>Topics in this chapter:<a class="headerlink" href="#topics-in-this-chapter" title="Permalink to this headline">¶</a></h2>
 <p>So far, we have seen how to use django&#8217;s admin interface, and generic views. In this chapter we
-will write our own admin page for creating a blog entry, store some user details in the session
+will write custom views and blog entry admin page, store some user details in the session
 and use date based generic views for our blog archives.</p>
 <div class="section" id="models-with-foreignkeys">
 <h3>Models with ForeignKeys:<a class="headerlink" href="#models-with-foreignkeys" title="Permalink to this headline">¶</a></h3>
@@ -76,7 +76,7 @@ on the linked Model.</p>
     <span class="o">...</span>
 </pre></div>
 </div>
-<p>would relate each <tt class="docutils literal"><span class="pre">Post</span></tt> to multiple <tt class="docutils literal"><span class="pre">Comment</span></tt> s</p>
+<p>would relate each <tt class="docutils literal"><span class="pre">Post</span></tt> to multiple <tt class="docutils literal"><span class="pre">Comment</span></tt></p>
 <p>Now, to fetch all comments related to a Post, we can use</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">post</span> <span class="o">=</span> <span class="n">Post</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">comments</span> <span class="o">=</span> <span class="n">post</span><span class="o">.</span><span class="n">comment_set</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
@@ -423,6 +423,53 @@ Here, we have used it to autofill the <tt class="docutils literal"><span class="
 <tt class="docutils literal"><span class="pre">comment_set</span></tt> property which provides an interface to that particular <tt class="docutils literal"><span class="pre">Post</span></tt>&#8216;s comments.</p>
 </div>
 <p>So far we have most of the blog actions covered. Next, let&#8217;s look into sessions:</p>
+<p>Suppose we want to store the commenter&#8217;s details in the session so that he does not have to fill them again.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Create your views here.</span>
+
+<span class="kn">from</span> <span class="nn">django.contrib.auth.decorators</span> <span class="kn">import</span> <span class="n">user_passes_test</span>
+<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">redirect</span><span class="p">,</span> <span class="n">render_to_response</span><span class="p">,</span> <span class="n">get_object_or_404</span>
+<span class="kn">from</span> <span class="nn">django.template</span> <span class="kn">import</span> <span class="n">RequestContext</span>
+
+<span class="kn">from</span> <span class="nn">models</span> <span class="kn">import</span> <span class="n">Post</span>
+<span class="kn">from</span> <span class="nn">forms</span> <span class="kn">import</span> <span class="n">PostForm</span><span class="p">,</span> <span class="n">CommentForm</span>
+
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="k">lambda</span> <span class="n">u</span><span class="p">:</span> <span class="n">u</span><span class="o">.</span><span class="n">is_superuser</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">add_post</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">form</span> <span class="o">=</span> <span class="n">PostForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span> <span class="ow">or</span> <span class="bp">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+        <span class="n">post</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">commit</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        <span class="n">post</span><span class="o">.</span><span class="n">author</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span>
+        <span class="n">post</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">post</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">&#39;blog/add_post.html&#39;</span><span class="p">,</span> 
+                              <span class="p">{</span> <span class="s">&#39;form&#39;</span><span class="p">:</span> <span class="n">form</span> <span class="p">},</span>
+                              <span class="n">context_instance</span><span class="o">=</span><span class="n">RequestContext</span><span class="p">(</span><span class="n">request</span><span class="p">))</span>
+
+<span class="k">def</span> <span class="nf">view_post</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">slug</span><span class="p">):</span>
+    <span class="n">post</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Post</span><span class="p">,</span> <span class="n">slug</span><span class="o">=</span><span class="n">slug</span><span class="p">)</span>
+    <span class="n">form</span> <span class="o">=</span> <span class="n">CommentForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span> <span class="ow">or</span> <span class="bp">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+        <span class="n">comment</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">commit</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        <span class="n">comment</span><span class="o">.</span><span class="n">post</span> <span class="o">=</span> <span class="n">post</span>
+        <span class="n">comment</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="p">[</span><span class="s">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">comment</span><span class="o">.</span><span class="n">name</span>
+        <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="p">[</span><span class="s">&quot;email&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">comment</span><span class="o">.</span><span class="n">email</span>
+        <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="p">[</span><span class="s">&quot;website&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">comment</span><span class="o">.</span><span class="n">website</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+    <span class="n">form</span><span class="o">.</span><span class="n">initial</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">)</span>
+    <span class="n">form</span><span class="o">.</span><span class="n">initial</span><span class="p">[</span><span class="s">&#39;email&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;email&#39;</span><span class="p">)</span>
+    <span class="n">form</span><span class="o">.</span><span class="n">initial</span><span class="p">[</span><span class="s">&#39;website&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;website&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">&#39;blog/blog_post.html&#39;</span><span class="p">,</span>
+                              <span class="p">{</span>
+                                  <span class="s">&#39;post&#39;</span><span class="p">:</span> <span class="n">post</span><span class="p">,</span>
+                                  <span class="s">&#39;form&#39;</span><span class="p">:</span> <span class="n">form</span><span class="p">,</span>
+                              <span class="p">},</span>
+                              <span class="n">context_instance</span><span class="o">=</span><span class="n">RequestContext</span><span class="p">(</span><span class="n">request</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Note that the <tt class="docutils literal"><span class="pre">form.initial</span></tt> attribute is a <tt class="docutils literal"><span class="pre">dict</span></tt> that holds initial data of the form. A session lasts until the user logs out or
+clears the cookies (e.g. by closing the browser). django identifies the session using <tt class="docutils literal"><span class="pre">sessionid</span></tt> cookie.</p>
+<p>The default session backend is <tt class="docutils literal"><span class="pre">django.contrib.sessions.backends.db</span></tt> i.e. database backend, but it can be configured to <tt class="docutils literal"><span class="pre">file</span></tt> or <tt class="docutils literal"><span class="pre">cache</span></tt> backend as well.</p>
 </div>
 </div>
 
