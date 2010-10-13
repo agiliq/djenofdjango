@@ -29,11 +29,11 @@ In this chapter, we will build a wiki from scratch. Basic functionality includes
 
 * User registration
 
-* Page Management (CRUD)
+* Article Management (CRUD)
 
 * Markup support (ReST)
 
-* Audit trail for pages
+* Audit trail for article
 
 * Revision history
 
