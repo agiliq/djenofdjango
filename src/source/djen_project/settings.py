@@ -12,7 +12,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'djen_database',                      # Or path to database file if using sqlite3.
+        'NAME': 'djen_database_test',                      # Or path to database file if using sqlite3.
         'USER': 'root',                      # Not used with sqlite3.
         'PASSWORD': 'agiliq',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -94,4 +94,9 @@ INSTALLED_APPS = (
     'cd_library',
     'pastebin',
     'blog',
+    'registration',
+    'wiki',
 )
+
+from local_settings import *
+

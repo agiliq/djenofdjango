@@ -3,3 +3,4 @@
 *~
 *build/doctrees/
 *.db
+*local_settings.py

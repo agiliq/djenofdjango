@@ -20,3 +20,19 @@ Advanced ORM
 Websearches using Yahoo Developer API.  
   We want to make the wiki searchable, so instead of going via a local search system like Lucene, we use Yahoo Developer API. In this we can explain to use django.util.simplejson, to talk to external APIs which provide a JSON interface. 
   
+
+A wiki application:
+====================
+
+In this chapter, we will build a wiki from scratch. Basic functionality includes:
+
+* User registration
+
+* Page Management (CRUD)
+
+* Markup support (ReST)
+
+* Audit trail for pages
+
+* Revision history
+
