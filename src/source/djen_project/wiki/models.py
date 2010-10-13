@@ -11,7 +11,7 @@ class Article(models.Model):
     slug = models.SlugField(max_length=50)
     text = models.TextField()
     author = models.ForeignKey(User)
-    published = models.BooleanField(default=False)
+    is_published = models.BooleanField(default=False)
     created_on = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
