@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -7,8 +6,8 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Chapter 6. Building a Yahoo Answer’s like site &mdash; djenofdjango v0.1 documentation</title>
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <title>Chapter 6. Building a Yahoo Answer’s like site &mdash; Djen of Django</title>
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -22,7 +21,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="djenofdjango v0.1 documentation" href="index.html" />
+    <link rel="top" title="Djen of Django" href="index.html" />
     <link rel="next" title="Chapter 7. Building a Project management application" href="chapter7.html" />
     <link rel="prev" title="Chapter 5. Building a Wiki" href="chapter5.html" /> 
   </head>
@@ -39,37 +38,11 @@
         <li class="right" >
           <a href="chapter5.html" title="Chapter 5. Building a Wiki"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">djenofdjango v0.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Djen of Django</a> &raquo;</li> 
       </ul>
-    </div>  
-
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body">
-            
-  <div class="section" id="chapter-6-building-a-yahoo-answer-s-like-site">
-<h1>Chapter 6. Building a Yahoo Answer&#8217;s like site<a class="headerlink" href="#chapter-6-building-a-yahoo-answer-s-like-site" title="Permalink to this headline">¶</a></h1>
-<p>(Topics introduced: Transactions, Middleware, Permissions, Messages.)</p>
-<p>Diving in. [Code listing]</p>
-<dl class="docutils">
-<dt>Transactions. (Till previous chapters we were not using transactions and all database actions were in Autocommit mode. Here we want many views to work as part of a transaction.)</dt>
-<dd>Using TransactionMiddleware  to tie Http requests to transactions.
-Finer grained control over transaction using commit_manually</dd>
-<dt>Permissions. (We would define various user levels, and different user levels have different permissions)</dt>
-<dd>Introducing permissions.
-Creating cutsom permissions.
-How Groups, Users and permissions work together.
-Using permission_required decorator.</dd>
-<dt>Message. (For example when the user gets a reply to her question.)</dt>
-<dd>Using get_and_delete_messages()</dd>
-</dl>
-</div>
+    </div>
 
 
-          </div>
-        </div>
-      </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
@@ -98,6 +71,36 @@ Using permission_required decorator.</dd>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
+
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="chapter-6-building-a-yahoo-answer-s-like-site">
+<h1>Chapter 6. Building a Yahoo Answer&#8217;s like site<a class="headerlink" href="#chapter-6-building-a-yahoo-answer-s-like-site" title="Permalink to this headline">¶</a></h1>
+<p>(Topics introduced: Transactions, Middleware, Permissions, Messages.)</p>
+<p>Diving in. [Code listing]</p>
+<dl class="docutils">
+<dt>Transactions. (Till previous chapters we were not using transactions and all database actions were in Autocommit mode. Here we want many views to work as part of a transaction.)</dt>
+<dd>Using TransactionMiddleware  to tie Http requests to transactions.
+Finer grained control over transaction using commit_manually</dd>
+<dt>Permissions. (We would define various user levels, and different user levels have different permissions)</dt>
+<dd>Introducing permissions.
+Creating cutsom permissions.
+How Groups, Users and permissions work together.
+Using permission_required decorator.</dd>
+<dt>Message. (For example when the user gets a reply to her question.)</dt>
+<dd>Using get_and_delete_messages()</dd>
+</dl>
+</div>
+
+
+          </div>
+        </div>
+      </div>
       <div class="clearer"></div>
     </div>
     <div class="related">
@@ -112,12 +115,41 @@ Using permission_required decorator.</dd>
         <li class="right" >
           <a href="chapter5.html" title="Chapter 5. Building a Wiki"
              >previous</a> |</li>
-        <li><a href="index.html">djenofdjango v0.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Djen of Django</a> &raquo;</li> 
       </ul>
     </div>
+
+<div id="disqus_thread"></div><script type="text/javascript" src="http://disqus.com/forums/uswaretechbooks/embed.js"></script><noscript><a href="http://disqus.com/forums/uswaretechbooks/?url=ref">View the discussion thread.</a></noscript><a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
     <div class="footer">
-        &copy; Copyright 2010, Agiliq.
+      &copy; Copyright 2010, Agiliq.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1pre.
-    </div>
+
+
+<script type="text/javascript">
+//<![CDATA[
+(function() {
+	var links = document.getElementsByTagName('a');
+	var query = '?';
+	for(var i = 0; i < links.length; i++) {
+	if(links[i].href.indexOf('#disqus_thread') >= 0) {
+		query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
+	}
+	}
+	document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/uswaretechbooks/get_num_replies.js' + query + '"></' + 'script>');
+})();
+//]]>
+</script>
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-xxxxxx-xx");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+
   </body>
 </html>

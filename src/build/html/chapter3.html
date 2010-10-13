@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -7,8 +6,8 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Chapter 3. Building a Pastebin. &mdash; djenofdjango v0.1 documentation</title>
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <title>Chapter 3. Building a Pastebin. &mdash; Djen of Django</title>
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -22,7 +21,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="djenofdjango v0.1 documentation" href="index.html" />
+    <link rel="top" title="Djen of Django" href="index.html" />
     <link rel="next" title="Chapter 4. Building a Blog" href="chapter4.html" />
     <link rel="prev" title="Chapter 2. Building a personal CD library." href="chapter2.html" /> 
   </head>
@@ -39,9 +38,76 @@
         <li class="right" >
           <a href="chapter2.html" title="Chapter 2. Building a personal CD library."
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">djenofdjango v0.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Djen of Django</a> &raquo;</li> 
       </ul>
-    </div>  
+    </div>
+
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Chapter 3. Building a Pastebin.</a><ul>
+<li><a class="reference internal" href="#url-configuration-entry-points">URL configuration - entry points:</a><ul>
+<li><a class="reference internal" href="#named-urls">Named urls:</a></li>
+<li><a class="reference internal" href="#grouped-urls">Grouped urls:</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#templates-skeletons-of-our-website">Templates - skeletons of our website:</a><ul>
+<li><a class="reference internal" href="#template-loaders">Template Loaders:</a></li>
+<li><a class="reference internal" href="#context">Context:</a></li>
+<li><a class="reference internal" href="#templatetags">Templatetags:</a></li>
+<li><a class="reference internal" href="#common-templatetags-and-template-inheritance">Common templatetags and template inheritance:</a></li>
+<li><a class="reference internal" href="#filters">Filters:</a></li>
+<li><a class="reference internal" href="#templates-are-not-meant-for-programming">Templates are not meant for programming:</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#generic-views-commonly-used-views">Generic views - commonly used views:</a><ul>
+<li><a class="reference internal" href="#views">Views:</a></li>
+<li><a class="reference internal" href="#generic-views">Generic Views:</a></li>
+<li><a class="reference internal" href="#create-update-create-object"><tt class="docutils literal"><span class="pre">create_update.create_object</span></tt></a></li>
+<li><a class="reference internal" href="#create-update-update-object"><tt class="docutils literal"><span class="pre">create_update.update_object</span></tt></a></li>
+<li><a class="reference internal" href="#create-update-delete-object"><tt class="docutils literal"><span class="pre">create_update.delete_object</span></tt></a></li>
+<li><a class="reference internal" href="#list-detail-object-list"><tt class="docutils literal"><span class="pre">list_detail.object_list</span></tt></a></li>
+<li><a class="reference internal" href="#list-detail-object-detail"><tt class="docutils literal"><span class="pre">list_detail.object_detail</span></tt></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#designing-a-pastebin-app">Designing a pastebin app:</a></li>
+<li><a class="reference internal" href="#sketch-the-models">Sketch the models:</a></li>
+<li><a class="reference internal" href="#configuring-urls">Configuring urls:</a></li>
+<li><a class="reference internal" href="#writing-custom-management-scrips">Writing custom management scrips:</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="chapter2.html"
+                        title="previous chapter">Chapter 2. Building a personal CD library.</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="chapter4.html"
+                        title="next chapter">Chapter 4. Building a Blog</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/chapter3.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+
 
     <div class="document">
       <div class="documentwrapper">
@@ -77,10 +143,11 @@ the request. A request url that does not match any urlconf entry will be 404&#82
     <span class="c"># (r&#39;^admin/doc/&#39;, include(&#39;django.contrib.admindocs.urls&#39;)),</span>
 
     <span class="c"># Uncomment the next line to enable the admin:</span>
-    <span class="p">(</span><span class="s">r&#39;^accounts/login/$&#39;</span><span class="p">,</span> <span class="s">&#39;django.contrib.auth.views.login&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">r&#39;^accounts/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s">&#39;registration.urls&#39;</span><span class="p">)),</span>
     <span class="p">(</span><span class="s">r&#39;^admin/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">urls</span><span class="p">)),</span>
     <span class="p">(</span><span class="s">r&#39;^pastebin/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s">&#39;pastebin.urls&#39;</span><span class="p">)),</span>
     <span class="p">(</span><span class="s">r&#39;^blog/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s">&#39;blog.urls&#39;</span><span class="p">)),</span>
+    <span class="p">(</span><span class="s">r&#39;^wiki/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s">&#39;wiki.urls&#39;</span><span class="p">)),</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -532,10 +599,11 @@ argument to generate a form and save it to the database. In our case, this is th
     <span class="c"># (r&#39;^admin/doc/&#39;, include(&#39;django.contrib.admindocs.urls&#39;)),</span>
 
     <span class="c"># Uncomment the next line to enable the admin:</span>
-    <span class="p">(</span><span class="s">r&#39;^accounts/login/$&#39;</span><span class="p">,</span> <span class="s">&#39;django.contrib.auth.views.login&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">r&#39;^accounts/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s">&#39;registration.urls&#39;</span><span class="p">)),</span>
     <span class="p">(</span><span class="s">r&#39;^admin/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">urls</span><span class="p">)),</span>
     <span class="p">(</span><span class="s">r&#39;^pastebin/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s">&#39;pastebin.urls&#39;</span><span class="p">)),</span>
     <span class="p">(</span><span class="s">r&#39;^blog/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s">&#39;blog.urls&#39;</span><span class="p">)),</span>
+    <span class="p">(</span><span class="s">r&#39;^wiki/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s">&#39;wiki.urls&#39;</span><span class="p">)),</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -902,69 +970,6 @@ on the queryset.</li>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Chapter 3. Building a Pastebin.</a><ul>
-<li><a class="reference internal" href="#url-configuration-entry-points">URL configuration - entry points:</a><ul>
-<li><a class="reference internal" href="#named-urls">Named urls:</a></li>
-<li><a class="reference internal" href="#grouped-urls">Grouped urls:</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#templates-skeletons-of-our-website">Templates - skeletons of our website:</a><ul>
-<li><a class="reference internal" href="#template-loaders">Template Loaders:</a></li>
-<li><a class="reference internal" href="#context">Context:</a></li>
-<li><a class="reference internal" href="#templatetags">Templatetags:</a></li>
-<li><a class="reference internal" href="#common-templatetags-and-template-inheritance">Common templatetags and template inheritance:</a></li>
-<li><a class="reference internal" href="#filters">Filters:</a></li>
-<li><a class="reference internal" href="#templates-are-not-meant-for-programming">Templates are not meant for programming:</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#generic-views-commonly-used-views">Generic views - commonly used views:</a><ul>
-<li><a class="reference internal" href="#views">Views:</a></li>
-<li><a class="reference internal" href="#generic-views">Generic Views:</a></li>
-<li><a class="reference internal" href="#create-update-create-object"><tt class="docutils literal"><span class="pre">create_update.create_object</span></tt></a></li>
-<li><a class="reference internal" href="#create-update-update-object"><tt class="docutils literal"><span class="pre">create_update.update_object</span></tt></a></li>
-<li><a class="reference internal" href="#create-update-delete-object"><tt class="docutils literal"><span class="pre">create_update.delete_object</span></tt></a></li>
-<li><a class="reference internal" href="#list-detail-object-list"><tt class="docutils literal"><span class="pre">list_detail.object_list</span></tt></a></li>
-<li><a class="reference internal" href="#list-detail-object-detail"><tt class="docutils literal"><span class="pre">list_detail.object_detail</span></tt></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#designing-a-pastebin-app">Designing a pastebin app:</a></li>
-<li><a class="reference internal" href="#sketch-the-models">Sketch the models:</a></li>
-<li><a class="reference internal" href="#configuring-urls">Configuring urls:</a></li>
-<li><a class="reference internal" href="#writing-custom-management-scrips">Writing custom management scrips:</a></li>
-</ul>
-</li>
-</ul>
-
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="chapter2.html"
-                        title="previous chapter">Chapter 2. Building a personal CD library.</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="chapter4.html"
-                        title="next chapter">Chapter 4. Building a Blog</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/chapter3.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" size="18" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
       <div class="clearer"></div>
     </div>
     <div class="related">
@@ -979,12 +984,41 @@ on the queryset.</li>
         <li class="right" >
           <a href="chapter2.html" title="Chapter 2. Building a personal CD library."
              >previous</a> |</li>
-        <li><a href="index.html">djenofdjango v0.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Djen of Django</a> &raquo;</li> 
       </ul>
     </div>
+
+<div id="disqus_thread"></div><script type="text/javascript" src="http://disqus.com/forums/uswaretechbooks/embed.js"></script><noscript><a href="http://disqus.com/forums/uswaretechbooks/?url=ref">View the discussion thread.</a></noscript><a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
     <div class="footer">
-        &copy; Copyright 2010, Agiliq.
+      &copy; Copyright 2010, Agiliq.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1pre.
-    </div>
+
+
+<script type="text/javascript">
+//<![CDATA[
+(function() {
+	var links = document.getElementsByTagName('a');
+	var query = '?';
+	for(var i = 0; i < links.length; i++) {
+	if(links[i].href.indexOf('#disqus_thread') >= 0) {
+		query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
+	}
+	}
+	document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/uswaretechbooks/get_num_replies.js' + query + '"></' + 'script>');
+})();
+//]]>
+</script>
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-xxxxxx-xx");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+
   </body>
 </html>

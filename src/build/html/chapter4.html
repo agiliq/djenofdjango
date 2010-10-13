@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -7,8 +6,8 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Chapter 4. Building a Blog &mdash; djenofdjango v0.1 documentation</title>
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <title>Chapter 4. Building a Blog &mdash; Djen of Django</title>
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -22,7 +21,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="djenofdjango v0.1 documentation" href="index.html" />
+    <link rel="top" title="Djen of Django" href="index.html" />
     <link rel="next" title="Chapter 5. Building a Wiki" href="chapter5.html" />
     <link rel="prev" title="Chapter 3. Building a Pastebin." href="chapter3.html" /> 
   </head>
@@ -39,9 +38,62 @@
         <li class="right" >
           <a href="chapter3.html" title="Chapter 3. Building a Pastebin."
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">djenofdjango v0.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Djen of Django</a> &raquo;</li> 
       </ul>
-    </div>  
+    </div>
+
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Chapter 4. Building a Blog</a><ul>
+<li><a class="reference internal" href="#topics-in-this-chapter">Topics in this chapter:</a><ul>
+<li><a class="reference internal" href="#models-with-foreignkeys">Models with ForeignKeys:</a></li>
+<li><a class="reference internal" href="#modelforms">ModelForms:</a></li>
+<li><a class="reference internal" href="#custom-views-with-forms-and-decorators">Custom views with forms and decorators:</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#our-blog-app">Our blog app:</a><ul>
+<li><a class="reference internal" href="#models">Models:</a></li>
+<li><a class="reference internal" href="#views">Views:</a></li>
+<li><a class="reference internal" href="#templates">Templates:</a></li>
+<li><a class="reference internal" href="#sessions">Sessions:</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#date-based-generic-views">Date based generic views:</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="chapter3.html"
+                        title="previous chapter">Chapter 3. Building a Pastebin.</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="chapter5.html"
+                        title="next chapter">Chapter 5. Building a Wiki</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/chapter4.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+
 
     <div class="document">
       <div class="documentwrapper">
@@ -543,60 +595,12 @@ clears the cookies (e.g. by closing the browser). django identifies the session 
 <span class="x">&lt;/ul&gt;</span>
 </pre></div>
 </div>
+<p>Now, blog archives should be acessible from <tt class="docutils literal"><span class="pre">/blog/archive/month/2010/oct</span></tt> or <tt class="docutils literal"><span class="pre">/blog/archive/week/2010/41</span></tt></p>
 </div>
 </div>
 
 
           </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Chapter 4. Building a Blog</a><ul>
-<li><a class="reference internal" href="#topics-in-this-chapter">Topics in this chapter:</a><ul>
-<li><a class="reference internal" href="#models-with-foreignkeys">Models with ForeignKeys:</a></li>
-<li><a class="reference internal" href="#modelforms">ModelForms:</a></li>
-<li><a class="reference internal" href="#custom-views-with-forms-and-decorators">Custom views with forms and decorators:</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#our-blog-app">Our blog app:</a><ul>
-<li><a class="reference internal" href="#models">Models:</a></li>
-<li><a class="reference internal" href="#views">Views:</a></li>
-<li><a class="reference internal" href="#templates">Templates:</a></li>
-<li><a class="reference internal" href="#sessions">Sessions:</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#date-based-generic-views">Date based generic views:</a></li>
-</ul>
-</li>
-</ul>
-
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="chapter3.html"
-                        title="previous chapter">Chapter 3. Building a Pastebin.</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="chapter5.html"
-                        title="next chapter">Chapter 5. Building a Wiki</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/chapter4.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" size="18" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -613,12 +617,41 @@ clears the cookies (e.g. by closing the browser). django identifies the session 
         <li class="right" >
           <a href="chapter3.html" title="Chapter 3. Building a Pastebin."
              >previous</a> |</li>
-        <li><a href="index.html">djenofdjango v0.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Djen of Django</a> &raquo;</li> 
       </ul>
     </div>
+
+<div id="disqus_thread"></div><script type="text/javascript" src="http://disqus.com/forums/uswaretechbooks/embed.js"></script><noscript><a href="http://disqus.com/forums/uswaretechbooks/?url=ref">View the discussion thread.</a></noscript><a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
     <div class="footer">
-        &copy; Copyright 2010, Agiliq.
+      &copy; Copyright 2010, Agiliq.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1pre.
-    </div>
+
+
+<script type="text/javascript">
+//<![CDATA[
+(function() {
+	var links = document.getElementsByTagName('a');
+	var query = '?';
+	for(var i = 0; i < links.length; i++) {
+	if(links[i].href.indexOf('#disqus_thread') >= 0) {
+		query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
+	}
+	}
+	document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/uswaretechbooks/get_num_replies.js' + query + '"></' + 'script>');
+})();
+//]]>
+</script>
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-xxxxxx-xx");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+
   </body>
 </html>
