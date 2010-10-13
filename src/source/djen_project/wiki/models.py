@@ -4,6 +4,12 @@ from django.template.defaultfilters import slugify
 
 # Create your models here.
 
+class PublishedArticlesManager(models.Manager):
+    use_for_related_fields = True
+    
+    def get_query_set(self):
+        return super(PublishedArticlesManager, self).get_query_set().filter(is_published=True)
+
 class Article(models.Model):
     """Represents a wiki article"""
     
@@ -13,6 +19,7 @@ class Article(models.Model):
     author = models.ForeignKey(User)
     is_published = models.BooleanField(default=False)
     created_on = models.DateTimeField(auto_now_add=True)
+    published = PublishedArticlesManager()
 
     def __unicode__(self):
         return self.title
