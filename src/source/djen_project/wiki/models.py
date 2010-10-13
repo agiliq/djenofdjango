@@ -11,6 +11,7 @@ class Article(models.Model):
     slug = models.SlugField(max_length=50)
     text = models.TextField()
     author = models.ForeignKey(User)
+    published = models.BooleanField(default=False)
     created_on = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
@@ -34,7 +35,7 @@ class Edit(models.Model):
     summary = models.CharField(max_length=100)
 
     def __unicode__(self):
-        return "%s edited by %s on %s" %(self.title , self.editor, self.edited_on)
+        return "%s - %s - %s" %(self.summary, self.editor, self.edited_on)
     
     @models.permalink
     def get_absolute_url(self):
