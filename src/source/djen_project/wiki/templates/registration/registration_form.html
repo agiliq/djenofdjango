@@ -1,3 +1,7 @@
+{% extends "registration/base.html" %}
+
+{% block content %}
+
 <h1>Create new account</h1>
 <form action="" method="POST">
     {% csrf_token %}
@@ -6,4 +10,6 @@
     </table>
     <input type="submit" name="submit" value="Submit">
 </form>
+
+{% endblock %}
 
