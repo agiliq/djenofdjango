@@ -49,6 +49,7 @@
   <ul>
 <li><a class="reference internal" href="#">Chapter 5. Building a Wiki</a><ul>
 <li><a class="reference internal" href="#a-wiki-application">A wiki application:</a></li>
+<li><a class="reference internal" href="#reusable-apps">Reusable Apps®:</a></li>
 </ul>
 </li>
 </ul>
@@ -89,25 +90,6 @@
             
   <div class="section" id="chapter-5-building-a-wiki">
 <h1>Chapter 5. Building a Wiki<a class="headerlink" href="#chapter-5-building-a-wiki" title="Permalink to this headline">¶</a></h1>
-<dl class="docutils">
-<dt>...</dt>
-<dd><p class="first">(Topics introduced: Managing user registration using django-regsitration. Advanced ORM tricks. Overriding save for Entities. Signals. Websearches using Yahoo Devloper API.)</p>
-<p>Diving in. [Code listing]</p>
-<p>Managing user registration using django-regsitration.
-In the previous chapters we did not allow external users to create a user. Here a user can create an account on the wiki. This is managed using django-registration.
-Explanation of Django registration, its views and templates.
-Discussion of making reusable Django applications, taking Django-registration as example.</p>
-<p>Advanced ORM
-model.extra, How to use it to handle complex queries.
-Defining customer manager for models. (With a wiki, we reattach model.objects to a manager which only gets the latest object. Another custom manager, model.allobjects gets us all the elements.)
-Manager methods vs. classmethods.
-Overiding save, delete amd other model objects to enable versioning for objects.
-Introduce signals. (However we would not have used this in our code.)
-Show how signals could have been used for the same purpose, and compare.</p>
-<p class="last">Websearches using Yahoo Developer API.
-We want to make the wiki searchable, so instead of going via a local search system like Lucene, we use Yahoo Developer API. In this we can explain to use django.util.simplejson, to talk to external APIs which provide a JSON interface.</p>
-</dd>
-</dl>
 <div class="section" id="a-wiki-application">
 <h2>A wiki application:<a class="headerlink" href="#a-wiki-application" title="Permalink to this headline">¶</a></h2>
 <p>In this chapter, we will build a wiki from scratch. Basic functionality includes:</p>
@@ -118,6 +100,215 @@ We want to make the wiki searchable, so instead of going via a local search syst
 <li>Audit trail for article</li>
 <li>Revision history</li>
 </ul>
+</div>
+<div class="section" id="reusable-apps">
+<h2>Reusable Apps®:<a class="headerlink" href="#reusable-apps" title="Permalink to this headline">¶</a></h2>
+<p>To manage user registrations, we will use <tt class="docutils literal"><span class="pre">django-registration</span></tt>. You can download it from</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><a class="reference external" href="http://bitbucket.org/ubernostrum/django-registration/">http://bitbucket.org/ubernostrum/django-registration/</a></p>
+</div>
+<p>django-registration is a great example of a reusable app, which can be customized to fit our requirements
+while providing the most common pattern by default (sign up, email activation etc)</p>
+<p>Some functionality offered by the app:</p>
+<ul class="simple">
+<li>User sign-up view</li>
+<li>Activation email view</li>
+<li>Validate activation key and create user account</li>
+<li>Login, logout from <tt class="docutils literal"><span class="pre">contrib.auth</span></tt></li>
+<li>Management scripts to clear expired registrations</li>
+</ul>
+<p>We shall follow the default pattern, i.e. user registration with activation email in the wiki app, although django-registration
+allows customization of the process by using <tt class="docutils literal"><span class="pre">backends</span></tt> which should know how to handle the registration. It ships with two such
+backends: <tt class="docutils literal"><span class="pre">default</span></tt> and <tt class="docutils literal"><span class="pre">simple</span></tt></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>browse through the code of django-registration to see what urls are avaialbe, what context is passed to the templates,
+which urls are mapped to which views etc.</p>
+<p class="last">Looking at named urls from <tt class="docutils literal"><span class="pre">urls.py</span></tt> would be useful for creating links to registration, login etc by using
+the url templatetag.</p>
+</div>
+<p>To install, download the app and run:</p>
+<div class="highlight-python"><pre>python setup.py install</pre>
+</div>
+<p>This will be installed to the site wide python packages directory but can still be imported from our app since it is a
+python package.</p>
+<p>Now, include <tt class="docutils literal"><span class="pre">registration</span></tt> in your <tt class="docutils literal"><span class="pre">INSTALLED_APPS</span></tt>, do <tt class="docutils literal"><span class="pre">syncdb</span></tt> and include the urls:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.conf.urls.defaults</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="c"># Uncomment the next two lines to enable the admin:</span>
+<span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">admin</span>
+<span class="n">admin</span><span class="o">.</span><span class="n">autodiscover</span><span class="p">()</span>
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="n">patterns</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span>
+    <span class="c"># Example:</span>
+    <span class="c"># (r&#39;^djen_project/&#39;, include(&#39;djen_project.foo.urls&#39;)),</span>
+
+    <span class="c"># Uncomment the admin/doc line below and add &#39;django.contrib.admindocs&#39; </span>
+    <span class="c"># to INSTALLED_APPS to enable admin documentation:</span>
+    <span class="c"># (r&#39;^admin/doc/&#39;, include(&#39;django.contrib.admindocs.urls&#39;)),</span>
+
+    <span class="c"># Uncomment the next line to enable the admin:</span>
+    <span class="p">(</span><span class="s">r&#39;^accounts/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s">&#39;registration.backends.default.urls&#39;</span><span class="p">)),</span>
+    <span class="p">(</span><span class="s">r&#39;^admin/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">urls</span><span class="p">)),</span>
+    <span class="p">(</span><span class="s">r&#39;^pastebin/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s">&#39;pastebin.urls&#39;</span><span class="p">)),</span>
+    <span class="p">(</span><span class="s">r&#39;^blog/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s">&#39;blog.urls&#39;</span><span class="p">)),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">django-registration provides views for login at <tt class="docutils literal"><span class="pre">accounts/login</span></tt> so we can omit
+our previous entry for the same.</p>
+</div>
+<p>Now, <tt class="docutils literal"><span class="pre">accounts/register/</span></tt> provides the user sign-up view and renders to <tt class="docutils literal"><span class="pre">registration/registration_form.html</span></tt>, so lets write the template:</p>
+<div class="highlight-django"><div class="highlight"><pre><span class="cp">{%</span> <span class="k">extends</span> <span class="s2">&quot;registration/base.html&quot;</span> <span class="cp">%}</span><span class="x"></span>
+
+<span class="cp">{%</span> <span class="k">comment</span> <span class="cp">%}</span><span class="c"></span>
+<span class="c">**registration/registration_form.html**</span>
+<span class="c">Used to show the form users will fill out to register. By default, has</span>
+<span class="c">the following context:</span>
+
+<span class="c">``form``</span>
+<span class="c">    The registration form. This will be an instance of some subclass</span>
+<span class="c">    of ``django.forms.Form``; consult `Django&#39;s forms documentation</span>
+<span class="c">    &lt;http://docs.djangoproject.com/en/dev/topics/forms/&gt;`_ for</span>
+<span class="c">    information on how to display this in a template.</span>
+<span class="cp">{%</span> <span class="k">endcomment</span> <span class="cp">%}</span><span class="x"></span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span><span class="x"></span>
+
+<span class="x">&lt;h1&gt;Create new account&lt;/h1&gt;</span>
+<span class="x">&lt;form action=&quot;&quot; method=&quot;POST&quot;&gt;</span>
+<span class="x">    </span><span class="cp">{%</span> <span class="k">csrf_token</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">    &lt;table&gt;</span>
+<span class="x">        </span><span class="cp">{{</span> <span class="nv">form.as_table</span> <span class="cp">}}</span><span class="x"></span>
+<span class="x">    &lt;/table&gt;</span>
+<span class="x">    &lt;input type=&quot;submit&quot; name=&quot;submit&quot; value=&quot;Submit&quot;&gt;</span>
+<span class="x">&lt;/form&gt;</span>
+
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span><span class="x"></span>
+</pre></div>
+</div>
+<p>Note that <tt class="docutils literal"><span class="pre">form</span></tt> is the user sign-up form passed as context by <tt class="docutils literal"><span class="pre">register</span></tt> of django-registration.</p>
+<p>To demostrate template heirarchy, we have used a base template and built all other registration templates on top of it. The base template looks like:
+<tt class="docutils literal"><span class="pre">wiki/templates/registration/base.html</span></tt></p>
+<div class="highlight-django"><div class="highlight"><pre><span class="x">&lt;!DOCTYPE HTML&gt;</span>
+<span class="x">&lt;html&gt;</span>
+<span class="x">    &lt;head&gt;</span>
+<span class="x">        &lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html; charset=utf-8&quot;&gt;</span>
+<span class="x">        &lt;title&gt;Wiki&lt;/title&gt;</span>
+<span class="x">        </span><span class="cp">{%</span> <span class="k">block</span> <span class="nv">extra_head</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">        </span>
+<span class="x">        </span><span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">    &lt;/head&gt;</span>
+<span class="x">    &lt;body&gt;</span>
+<span class="x">        </span><span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">        </span>
+<span class="x">        </span><span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">    &lt;/body&gt;</span>
+<span class="x">&lt;/html&gt;</span>
+</pre></div>
+</div>
+<p>At the moment, we have <tt class="docutils literal"><span class="pre">extra_head</span></tt> and <tt class="docutils literal"><span class="pre">content</span></tt> blocks. You can place as many blocks as you like with careful planning and hierarchy. For example
+<tt class="docutils literal"><span class="pre">extra_head</span></tt> would serve to include child template specific css/scripts. Global css/scripts could be directly included in <tt class="docutils literal"><span class="pre">base.html</span></tt> to make them
+available to all child templates. (e.g. something general like <tt class="docutils literal"><span class="pre">jquery.js</span></tt> would go in base while something specific like <tt class="docutils literal"><span class="pre">jquery.form.js</span></tt> would go in
+the child template)</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Templates outside any subdirectory are considered harmful since they may interfere with templates from other applications.
+In general it is better to <tt class="docutils literal"><span class="pre">namespace</span></tt> your templates by putting them inside subdirectories.</p>
+<p>E.g.:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">wiki/templates/base.html</span></tt> - Wrong!</li>
+<li><tt class="docutils literal"><span class="pre">wiki/templates/wiki/base.html</span></tt> - Right.</li>
+</ul>
+<p>The reason being that templates from other apps extending <tt class="docutils literal"><span class="pre">base.html</span></tt> would find both <tt class="docutils literal"><span class="pre">wiki/templates/blog/base.html</span></tt> and
+<tt class="docutils literal"><span class="pre">wiki/templates/base.html</span></tt>. Then you would be left at the mercy of precedence of <tt class="docutils literal"><span class="pre">TEMPLATE_LOADERS</span></tt> to get the blog base template
+and not the wiki base template.</p>
+<p class="last">Of course, it can be useful if used correctly, but quite hard to debug if not.</p>
+</div>
+<p>At this point the user can submit a sign-up form. He will be sent an email with subject from <tt class="docutils literal"><span class="pre">wiki/templates/registration/activation_email_subject.text</span></tt> and
+content from <tt class="docutils literal"><span class="pre">wiki/templates/registration/activation_email.txt</span></tt>. Let&#8217;s write these templates:</p>
+<p>A nice base email template would be <tt class="docutils literal"><span class="pre">wiki/templates/registration/email.txt</span></tt>:</p>
+<div class="highlight-django"><div class="highlight"><pre><span class="x">Hi!,</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">body</span> <span class="cp">%}</span><span class="x"></span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span><span class="x"></span>
+
+<span class="x">Regards,</span>
+<span class="x">Admin</span>
+
+<span class="x">Note: This is an autogenerated mail, please don&#39;t reply.</span>
+</pre></div>
+</div>
+<p>In <tt class="docutils literal"><span class="pre">wiki/templates/registration/activation_email_subject.txt</span></tt></p>
+<div class="highlight-django"><div class="highlight"><pre><span class="cp">{%</span> <span class="k">comment</span> <span class="cp">%}</span><span class="c"></span>
+<span class="c">**registration/activation_email_subject.txt**</span>
+
+<span class="c">Used to generate the subject line of the activation email. Because the</span>
+<span class="c">subject line of an email must be a single line of text, any output</span>
+<span class="c">from this template will be forcibly condensed to a single line before</span>
+<span class="c">being used. This template has the following context:</span>
+
+<span class="c">``activation_key``</span>
+<span class="c">    The activation key for the new account.</span>
+
+<span class="c">``expiration_days``</span>
+<span class="c">    The number of days remaining during which the account may be</span>
+<span class="c">    activated.</span>
+
+<span class="c">``site``</span>
+<span class="c">    An object representing the site on which the user registered;</span>
+<span class="c">    depending on whether ``django.contrib.sites`` is installed, this</span>
+<span class="c">    may be an instance of either ``django.contrib.sites.models.Site``</span>
+<span class="c">    (if the sites application is installed) or</span>
+<span class="c">    ``django.contrib.sites.models.RequestSite`` (if not). Consult `the</span>
+<span class="c">    documentation for the Django sites framework</span>
+<span class="c">    &lt;http://docs.djangoproject.com/en/dev/ref/contrib/sites/&gt;`_ for</span>
+<span class="c">    details regarding these objects&#39; interfaces.</span>
+<span class="cp">{%</span> <span class="k">endcomment</span> <span class="cp">%}</span><span class="x"></span>
+
+<span class="x">Your account activation details at </span><span class="cp">{{</span> <span class="nv">site</span> <span class="cp">}}</span><span class="x"></span>
+</pre></div>
+</div>
+<p>In <tt class="docutils literal"><span class="pre">wiki/templates/registration/activation_email.txt</span></tt></p>
+<div class="highlight-django"><div class="highlight"><pre><span class="cp">{%</span> <span class="k">extends</span> <span class="s2">&quot;registration/email.txt&quot;</span> <span class="cp">%}</span><span class="x"></span>
+
+<span class="cp">{%</span> <span class="k">comment</span> <span class="cp">%}</span><span class="c"></span>
+<span class="c">**registration/activation_email.txt**</span>
+
+<span class="c">Used to generate the body of the activation email. Should display a</span>
+<span class="c">link the user can click to activate the account. This template has the</span>
+<span class="c">following context:</span>
+
+<span class="c">``activation_key``</span>
+<span class="c">    The activation key for the new account.</span>
+
+<span class="c">``expiration_days``</span>
+<span class="c">    The number of days remaining during which the account may be</span>
+<span class="c">    activated.</span>
+
+<span class="c">``site``</span>
+<span class="c">    An object representing the site on which the user registered;</span>
+<span class="c">    depending on whether ``django.contrib.sites`` is installed, this</span>
+<span class="c">    may be an instance of either ``django.contrib.sites.models.Site``</span>
+<span class="c">    (if the sites application is installed) or</span>
+<span class="c">    ``django.contrib.sites.models.RequestSite`` (if not). Consult `the</span>
+<span class="c">    documentation for the Django sites framework</span>
+<span class="c">    &lt;http://docs.djangoproject.com/en/dev/ref/contrib/sites/&gt;`_ for</span>
+<span class="c">    details regarding these objects&#39; interfaces.</span>
+<span class="cp">{%</span> <span class="k">endcomment</span> <span class="cp">%}</span><span class="x"></span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">body</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">Please follow the link to activate your account.</span>
+
+<span class="x">http://</span><span class="cp">{{</span> <span class="nv">site</span> <span class="cp">}}{%</span> <span class="k">url</span> <span class="nv">registration_activate</span> <span class="nv">activation_key</span> <span class="cp">%}</span><span class="x"></span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span><span class="x"></span>
+</pre></div>
+</div>
+<p>Note the use of <tt class="docutils literal"><span class="pre">url</span></tt> templatetag to get the activation link. Also, the tag returns a relative url, so we use the <tt class="docutils literal"><span class="pre">site</span></tt> context variable
+passed by the <tt class="docutils literal"><span class="pre">register</span></tt> view</p>
 </div>
 </div>
 
@@ -143,36 +334,36 @@ We want to make the wiki searchable, so instead of going via a local search syst
       </ul>
     </div>
 
-<div id="disqus_thread"></div><script type="text/javascript" src="http://disqus.com/forums/uswaretechbooks/embed.js"></script><noscript><a href="http://disqus.com/forums/uswaretechbooks/?url=ref">View the discussion thread.</a></noscript><a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
-    <div class="footer">
-      &copy; Copyright 2010, Agiliq.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1pre.
+<div id="disqus_thread"></div><script type="text/javascript" src="http://disqus.com/forums/agiliq/embed.js"></script><noscript><a href="http://disqus.com/forums/agiliq/?url=ref">View the discussion thread.</a></noscript><a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+<div class="footer">
+    &copy; Copyright 2010, Agiliq.
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1pre.
 
 
-<script type="text/javascript">
-//<![CDATA[
-(function() {
-	var links = document.getElementsByTagName('a');
-	var query = '?';
-	for(var i = 0; i < links.length; i++) {
-	if(links[i].href.indexOf('#disqus_thread') >= 0) {
-		query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
-	}
-	}
-	document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/uswaretechbooks/get_num_replies.js' + query + '"></' + 'script>');
-})();
+    <script type="text/javascript">
+        //<![CDATA[
+        (function() {
+            var links = document.getElementsByTagName('a');
+            var query = '?';
+            for(var i = 0; i < links.length; i++) {
+                if(links[i].href.indexOf('#disqus_thread') >= 0) {
+                    query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
+                }
+            }
+            document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/agiliq/get_num_replies.js' + query + '"></' + 'script>');
+            })();
 //]]>
 </script>
 
 <script type="text/javascript">
-var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
 </script>
 <script type="text/javascript">
-try {
-var pageTracker = _gat._getTracker("UA-xxxxxx-xx");
-pageTracker._trackPageview();
-} catch(err) {}</script>
+    try {
+        var pageTracker = _gat._getTracker("UA-xxxxxx-xx");
+        pageTracker._trackPageview();
+    } catch(err) {}</script>
 
 
   </body>

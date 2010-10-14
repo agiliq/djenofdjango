@@ -19,6 +19,7 @@ class Article(models.Model):
     author = models.ForeignKey(User)
     is_published = models.BooleanField(default=False)
     created_on = models.DateTimeField(auto_now_add=True)
+    objects = models.Manager()
     published = PublishedArticlesManager()
 
     def __unicode__(self):
@@ -31,7 +32,7 @@ class Article(models.Model):
 
     @models.permalink
     def get_absolute_url(self):
-        return ('wiki_article_detail', self.slug)
+        return ('wiki_article_detail', (), { 'slug': self.slug })
 
 class Edit(models.Model):
     """Stores an edit session"""

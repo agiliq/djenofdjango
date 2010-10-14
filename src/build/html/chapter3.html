@@ -143,11 +143,10 @@ the request. A request url that does not match any urlconf entry will be 404&#82
     <span class="c"># (r&#39;^admin/doc/&#39;, include(&#39;django.contrib.admindocs.urls&#39;)),</span>
 
     <span class="c"># Uncomment the next line to enable the admin:</span>
-    <span class="p">(</span><span class="s">r&#39;^accounts/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s">&#39;registration.urls&#39;</span><span class="p">)),</span>
+    <span class="p">(</span><span class="s">r&#39;^accounts/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s">&#39;registration.backends.default.urls&#39;</span><span class="p">)),</span>
     <span class="p">(</span><span class="s">r&#39;^admin/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">urls</span><span class="p">)),</span>
     <span class="p">(</span><span class="s">r&#39;^pastebin/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s">&#39;pastebin.urls&#39;</span><span class="p">)),</span>
     <span class="p">(</span><span class="s">r&#39;^blog/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s">&#39;blog.urls&#39;</span><span class="p">)),</span>
-    <span class="p">(</span><span class="s">r&#39;^wiki/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s">&#39;wiki.urls&#39;</span><span class="p">)),</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -599,11 +598,10 @@ argument to generate a form and save it to the database. In our case, this is th
     <span class="c"># (r&#39;^admin/doc/&#39;, include(&#39;django.contrib.admindocs.urls&#39;)),</span>
 
     <span class="c"># Uncomment the next line to enable the admin:</span>
-    <span class="p">(</span><span class="s">r&#39;^accounts/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s">&#39;registration.urls&#39;</span><span class="p">)),</span>
+    <span class="p">(</span><span class="s">r&#39;^accounts/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s">&#39;registration.backends.default.urls&#39;</span><span class="p">)),</span>
     <span class="p">(</span><span class="s">r&#39;^admin/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">urls</span><span class="p">)),</span>
     <span class="p">(</span><span class="s">r&#39;^pastebin/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s">&#39;pastebin.urls&#39;</span><span class="p">)),</span>
     <span class="p">(</span><span class="s">r&#39;^blog/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s">&#39;blog.urls&#39;</span><span class="p">)),</span>
-    <span class="p">(</span><span class="s">r&#39;^wiki/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s">&#39;wiki.urls&#39;</span><span class="p">)),</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -988,36 +986,36 @@ on the queryset.</li>
       </ul>
     </div>
 
-<div id="disqus_thread"></div><script type="text/javascript" src="http://disqus.com/forums/uswaretechbooks/embed.js"></script><noscript><a href="http://disqus.com/forums/uswaretechbooks/?url=ref">View the discussion thread.</a></noscript><a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
-    <div class="footer">
-      &copy; Copyright 2010, Agiliq.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1pre.
+<div id="disqus_thread"></div><script type="text/javascript" src="http://disqus.com/forums/agiliq/embed.js"></script><noscript><a href="http://disqus.com/forums/agiliq/?url=ref">View the discussion thread.</a></noscript><a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+<div class="footer">
+    &copy; Copyright 2010, Agiliq.
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1pre.
 
 
-<script type="text/javascript">
-//<![CDATA[
-(function() {
-	var links = document.getElementsByTagName('a');
-	var query = '?';
-	for(var i = 0; i < links.length; i++) {
-	if(links[i].href.indexOf('#disqus_thread') >= 0) {
-		query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
-	}
-	}
-	document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/uswaretechbooks/get_num_replies.js' + query + '"></' + 'script>');
-})();
+    <script type="text/javascript">
+        //<![CDATA[
+        (function() {
+            var links = document.getElementsByTagName('a');
+            var query = '?';
+            for(var i = 0; i < links.length; i++) {
+                if(links[i].href.indexOf('#disqus_thread') >= 0) {
+                    query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
+                }
+            }
+            document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/agiliq/get_num_replies.js' + query + '"></' + 'script>');
+            })();
 //]]>
 </script>
 
 <script type="text/javascript">
-var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
 </script>
 <script type="text/javascript">
-try {
-var pageTracker = _gat._getTracker("UA-xxxxxx-xx");
-pageTracker._trackPageview();
-} catch(err) {}</script>
+    try {
+        var pageTracker = _gat._getTracker("UA-xxxxxx-xx");
+        pageTracker._trackPageview();
+    } catch(err) {}</script>
 
 
   </body>
