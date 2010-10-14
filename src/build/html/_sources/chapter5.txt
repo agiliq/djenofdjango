@@ -86,6 +86,13 @@ Now, include ``registration`` in your ``INSTALLED_APPS``, do ``syncdb`` and incl
 .. note:: django-registration provides views for login at ``accounts/login`` so we can omit
           our previous entry for the same.
 
+The app requires a setting called ``ACCOUNT_ACTIVATION_DAYS`` which is the number of days before which the user should complete
+registration. If you are not using ``local_settings.py``, create one and add ``from local_settings import *`` to ``settings.py``. Now
+add this setting to local_settings.py::
+
+    # Django registration settings
+    ACCOUNT_ACTIVATION_DAYS = 7
+
 Now, ``accounts/register/`` provides the user sign-up view and renders to ``registration/registration_form.html``, so lets write the template:
 
 .. literalinclude:: djen_project/wiki/templates/registration/registration_form.html
@@ -98,7 +105,7 @@ To demostrate template heirarchy, we have used a base template and built all oth
 ``wiki/templates/registration/base.html``
 
 .. literalinclude:: djen_project/wiki/templates/registration/base.html
-    :commit:  3a0af03
+    :commit: e887a3e
     :language: django
 
 At the moment, we have ``extra_head`` and ``content`` blocks. You can place as many blocks as you like with careful planning and hierarchy. For example
@@ -146,3 +153,17 @@ In ``wiki/templates/registration/activation_email.txt``
 Note the use of ``url`` templatetag to get the activation link. Also, the tag returns a relative url, so we use the ``site`` context variable
 passed by the ``register`` view
 
+.. note::
+
+    If you have a mail server configured, well and good. If not, you could use gmail's smtp server by adding
+
+    .. literalinclude:: djen_project/local_settings.py.example
+
+    to ``local_settings.py``
+
+At this point, a user should be able to sign-up, get the activation email, follow the activation link, complete registration and login.
+
+All this by just writing down the tempalates. Amazing, isn't it?
+
+Now you would have noticed that the logged in user is redirected to ``/accounts/profile``. We would next customize the wiki app and redirect
+the user to the index page.

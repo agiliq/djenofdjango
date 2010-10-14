@@ -103,8 +103,10 @@ the settings to any other database you like. Just make sure the database exists.
 
 .. note::
 
-    It is advised to have a local_settings.py file with exclusively sensitive settings like database username/password,
+    It is advised to have a local_settings.py file with exclusively server specific and sensitive settings like database username/password,
     API keys or Secret Key etc and have settings.py import all these values.
+
+    To do this, you would create local_settings.py and include ``from local_settings import *`` at the bottom of settings.py
 
 urls.py is a 'table of contents' of our project (or website). It includes a list of the paths that are to be processed
 and responded to.

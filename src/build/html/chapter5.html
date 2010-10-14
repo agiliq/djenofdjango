@@ -161,6 +161,13 @@ python package.</p>
 <p class="last">django-registration provides views for login at <tt class="docutils literal"><span class="pre">accounts/login</span></tt> so we can omit
 our previous entry for the same.</p>
 </div>
+<p>The app requires a setting called <tt class="docutils literal"><span class="pre">ACCOUNT_ACTIVATION_DAYS</span></tt> which is the number of days before which the user should complete
+registration. If you are not using <tt class="docutils literal"><span class="pre">local_settings.py</span></tt>, create one and add <tt class="docutils literal"><span class="pre">from</span> <span class="pre">local_settings</span> <span class="pre">import</span> <span class="pre">*</span></tt> to <tt class="docutils literal"><span class="pre">settings.py</span></tt>. Now
+add this setting to local_settings.py:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Django registration settings</span>
+<span class="n">ACCOUNT_ACTIVATION_DAYS</span> <span class="o">=</span> <span class="mi">7</span>
+</pre></div>
+</div>
 <p>Now, <tt class="docutils literal"><span class="pre">accounts/register/</span></tt> provides the user sign-up view and renders to <tt class="docutils literal"><span class="pre">registration/registration_form.html</span></tt>, so lets write the template:</p>
 <div class="highlight-django"><div class="highlight"><pre><span class="cp">{%</span> <span class="k">extends</span> <span class="s2">&quot;registration/base.html&quot;</span> <span class="cp">%}</span><span class="x"></span>
 
@@ -203,9 +210,12 @@ our previous entry for the same.</p>
 <span class="x">        </span><span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span><span class="x"></span>
 <span class="x">    &lt;/head&gt;</span>
 <span class="x">    &lt;body&gt;</span>
-<span class="x">        </span><span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span><span class="x"></span>
-<span class="x">        </span>
-<span class="x">        </span><span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">        &lt;div class=&quot;content&quot;&gt;</span>
+<span class="x">            &lt;p&gt;</span>
+<span class="x">            </span><span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span><span class="x">        </span>
+<span class="x">            </span><span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">            &lt;/p&gt;</span>
+<span class="x">        &lt;/div&gt;</span>
 <span class="x">    &lt;/body&gt;</span>
 <span class="x">&lt;/html&gt;</span>
 </pre></div>
@@ -309,6 +319,26 @@ content from <tt class="docutils literal"><span class="pre">wiki/templates/regis
 </div>
 <p>Note the use of <tt class="docutils literal"><span class="pre">url</span></tt> templatetag to get the activation link. Also, the tag returns a relative url, so we use the <tt class="docutils literal"><span class="pre">site</span></tt> context variable
 passed by the <tt class="docutils literal"><span class="pre">register</span></tt> view</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>If you have a mail server configured, well and good. If not, you could use gmail&#8217;s smtp server by adding</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Django registration settings</span>
+<span class="n">ACCOUNT_ACTIVATION_DAYS</span> <span class="o">=</span> <span class="mi">7</span> 
+
+<span class="c"># Email settings for sending accout activation mails</span>
+<span class="n">EMAIL_USE_TLS</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">EMAIL_HOST</span> <span class="o">=</span> <span class="s">&quot;smtp.gmail.com&quot;</span>
+<span class="n">EMAIL_HOST_USER</span> <span class="o">=</span> <span class="s">&quot;user@example.com&quot;</span>
+<span class="n">EMAIL_HOST_PASSWORD</span> <span class="o">=</span> <span class="s">&quot;secret&quot;</span>
+<span class="n">EMAIL_PORT</span> <span class="o">=</span> <span class="mi">587</span>
+</pre></div>
+</div>
+<p class="last">to <tt class="docutils literal"><span class="pre">local_settings.py</span></tt></p>
+</div>
+<p>At this point, a user should be able to sign-up, get the activation email, follow the activation link, complete registration and login.</p>
+<p>All this by just writing down the tempalates. Amazing, isn&#8217;t it?</p>
+<p>Now you would have noticed that the logged in user is redirected to <tt class="docutils literal"><span class="pre">/accounts/profile</span></tt>. We would next customize the wiki app and redirect
+the user to the index page.</p>
 </div>
 </div>
 
