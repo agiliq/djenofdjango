@@ -535,17 +535,17 @@ name is optional, we fall back to the id which is guaranteed.</li>
 </ul>
 </div>
 <p>Adding our app to the project</p>
-<div class="highlight-python"><pre>INSTALLED_APPS = (
+<div class="highlight-python"><pre>ROOT_URLCONF = 'djen_project.urls'
+
+TEMPLATE_DIRS = (
+    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
+)
+
+INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.sites',
-    'django.contrib.messages',
-    # Uncomment the next line to enable the admin:
-    'django.contrib.admin',
-    'cd_library',
-    'pastebin',
-    'blog',
 </pre>
 </div>
 <p>And syncdb&#8217;ing:</p>

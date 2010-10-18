@@ -182,4 +182,19 @@ To demonstrate custom model managers, we would like to show only 'published' art
 Let's write down the models:
 
 .. literalinclude:: djen_project/wiki/models.py
+    :commit: 5ce5b86
+
+Most of the code should be familiar, some things that are new:
+
+* The Article model will hold all articles, but only those with ``is_published`` set to ``True`` will be displayed on the front page.
+
+* We have a defined a custom model manager called ``PublishedArticlesManager`` which is a queryset that only returns the published articles.
+
+* Non-published articles would be used only for editing. So, we retain the default model manager by setting ``objects`` to ``models.Manager``
+
+* Now, to fetch all articles, one would use ``Articles.objects.all``, while ``Artilces.published.all`` would return only published articles.
+
+* A custom manager should subclass ``models.Manager`` and define the custom ``get_query_set`` property.
+
+* The ``Edit`` class would hold an edit session by a registered user on an article.
 

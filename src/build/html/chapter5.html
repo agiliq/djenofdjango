@@ -357,7 +357,6 @@ the user to the index page.</p>
 <span class="c"># Create your models here.</span>
 
 <span class="k">class</span> <span class="nc">PublishedArticlesManager</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Manager</span><span class="p">):</span>
-    <span class="n">use_for_related_fields</span> <span class="o">=</span> <span class="bp">True</span>
     
     <span class="k">def</span> <span class="nf">get_query_set</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">PublishedArticlesManager</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get_query_set</span><span class="p">()</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">is_published</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
@@ -402,6 +401,15 @@ the user to the index page.</p>
         <span class="k">return</span> <span class="p">(</span><span class="s">&#39;wiki_edit_detail&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
 </pre></div>
 </div>
+<p>Most of the code should be familiar, some things that are new:</p>
+<ul class="simple">
+<li>The Article model will hold all articles, but only those with <tt class="docutils literal"><span class="pre">is_published</span></tt> set to <tt class="xref docutils literal"><span class="pre">True</span></tt> will be displayed on the front page.</li>
+<li>We have a defined a custom model manager called <tt class="docutils literal"><span class="pre">PublishedArticlesManager</span></tt> which is a queryset that only returns the published articles.</li>
+<li>Non-published articles would be used only for editing. So, we retain the default model manager by setting <tt class="docutils literal"><span class="pre">objects</span></tt> to <tt class="docutils literal"><span class="pre">models.Manager</span></tt></li>
+<li>Now, to fetch all articles, one would use <tt class="docutils literal"><span class="pre">Articles.objects.all</span></tt>, while <tt class="docutils literal"><span class="pre">Artilces.published.all</span></tt> would return only published articles.</li>
+<li>A custom manager should subclass <tt class="docutils literal"><span class="pre">models.Manager</span></tt> and define the custom <tt class="docutils literal"><span class="pre">get_query_set</span></tt> property.</li>
+<li>The <tt class="docutils literal"><span class="pre">Edit</span></tt> class would hold an edit session by a registered user on an article.</li>
+</ul>
 </div>
 </div>
 
