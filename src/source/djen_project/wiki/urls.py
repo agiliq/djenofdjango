@@ -3,6 +3,12 @@ from django.conf.urls.defaults import *
 from models import Article
 
 urlpatterns = patterns('',
+    url(r'^$', 
+        'django.views.generic.list_detail.object_list',
+        {
+            'queryset': Article.objects.all(),
+        },
+        name='wiki_article_index'),
     url(r'^article/(?P<slug>[-\w]+)$', 
         'django.views.generic.list_detail.object_detail',
         {
