@@ -75,7 +75,7 @@
 <li><a class="reference internal" href="#designing-a-pastebin-app">Designing a pastebin app:</a></li>
 <li><a class="reference internal" href="#sketch-the-models">Sketch the models:</a></li>
 <li><a class="reference internal" href="#configuring-urls">Configuring urls:</a></li>
-<li><a class="reference internal" href="#writing-custom-management-scrips">Writing custom management scrips:</a></li>
+<li><a class="reference internal" href="#writing-custom-management-scripts">Writing custom management scripts:</a></li>
 </ul>
 </li>
 </ul>
@@ -147,6 +147,7 @@ the request. A request url that does not match any urlconf entry will be 404&#82
     <span class="p">(</span><span class="s">r&#39;^admin/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">urls</span><span class="p">)),</span>
     <span class="p">(</span><span class="s">r&#39;^pastebin/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s">&#39;pastebin.urls&#39;</span><span class="p">)),</span>
     <span class="p">(</span><span class="s">r&#39;^blog/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s">&#39;blog.urls&#39;</span><span class="p">)),</span>
+    <span class="p">(</span><span class="s">r&#39;^wiki/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s">&#39;wiki.urls&#39;</span><span class="p">)),</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -159,7 +160,7 @@ admin app at <tt class="docutils literal"><span class="pre">/admin/</span></tt>.
 </div>
 <p><tt class="docutils literal"><span class="pre">regex</span></tt> is any valid python regex that has to be processed. This would be absolute in the project
 urls.py and relative to the mount point in an app&#8217;s urls.py</p>
-<p><tt class="docutils literal"><span class="pre">view_function</span></tt> is a function that corresponds to this url. The funtion <strong>must</strong> return a <tt class="docutils literal"><span class="pre">HttpResponse</span></tt>
+<p><tt class="docutils literal"><span class="pre">view_function</span></tt> is a function that corresponds to this url. The function <strong>must</strong> return a <tt class="docutils literal"><span class="pre">HttpResponse</span></tt>
 object. Usually, shortcuts such as <tt class="docutils literal"><span class="pre">render_to_response</span></tt>, are used though. More about views later.</p>
 <p><tt class="docutils literal"><span class="pre">arg_dict</span></tt> is an optional dict of arguments that will be passed to the <tt class="docutils literal"><span class="pre">view_function</span></tt>. In addition, options
 can be declared from the url regex too. For example:</p>
@@ -214,9 +215,9 @@ templates supplied with django.</p>
 <p>A template is a structure of webpage that will be <em>rendered</em> using a <em>context</em> and returned as response if
 you want it to. A <tt class="docutils literal"><span class="pre">django.template.Template</span></tt> object can be rendered using the <tt class="docutils literal"><span class="pre">render</span></tt> method.</p>
 <p>Normally templates are html files with some extra django content, such as templatetags and variables. Note that our
-templates need to be publicly accessible(infact they shouldn&#8217;t be) from a webserver. They are not meant to be displayed
+templates need to be publicly accessible(in fact they shouldn&#8217;t be) from a webserver. They are not meant to be displayed
 directly, django will process them based on the request, context etc and respond with the rendered templates.</p>
-<p>In case you want a template to be directly accesible (e.g. static html files), you could use the <tt class="docutils literal"><span class="pre">django.views.generic.simple.direct_to_template</span></tt>
+<p>In case you want a template to be directly accessible (e.g. static html files), you could use the <tt class="docutils literal"><span class="pre">django.views.generic.simple.direct_to_template</span></tt>
 generic view.</p>
 <div class="section" id="template-loaders">
 <h3>Template Loaders:<a class="headerlink" href="#template-loaders" title="Permalink to this headline">¶</a></h3>
@@ -357,7 +358,7 @@ have other specific template extend the <tt class="docutils literal"><span class
 </div>
 <div class="section" id="templates-are-not-meant-for-programming">
 <h3>Templates are not meant for programming:<a class="headerlink" href="#templates-are-not-meant-for-programming" title="Permalink to this headline">¶</a></h3>
-<p>One of the core django philosphy is that templates are meant for rendering the context and
+<p>One of the core django philosophy is that templates are meant for rendering the context and
 optionally making a few aesthetic changes only. Templates should not be used for handling
 complex queries or operations. This is also useful to keep the programming and designing aspects
 of the website separate. Template language should be easy enough to be written by designers.</p>
@@ -400,7 +401,7 @@ to some other <tt class="docutils literal"><span class="pre">url</span></tt> or 
 <h3>Generic Views:<a class="headerlink" href="#generic-views" title="Permalink to this headline">¶</a></h3>
 <p>Generic views are commonly used view patterns that are shipped with django to make
 common operations such a list, detail, create, update delete easy. To do these operations,
-we need not even write any views, we can use generic views by passing the proper arugments.</p>
+we need not even write any views, we can use generic views by passing the proper arguments.</p>
 <p>We will be using the <tt class="docutils literal"><span class="pre">create_update</span></tt> and <tt class="docutils literal"><span class="pre">list_detail</span></tt> generic views in this chapter</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -477,7 +478,7 @@ views</p>
 <li><tt class="docutils literal"><span class="pre">django.views.generic.list_detail.object_detail</span></tt></li>
 </ul>
 </blockquote>
-<p>Our workflow for this app would be</p>
+<p>Our work flow for this app would be</p>
 <blockquote>
 <ul class="simple">
 <li>sketch the models</li>
@@ -602,6 +603,7 @@ argument to generate a form and save it to the database. In our case, this is th
     <span class="p">(</span><span class="s">r&#39;^admin/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">urls</span><span class="p">)),</span>
     <span class="p">(</span><span class="s">r&#39;^pastebin/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s">&#39;pastebin.urls&#39;</span><span class="p">)),</span>
     <span class="p">(</span><span class="s">r&#39;^blog/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s">&#39;blog.urls&#39;</span><span class="p">)),</span>
+    <span class="p">(</span><span class="s">r&#39;^wiki/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s">&#39;wiki.urls&#39;</span><span class="p">)),</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -910,8 +912,8 @@ the messages framework.</p>
 <p>Now, for better maintenance, we would like to delete all pastes that have not been updated in a day using an script.
 We will use django&#8217;s custom management scripts for this.</p>
 </div>
-<div class="section" id="writing-custom-management-scrips">
-<h2>Writing custom management scrips:<a class="headerlink" href="#writing-custom-management-scrips" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="writing-custom-management-scripts">
+<h2>Writing custom management scripts:<a class="headerlink" href="#writing-custom-management-scripts" title="Permalink to this headline">¶</a></h2>
 <p>Just like other manage.py subcommands such as <tt class="docutils literal"><span class="pre">syncdb</span></tt>, <tt class="docutils literal"><span class="pre">shell</span></tt>, <tt class="docutils literal"><span class="pre">startapp</span></tt> and <tt class="docutils literal"><span class="pre">runserver</span></tt>, we can have custom subcommands to
 help us maintain the app.</p>
 <p>For our subcommand to be registered with manage.py, we need the following structure in our app:</p>

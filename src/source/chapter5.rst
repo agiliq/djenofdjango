@@ -29,11 +29,9 @@ In this chapter, we will build a wiki from scratch. Basic functionality includes
 
 * User registration
 
-* Article Management (CRUD)
+* Article Management (CRUD) with ReST support
 
-* Markup support (ReST)
-
-* Audit trail for article
+* Audit trail for articles
 
 * Revision history
 
@@ -167,3 +165,21 @@ All this by just writing down the tempalates. Amazing, isn't it?
 
 Now you would have noticed that the logged in user is redirected to ``/accounts/profile``. We would next customize the wiki app and redirect
 the user to the index page.
+
+Article Management:
+===================
+
+This is similar to our last app (blog) in many ways. Significant changes would be:
+
+* Allow any registered user to add/edit an article(instead of just the administrator).
+
+* Allow ReST input instead of just plain text.
+
+* Keep track of all edit sessions related to an article.
+
+To demonstrate custom model managers, we would like to show only 'published' articles on the index page.
+
+Let's write down the models:
+
+.. literalinclude:: djen_project/wiki/models.py
+

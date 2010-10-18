@@ -29,7 +29,7 @@ A typical urlconf entry looks like this::
 ``regex`` is any valid python regex that has to be processed. This would be absolute in the project
 urls.py and relative to the mount point in an app's urls.py
 
-``view_function`` is a function that corresponds to this url. The funtion **must** return a ``HttpResponse``
+``view_function`` is a function that corresponds to this url. The function **must** return a ``HttpResponse``
 object. Usually, shortcuts such as ``render_to_response``, are used though. More about views later.
 
 ``arg_dict`` is an optional dict of arguments that will be passed to the ``view_function``. In addition, options
@@ -90,10 +90,10 @@ A template is a structure of webpage that will be *rendered* using a *context* a
 you want it to. A ``django.template.Template`` object can be rendered using the ``render`` method.
 
 Normally templates are html files with some extra django content, such as templatetags and variables. Note that our
-templates need to be publicly accessible(infact they shouldn't be) from a webserver. They are not meant to be displayed
+templates need to be publicly accessible(in fact they shouldn't be) from a webserver. They are not meant to be displayed
 directly, django will process them based on the request, context etc and respond with the rendered templates.
 
-In case you want a template to be directly accesible (e.g. static html files), you could use the ``django.views.generic.simple.direct_to_template`` 
+In case you want a template to be directly accessible (e.g. static html files), you could use the ``django.views.generic.simple.direct_to_template`` 
 generic view.
 
 Template Loaders:
@@ -266,7 +266,7 @@ Here ``capfirst`` is a filter that will capitalize the first char our ``username
 Templates are not meant for programming:
 ++++++++++++++++++++++++++++++++++++++++
 
-One of the core django philosphy is that templates are meant for rendering the context and
+One of the core django philosophy is that templates are meant for rendering the context and
 optionally making a few aesthetic changes only. Templates should not be used for handling 
 complex queries or operations. This is also useful to keep the programming and designing aspects
 of the website separate. Template language should be easy enough to be written by designers.
@@ -319,7 +319,7 @@ Generic Views:
 
 Generic views are commonly used view patterns that are shipped with django to make
 common operations such a list, detail, create, update delete easy. To do these operations,
-we need not even write any views, we can use generic views by passing the proper arugments.
+we need not even write any views, we can use generic views by passing the proper arguments.
 
 We will be using the ``create_update`` and ``list_detail`` generic views in this chapter
 
@@ -411,7 +411,7 @@ views
 
     * ``django.views.generic.list_detail.object_detail``
 
-Our workflow for this app would be
+Our work flow for this app would be
 
     * sketch the models
 
@@ -639,8 +639,8 @@ So we now have pages to create, update, delete and view all pastes.
 Now, for better maintenance, we would like to delete all pastes that have not been updated in a day using an script.
 We will use django's custom management scripts for this.
 
-Writing custom management scrips:
-=================================
+Writing custom management scripts:
+===================================
 
 Just like other manage.py subcommands such as ``syncdb``, ``shell``, ``startapp`` and ``runserver``, we can have custom subcommands to
 help us maintain the app.

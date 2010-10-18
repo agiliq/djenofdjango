@@ -233,7 +233,7 @@ A little bit about the admin interface first:
 
 * It is a contrib app, which means it is a community contributed app
 
-* It is flexible enough to accomodate any other app's models and have admin actions for them.
+* It is flexible enough to accommodate any other app's models and have admin actions for them.
 
 Since the admin is an app, it needs to be added to INSTALLED_APPS as well. You would have noticed this in the commented lines above.
 
@@ -376,7 +376,7 @@ A few examples::
 
     from cd_library.models import CD
 
-retreive all cds::
+retrieve all cds::
 
     cds = CD.objects.all()
 
