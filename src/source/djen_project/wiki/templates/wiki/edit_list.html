@@ -1,0 +1,13 @@
+<h2>History</h2>
+
+<h3>{{ article }}</h3>
+
+<ul>
+    {% for edit in object_list %}
+    <div>
+        <label>{{ edit }}</label>
+    </div>
+    {% endfor %}
+</ul>
+
+<a href="{% url wiki_article_detail article.slug %}"><< Back</a>

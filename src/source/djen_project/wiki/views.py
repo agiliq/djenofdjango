@@ -3,6 +3,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render_to_response, get_object_or_404
 from django.template import RequestContext
+from django.views.generic.list_detail import object_list
 
 from models import Article, Edit
 from forms import ArticleForm
@@ -37,4 +38,10 @@ def edit_article(request, slug):
                                   'article': article,
                               },
                               context_instance=RequestContext(request))
+
+def article_history(request, slug):
+    article = get_object_or_404(Article, slug=slug)
+    return  object_list(request, 
+                        queryset=Edit.objects.filter(article__slug=slug),
+                        extra_context={'article': article})
 

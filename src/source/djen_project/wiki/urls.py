@@ -1,12 +1,12 @@
 from django.conf.urls.defaults import *
 
-from models import Article
+from models import Article, Edit
 
 urlpatterns = patterns('',
     url(r'^$', 
         'django.views.generic.list_detail.object_list',
         {
-            'queryset': Article.objects.all(),
+            'queryset': Article.published.all(),
         },
         name='wiki_article_index'),
     url(r'^article/(?P<slug>[-\w]+)$', 
@@ -15,6 +15,9 @@ urlpatterns = patterns('',
             'queryset': Article.objects.all(),
         },
         name='wiki_article_detail'),
+    url(r'^history/(?P<slug>[-\w]+)$',
+        'wiki.views.article_history',
+        name='wiki_article_history'),
     url(r'^add/article$',
         'wiki.views.add_article',
         name='wiki_article_add'),
