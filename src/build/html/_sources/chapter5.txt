@@ -182,7 +182,7 @@ To demonstrate custom model managers, we would like to show only 'published' art
 Let's write down the models:
 
 .. literalinclude:: djen_project/wiki/models.py
-    :commit: 5ce5b86
+    :commit: f8603b3
 
 Most of the code should be familiar, some things that are new:
 
@@ -197,4 +197,54 @@ Most of the code should be familiar, some things that are new:
 * A custom manager should subclass ``models.Manager`` and define the custom ``get_query_set`` property.
 
 * The ``Edit`` class would hold an edit session by a registered user on an article.
+
+* We see the use of ``verbose_name`` and ``help_text`` keyword arguments. By default, django will replace ``_`` with spaces and Capitalize
+  the field name for the label. This can be overridden using ``verbose_name`` argument. ``help_text`` will be displayed below a field in 
+  the rendered ``ModelForm``
+
+Now, we will need urls similar to our previous app, plus we would need a url to see the article history.
+
+.. literalinclude:: djen_project/wiki/urls.py
+    :commit: 41bd9b3
+
+Note that:
+
+* We will use the object_list generic views for the article index page and detail page.
+
+* We have to autofill the ``author`` to the logged-in user, so will write a custom view for that.
+
+* Similarly, it would be better to write down custom views for edit article and article history pages.
+
+Here are the forms we will need:
+
+.. literalinclude:: djen_project/wiki/forms.py
+
+Here:
+
+* We are excluding ``author`` and ``slug`` which will be autofilled.
+
+* We are inluding the ``summary`` field in ``Edit`` model only. The other fields (``article``, ``editor``, ``edited_on``) will be autofilled.
+
+
+In our custom views:
+
+.. literalinclude:: djen_project/wiki/views.py
+
+* We are using the ``login_required`` decorator to only allow logged-in users to add/edit articles.
+
+* ``get_object_or_404`` is a shortcut method which ``gets`` an object based on some criteria. While the ``get`` method throws an
+  ``DoesNotExist`` when no match is found, this method automatically issues a ``404 Not Found`` response. This is useful when getting an
+  object based on url parameters (``slug``, ``id`` etc.)
+
+* ``redirect``, as we have seen, would issue a ``HttpResponseRedirect`` on the ``article's`` ``get_absolute_url`` property.
+
+* ``edit_article`` includes two forms, one for the ``Article`` model and the other for the ``Edit`` model. We save both the forms one by one.
+
+* As planned, the ``author`` field of ``article`` and ``editor``, ``article`` fields of ``Article`` and ``Edit`` respectively, are filled up
+  before commiting ``save``.
+
+* ``article_history`` view first checks if an article with the given ``slug`` exists. If yes, it forwards the request to the ``object_list`` generic
+  view. We also pass the ``article`` from the generic view using ``extra_context``.
+
+* Note the ``filter`` on the ``Edit`` model's queryset and the ``lookup`` on the related ``Article's`` slug.
 
