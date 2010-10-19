@@ -6,7 +6,7 @@ from django.template import RequestContext
 from django.views.generic.list_detail import object_list
 
 from models import Article, Edit
-from forms import ArticleForm
+from forms import ArticleForm, EditForm
 
 @login_required
 def add_article(request):
@@ -24,17 +24,19 @@ def add_article(request):
 def edit_article(request, slug):
     article = get_object_or_404(Article, slug=slug)
     form = ArticleForm(request.POST or None, instance=article)
+    edit_form = EditForm(request.POST or None)
     if form.is_valid():
         article = form.save()
-        edit = Edit()
-        edit.article = article
-        edit.editor = request.user
-        edit.summary = request.POST.get('summary')
-        edit.save()
-        return redirect(article)
+        if edit_form.is_valid():
+            edit = edit_form.save(commit=False)
+            edit.article = article
+            edit.editor = request.user
+            edit.save()
+            return redirect(article)
     return render_to_response('wiki/article_form.html', 
                               { 
                                   'form': form,
+                                  'edit_form': edit_form,
                                   'article': article,
                               },
                               context_instance=RequestContext(request))
