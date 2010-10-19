@@ -1,7 +1,9 @@
+{% load markup %}
+
 <h2>{{ object.title }}</h2>
 
 <p>
-{{ object.text }}
+{{ object.text|restructuredtext }}
 </p>
 
 <h3>Actions<h3>
