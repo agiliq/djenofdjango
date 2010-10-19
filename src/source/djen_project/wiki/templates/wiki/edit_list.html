@@ -2,16 +2,27 @@
 
 <h3>{{ article }}</h3>
 
-{% if object_list %}
-<ul>
-    {% for edit in object_list %}
-    <div>
-        <label>{{ edit }}</label>
-    </div>
-    {% endfor %}
-</ul>
-{% else %}
-<h5>No history for this article.</h5>
-{% endif %}
+<table border="1" cellspacing="0">
+    <thead>
+        <th>Edited</th>
+        <th>User</th>
+        <th>Summary</th>
+    </thead>
+    <tbody>
+        {% for edit in object_list %}
+        <tr>
+            <td>{{ edit.edited_on }}</td>
+            <td>{{ edit.editor }}</td>
+            <td>{{ edit.summary }}</td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td>{{ article.created_on }}</td>
+            <td>{{ article.author }}</td>
+            <td>New article created</td>
+        </tr>
+    </tbody>
+</table>
 
+<br />
 <a href="{% url wiki_article_detail article.slug %}"><< Back</a>
