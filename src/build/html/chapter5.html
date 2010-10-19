@@ -335,6 +335,54 @@ passed by the <tt class="docutils literal"><span class="pre">register</span></tt
 </div>
 <p class="last">to <tt class="docutils literal"><span class="pre">local_settings.py</span></tt></p>
 </div>
+<p>Some other templates required by django-registration:</p>
+<div class="highlight-django"><div class="highlight"><pre><span class="cp">{%</span> <span class="k">extends</span> <span class="s2">&quot;registration/base.html&quot;</span> <span class="cp">%}</span><span class="x"></span>
+
+<span class="cp">{%</span> <span class="k">comment</span> <span class="cp">%}</span><span class="c"></span>
+<span class="c">**registration/activate.html**</span>
+
+<span class="c">Used if account activation fails. With the default setup, has the following context:</span>
+
+<span class="c">``activation_key``</span>
+<span class="c">    The activation key used during the activation attempt.</span>
+<span class="cp">{%</span> <span class="k">endcomment</span> <span class="cp">%}</span><span class="x"></span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">Sorry, your account could not be activated at this time.</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span><span class="x"></span>
+</pre></div>
+</div>
+<div class="highlight-django"><div class="highlight"><pre><span class="cp">{%</span> <span class="k">extends</span> <span class="s2">&quot;registration/base.html&quot;</span> <span class="cp">%}</span><span class="x"></span>
+
+<span class="cp">{%</span> <span class="k">comment</span> <span class="cp">%}</span><span class="c"></span>
+<span class="c">**registration/activation_complete.html**</span>
+
+<span class="c">Used after successful account activation. This template has no context</span>
+<span class="c">variables of its own, and should simply inform the user that their</span>
+<span class="c">account is now active.</span>
+<span class="cp">{%</span> <span class="k">endcomment</span> <span class="cp">%}</span><span class="x"></span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">Thanks! Your account has be activated. Please &lt;a href=&quot;</span><span class="cp">{%</span> <span class="k">url</span> <span class="nv">auth_login</span> <span class="cp">%}</span><span class="x">&quot;&gt;login to continue&lt;/a&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span><span class="x"></span>
+</pre></div>
+</div>
+<div class="highlight-django"><div class="highlight"><pre><span class="cp">{%</span> <span class="k">extends</span> <span class="s2">&quot;registration/base.html&quot;</span> <span class="cp">%}</span><span class="x"></span>
+
+<span class="cp">{%</span> <span class="k">comment</span> <span class="cp">%}</span><span class="c"></span>
+<span class="c">**registration/registration_complete.html**</span>
+
+<span class="c">Used after successful completion of the registration form. This</span>
+<span class="c">template has no context variables of its own, and should simply inform</span>
+<span class="c">the user that an email containing account-activation information has</span>
+<span class="c">been sent.</span>
+<span class="cp">{%</span> <span class="k">endcomment</span> <span class="cp">%}</span><span class="x"></span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">An account activation email has been sent to you. Please check your email and follow the instructions.</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span><span class="x"></span>
+</pre></div>
+</div>
 <p>At this point, a user should be able to sign-up, get the activation email, follow the activation link, complete registration and login.</p>
 <p>All this by just writing down the tempalates. Amazing, isn&#8217;t it?</p>
 <p>Now you would have noticed that the logged in user is redirected to <tt class="docutils literal"><span class="pre">/accounts/profile</span></tt>. We would next customize the wiki app and redirect
@@ -663,6 +711,22 @@ variable does not throw any error in the template, so this works fine in the add
 </pre></div>
 </div>
 <p>Displays a table with the history.</p>
+<p>Since we are done with our templates, let us redirect our logged in users to the wiki index page:</p>
+<div class="highlight-django"><div class="highlight"><pre><span class="cp">{%</span> <span class="k">extends</span> <span class="s2">&quot;registration/base.html&quot;</span> <span class="cp">%}</span><span class="x"></span>
+
+<span class="cp">{%</span> <span class="k">comment</span> <span class="cp">%}</span><span class="c"></span>
+<span class="c">**registration/activation_complete.html**</span>
+
+<span class="c">Used after successful account activation. This template has no context</span>
+<span class="c">variables of its own, and should simply inform the user that their</span>
+<span class="c">account is now active.</span>
+<span class="cp">{%</span> <span class="k">endcomment</span> <span class="cp">%}</span><span class="x"></span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">Thanks! Your account has be activated. Please &lt;a href=&quot;</span><span class="cp">{%</span> <span class="k">url</span> <span class="nv">auth_login</span> <span class="cp">%}</span><span class="x">?next=</span><span class="cp">{%</span> <span class="k">url</span> <span class="nv">wiki_article_index</span> <span class="cp">%}</span><span class="x">&quot;&gt;login to continue&lt;/a&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span><span class="x"></span>
+</pre></div>
+</div>
 </div>
 </div>
 

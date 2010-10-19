@@ -159,6 +159,20 @@ passed by the ``register`` view
 
     to ``local_settings.py``
 
+Some other templates required by django-registration:
+
+.. literalinclude:: djen_project/wiki/templates/registration/activate.html
+    :commit: 21404bb
+    :language: django
+
+.. literalinclude:: djen_project/wiki/templates/registration/activation_complete.html
+    :commit: 21404bb
+    :language: django
+
+.. literalinclude:: djen_project/wiki/templates/registration/registration_complete.html
+    :commit: 21404bb
+    :language: django
+
 At this point, a user should be able to sign-up, get the activation email, follow the activation link, complete registration and login.
 
 All this by just writing down the tempalates. Amazing, isn't it?
@@ -296,3 +310,10 @@ The article history template:
     :commit: 39527ee
 
 Displays a table with the history.
+
+Since we are done with our templates, let us redirect our logged in users to the wiki index page:
+
+.. literalinclude:: djen_project/wiki/templates/registration/activation_complete.html
+    :commit: 87106ee
+    :language: django
+
