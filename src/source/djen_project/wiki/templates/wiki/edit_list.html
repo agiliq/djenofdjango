@@ -2,6 +2,7 @@
 
 <h3>{{ article }}</h3>
 
+{% if object_list %}
 <ul>
     {% for edit in object_list %}
     <div>
@@ -9,5 +10,8 @@
     </div>
     {% endfor %}
 </ul>
+{% else %}
+<h5>No history for this article.</h5>
+{% endif %}
 
 <a href="{% url wiki_article_detail article.slug %}"><< Back</a>

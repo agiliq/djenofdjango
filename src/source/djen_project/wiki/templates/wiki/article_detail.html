@@ -23,7 +23,9 @@
     <li>
         <a href="{% url wiki_article_edit object.slug %}">Edit this article</a>
     </li>
-        <li>
-            <a href="{% url wiki_article_history object.slug %}">View article history</a>
-        </li>
+    <li>
+        <a href="{% url wiki_article_history object.slug %}">View article history</a>
+    </li>
 </ul>
+
+<a href="{% url wiki_article_index %}">See All</a>
