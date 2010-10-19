@@ -393,6 +393,9 @@ the user to the index page.</p>
     <span class="n">edited_on</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">auto_now_add</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
     <span class="n">summary</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">ordering</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;-edited_on&#39;</span><span class="p">]</span>
+
     <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s"> - </span><span class="si">%s</span><span class="s"> - </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">summary</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">editor</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">edited_on</span><span class="p">)</span>
     
@@ -412,6 +415,8 @@ the user to the index page.</p>
 <li>We see the use of <tt class="docutils literal"><span class="pre">verbose_name</span></tt> and <tt class="docutils literal"><span class="pre">help_text</span></tt> keyword arguments. By default, django will replace <tt class="docutils literal"><span class="pre">_</span></tt> with spaces and Capitalize
 the field name for the label. This can be overridden using <tt class="docutils literal"><span class="pre">verbose_name</span></tt> argument. <tt class="docutils literal"><span class="pre">help_text</span></tt> will be displayed below a field in
 the rendered <tt class="docutils literal"><span class="pre">ModelForm</span></tt></li>
+<li>The <tt class="docutils literal"><span class="pre">ordering</span></tt> attribute of meta class for <tt class="docutils literal"><span class="pre">Edit</span></tt> defines the default ordering in which <tt class="docutils literal"><span class="pre">edits</span></tt> will be returned. This can also be done
+using <tt class="docutils literal"><span class="pre">order_by</span></tt> in the queryset.</li>
 </ul>
 <p>Now, we will need urls similar to our previous app, plus we would need a url to see the article history.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.conf.urls.defaults</span> <span class="kn">import</span> <span class="o">*</span>
@@ -428,7 +433,7 @@ the rendered <tt class="docutils literal"><span class="pre">ModelForm</span></tt
     <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^article/(?P&lt;slug&gt;[-\w]+)$&#39;</span><span class="p">,</span> 
         <span class="s">&#39;django.views.generic.list_detail.object_detail&#39;</span><span class="p">,</span>
         <span class="p">{</span>
-            <span class="s">&#39;queryset&#39;</span><span class="p">:</span> <span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">(),</span>
+            <span class="s">&#39;queryset&#39;</span><span class="p">:</span> <span class="n">Article</span><span class="o">.</span><span class="n">published</span><span class="o">.</span><span class="n">all</span><span class="p">(),</span>
         <span class="p">},</span>
         <span class="n">name</span><span class="o">=</span><span class="s">&#39;wiki_article_detail&#39;</span><span class="p">),</span>
     <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^history/(?P&lt;slug&gt;[-\w]+)$&#39;</span><span class="p">,</span>
@@ -445,7 +450,7 @@ the rendered <tt class="docutils literal"><span class="pre">ModelForm</span></tt
 </div>
 <p>Note that:</p>
 <ul class="simple">
-<li>We will use the object_list generic views for the article index page and detail page.</li>
+<li>We will use the <tt class="docutils literal"><span class="pre">list_detail</span></tt> generic views for the article index page and detail page.</li>
 <li>We have to autofill the <tt class="docutils literal"><span class="pre">author</span></tt> to the logged-in user, so will write a custom view for that.</li>
 <li>Similarly, it would be better to write down custom views for edit article and article history pages.</li>
 </ul>
@@ -475,6 +480,7 @@ the rendered <tt class="docutils literal"><span class="pre">ModelForm</span></tt
 <div class="highlight-python"><div class="highlight"><pre><span class="c"># Create your views here.</span>
 
 <span class="kn">from</span> <span class="nn">django.contrib.auth.decorators</span> <span class="kn">import</span> <span class="n">login_required</span>
+<span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">messages</span>
 <span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">redirect</span><span class="p">,</span> <span class="n">render_to_response</span><span class="p">,</span> <span class="n">get_object_or_404</span>
 <span class="kn">from</span> <span class="nn">django.template</span> <span class="kn">import</span> <span class="n">RequestContext</span>
 <span class="kn">from</span> <span class="nn">django.views.generic.list_detail</span> <span class="kn">import</span> <span class="n">object_list</span>
@@ -489,6 +495,8 @@ the rendered <tt class="docutils literal"><span class="pre">ModelForm</span></tt
         <span class="n">article</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">commit</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
         <span class="n">article</span><span class="o">.</span><span class="n">author</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span>
         <span class="n">article</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s">&quot;Article saved successfully&quot;</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">fail_silently</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">article</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">&#39;wiki/article_form.html&#39;</span><span class="p">,</span> 
                               <span class="p">{</span> <span class="s">&#39;form&#39;</span><span class="p">:</span> <span class="n">form</span> <span class="p">},</span>
@@ -506,6 +514,8 @@ the rendered <tt class="docutils literal"><span class="pre">ModelForm</span></tt
             <span class="n">edit</span><span class="o">.</span><span class="n">article</span> <span class="o">=</span> <span class="n">article</span>
             <span class="n">edit</span><span class="o">.</span><span class="n">editor</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span>
             <span class="n">edit</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s">&quot;Article updated successfully&quot;</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">fail_silently</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">article</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">&#39;wiki/article_form.html&#39;</span><span class="p">,</span> 
                               <span class="p">{</span> 
@@ -529,12 +539,34 @@ the rendered <tt class="docutils literal"><span class="pre">ModelForm</span></tt
 object based on url parameters (<tt class="docutils literal"><span class="pre">slug</span></tt>, <tt class="docutils literal"><span class="pre">id</span></tt> etc.)</li>
 <li><tt class="docutils literal"><span class="pre">redirect</span></tt>, as we have seen, would issue a <tt class="docutils literal"><span class="pre">HttpResponseRedirect</span></tt> on the <tt class="docutils literal"><span class="pre">article's</span></tt> <tt class="docutils literal"><span class="pre">get_absolute_url</span></tt> property.</li>
 <li><tt class="docutils literal"><span class="pre">edit_article</span></tt> includes two forms, one for the <tt class="docutils literal"><span class="pre">Article</span></tt> model and the other for the <tt class="docutils literal"><span class="pre">Edit</span></tt> model. We save both the forms one by one.</li>
+<li>Passing <tt class="docutils literal"><span class="pre">instance</span></tt> to the form will populate existing data in the fields.</li>
 <li>As planned, the <tt class="docutils literal"><span class="pre">author</span></tt> field of <tt class="docutils literal"><span class="pre">article</span></tt> and <tt class="docutils literal"><span class="pre">editor</span></tt>, <tt class="docutils literal"><span class="pre">article</span></tt> fields of <tt class="docutils literal"><span class="pre">Article</span></tt> and <tt class="docutils literal"><span class="pre">Edit</span></tt> respectively, are filled up
 before commiting <tt class="docutils literal"><span class="pre">save</span></tt>.</li>
 <li><tt class="docutils literal"><span class="pre">article_history</span></tt> view first checks if an article with the given <tt class="docutils literal"><span class="pre">slug</span></tt> exists. If yes, it forwards the request to the <tt class="docutils literal"><span class="pre">object_list</span></tt> generic
 view. We also pass the <tt class="docutils literal"><span class="pre">article</span></tt> from the generic view using <tt class="docutils literal"><span class="pre">extra_context</span></tt>.</li>
 <li>Note the <tt class="docutils literal"><span class="pre">filter</span></tt> on the <tt class="docutils literal"><span class="pre">Edit</span></tt> model&#8217;s queryset and the <tt class="docutils literal"><span class="pre">lookup</span></tt> on the related <tt class="docutils literal"><span class="pre">Article's</span></tt> slug.</li>
 </ul>
+<p>To display all the articles on the index page:</p>
+<p><tt class="docutils literal"><span class="pre">wiki/templates/wiki/article_list.html</span></tt>:</p>
+<div class="highlight-django"><div class="highlight"><pre><span class="cp">{%</span> <span class="k">if</span> <span class="nv">object_list</span> <span class="cp">%}</span><span class="x"></span>
+
+<span class="x">&lt;h2&gt;Recent Articles&lt;/h2&gt;</span>
+
+<span class="x">&lt;ul&gt;</span>
+<span class="x">    </span><span class="cp">{%</span> <span class="k">for</span> <span class="nv">article</span> <span class="k">in</span> <span class="nv">object_list</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">    &lt;li&gt;</span>
+<span class="x">        &lt;a href=&quot;</span><span class="cp">{%</span> <span class="k">url</span> <span class="nv">wiki_article_detail</span> <span class="nv">article.slug</span> <span class="cp">%}</span><span class="x">&quot;&gt;</span><span class="cp">{{</span> <span class="nv">article.title</span> <span class="cp">}}</span><span class="x">&lt;/a&gt;</span>
+<span class="x">    &lt;/li&gt;</span>
+<span class="x">    </span><span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">&lt;/ul&gt;</span>
+
+<span class="cp">{%</span> <span class="k">else</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">&lt;h2&gt;No articles have been published yet.&lt;/h2&gt;</span>
+<span class="cp">{%</span> <span class="k">endif</span> <span class="cp">%}</span><span class="x"></span>
+
+<span class="x">&lt;a href=&quot;</span><span class="cp">{%</span> <span class="k">url</span> <span class="nv">wiki_article_add</span> <span class="cp">%}</span><span class="x">&quot;&gt;Create new article&lt;/a&gt;</span>
+</pre></div>
+</div>
 </div>
 </div>
 

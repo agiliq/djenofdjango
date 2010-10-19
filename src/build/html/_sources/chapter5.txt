@@ -182,7 +182,7 @@ To demonstrate custom model managers, we would like to show only 'published' art
 Let's write down the models:
 
 .. literalinclude:: djen_project/wiki/models.py
-    :commit: f8603b3
+    :commit: 2070d53
 
 Most of the code should be familiar, some things that are new:
 
@@ -202,14 +202,17 @@ Most of the code should be familiar, some things that are new:
   the field name for the label. This can be overridden using ``verbose_name`` argument. ``help_text`` will be displayed below a field in 
   the rendered ``ModelForm``
 
+* The ``ordering`` attribute of meta class for ``Edit`` defines the default ordering in which ``edits`` will be returned. This can also be done
+  using ``order_by`` in the queryset.
+
 Now, we will need urls similar to our previous app, plus we would need a url to see the article history.
 
 .. literalinclude:: djen_project/wiki/urls.py
-    :commit: 41bd9b3
+    :commit: 33f308c
 
 Note that:
 
-* We will use the object_list generic views for the article index page and detail page.
+* We will use the ``list_detail`` generic views for the article index page and detail page.
 
 * We have to autofill the ``author`` to the logged-in user, so will write a custom view for that.
 
@@ -240,6 +243,8 @@ In our custom views:
 
 * ``edit_article`` includes two forms, one for the ``Article`` model and the other for the ``Edit`` model. We save both the forms one by one.
 
+* Passing ``instance`` to the form will populate existing data in the fields.
+
 * As planned, the ``author`` field of ``article`` and ``editor``, ``article`` fields of ``Article`` and ``Edit`` respectively, are filled up
   before commiting ``save``.
 
@@ -247,4 +252,11 @@ In our custom views:
   view. We also pass the ``article`` from the generic view using ``extra_context``.
 
 * Note the ``filter`` on the ``Edit`` model's queryset and the ``lookup`` on the related ``Article's`` slug.
+
+To display all the articles on the index page:
+
+``wiki/templates/wiki/article_list.html``:
+
+.. literalinclude:: djen_project/wiki/templates/wiki/article_list.html
+    :language: django
 
