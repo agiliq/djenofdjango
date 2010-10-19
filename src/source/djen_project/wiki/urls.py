@@ -12,7 +12,7 @@ urlpatterns = patterns('',
     url(r'^article/(?P<slug>[-\w]+)$', 
         'django.views.generic.list_detail.object_detail',
         {
-            'queryset': Article.objects.all(),
+            'queryset': Article.published.all(),
         },
         name='wiki_article_detail'),
     url(r'^history/(?P<slug>[-\w]+)$',
