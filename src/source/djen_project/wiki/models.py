@@ -14,9 +14,9 @@ class Article(models.Model):
     
     title = models.CharField(max_length=100)
     slug = models.SlugField(max_length=50)
-    text = models.TextField()
+    text = models.TextField(help_text="Formatted using ReST")
     author = models.ForeignKey(User)
-    is_published = models.BooleanField(default=False)
+    is_published = models.BooleanField(default=False, verbose_name="Publish?")
     created_on = models.DateTimeField(auto_now_add=True)
     objects = models.Manager()
     published = PublishedArticlesManager()
