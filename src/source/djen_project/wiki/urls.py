@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import *
 
-from models import Article, Edit
+from models import Article
 
 urlpatterns = patterns('',
     url(r'^$', 
