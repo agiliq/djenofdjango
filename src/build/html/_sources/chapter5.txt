@@ -259,4 +259,28 @@ To display all the articles on the index page:
 
 .. literalinclude:: djen_project/wiki/templates/wiki/article_list.html
     :language: django
+    :commit: 39527ee
+
+We will include links to edit and view history in the article detail page:
+
+``wiki/templates/wiki/article_detail.html``:
+
+.. literalinclude:: djen_project/wiki/templates/wiki/article_detail.html
+    :language: django
+    :commit: 39527ee
+
+Here we are using the ``restructuredtext`` filter provided by ``django.contrib.markup``. To use this, you will need to add 
+``django.contrib.markup`` to INSTALLED_APPS and use the ``load`` templatetag to load ``markup`` filters.
+
+Here's the form that would be use to create/edit an article:
+
+``wiki/templates/wiki/article_form.html``
+
+.. literalinclude:: djen_project/wiki/templates/wiki/article_form.html
+    :language: django
+    :commit: 39527ee
+
+Note that the same form is used for add article and edit article pages. We pass the ``article`` context variable from edit page, so
+we can use it to identify if this is an add or edit page. We also render the ``edit_form`` passed from edit page. Rendering an undefined
+variable does not throw any error in the template, so this works fine in the add page.
 
