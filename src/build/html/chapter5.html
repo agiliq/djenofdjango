@@ -604,7 +604,12 @@ view. We also pass the <tt class="docutils literal"><span class="pre">article</s
 </div>
 <p>Here we are using the <tt class="docutils literal"><span class="pre">restructuredtext</span></tt> filter provided by <tt class="docutils literal"><span class="pre">django.contrib.markup</span></tt>. To use this, you will need to add
 <tt class="docutils literal"><span class="pre">django.contrib.markup</span></tt> to INSTALLED_APPS and use the <tt class="docutils literal"><span class="pre">load</span></tt> templatetag to load <tt class="docutils literal"><span class="pre">markup</span></tt> filters.</p>
-<p>Here&#8217;s the form that would be use to create/edit an article:</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You will require docutils for ReST markup to work.
+Get it from: <a class="reference external" href="http://docutils.sourceforge.net/">http://docutils.sourceforge.net/</a></p>
+</div>
+<p>Here&#8217;s the form that would be used to create/edit an article:</p>
 <p><tt class="docutils literal"><span class="pre">wiki/templates/wiki/article_form.html</span></tt></p>
 <div class="highlight-django"><div class="highlight"><pre><span class="cp">{%</span> <span class="k">if</span> <span class="nv">article</span> <span class="cp">%}</span><span class="x"></span>
 <span class="x">    &lt;h1&gt;Edit article </span><span class="cp">{{</span> <span class="nv">article</span> <span class="cp">}}</span><span class="x">&lt;/h1&gt;</span>
@@ -625,6 +630,39 @@ view. We also pass the <tt class="docutils literal"><span class="pre">article</s
 <p>Note that the same form is used for add article and edit article pages. We pass the <tt class="docutils literal"><span class="pre">article</span></tt> context variable from edit page, so
 we can use it to identify if this is an add or edit page. We also render the <tt class="docutils literal"><span class="pre">edit_form</span></tt> passed from edit page. Rendering an undefined
 variable does not throw any error in the template, so this works fine in the add page.</p>
+<p>The article history template:</p>
+<p><tt class="docutils literal"><span class="pre">wiki/templates/wiki/edit_list.html</span></tt></p>
+<div class="highlight-django"><div class="highlight"><pre><span class="x">&lt;h2&gt;History&lt;/h2&gt;</span>
+
+<span class="x">&lt;h3&gt;</span><span class="cp">{{</span> <span class="nv">article</span> <span class="cp">}}</span><span class="x">&lt;/h3&gt;</span>
+
+<span class="x">&lt;table border=&quot;1&quot; cellspacing=&quot;0&quot;&gt;</span>
+<span class="x">    &lt;thead&gt;</span>
+<span class="x">        &lt;th&gt;Edited&lt;/th&gt;</span>
+<span class="x">        &lt;th&gt;User&lt;/th&gt;</span>
+<span class="x">        &lt;th&gt;Summary&lt;/th&gt;</span>
+<span class="x">    &lt;/thead&gt;</span>
+<span class="x">    &lt;tbody&gt;</span>
+<span class="x">        </span><span class="cp">{%</span> <span class="k">for</span> <span class="nv">edit</span> <span class="k">in</span> <span class="nv">object_list</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">        &lt;tr&gt;</span>
+<span class="x">            &lt;td&gt;</span><span class="cp">{{</span> <span class="nv">edit.edited_on</span> <span class="cp">}}</span><span class="x">&lt;/td&gt;</span>
+<span class="x">            &lt;td&gt;</span><span class="cp">{{</span> <span class="nv">edit.editor</span> <span class="cp">}}</span><span class="x">&lt;/td&gt;</span>
+<span class="x">            &lt;td&gt;</span><span class="cp">{{</span> <span class="nv">edit.summary</span> <span class="cp">}}</span><span class="x">&lt;/td&gt;</span>
+<span class="x">        &lt;/tr&gt;</span>
+<span class="x">        </span><span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">        &lt;tr&gt;</span>
+<span class="x">            &lt;td&gt;</span><span class="cp">{{</span> <span class="nv">article.created_on</span> <span class="cp">}}</span><span class="x">&lt;/td&gt;</span>
+<span class="x">            &lt;td&gt;</span><span class="cp">{{</span> <span class="nv">article.author</span> <span class="cp">}}</span><span class="x">&lt;/td&gt;</span>
+<span class="x">            &lt;td&gt;New article created&lt;/td&gt;</span>
+<span class="x">        &lt;/tr&gt;</span>
+<span class="x">    &lt;/tbody&gt;</span>
+<span class="x">&lt;/table&gt;</span>
+
+<span class="x">&lt;br /&gt;</span>
+<span class="x">&lt;a href=&quot;</span><span class="cp">{%</span> <span class="k">url</span> <span class="nv">wiki_article_detail</span> <span class="nv">article.slug</span> <span class="cp">%}</span><span class="x">&quot;&gt;&lt;&lt; Back&lt;/a&gt;</span>
+</pre></div>
+</div>
+<p>Displays a table with the history.</p>
 </div>
 </div>
 
