@@ -41,6 +41,9 @@ class Edit(models.Model):
     edited_on = models.DateTimeField(auto_now_add=True)
     summary = models.CharField(max_length=100)
 
+    class Meta:
+        ordering = ['-edited_on']
+
     def __unicode__(self):
         return "%s - %s - %s" %(self.summary, self.editor, self.edited_on)
     
