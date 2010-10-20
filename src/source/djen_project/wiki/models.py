@@ -13,7 +13,7 @@ class Article(models.Model):
     """Represents a wiki article"""
     
     title = models.CharField(max_length=100)
-    slug = models.SlugField(max_length=50)
+    slug = models.SlugField(max_length=50, unique=True)
     text = models.TextField(help_text="Formatted using ReST")
     author = models.ForeignKey(User)
     is_published = models.BooleanField(default=False, verbose_name="Publish?")

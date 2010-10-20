@@ -12,6 +12,10 @@
     </div>
 {% endif %}
 
+{% if not object.is_published %}
+    <label>Note: This article has not been published yet</label>
+{% endif %}
+
 <h2>{{ object.title }}</h2>
 
 <p>
