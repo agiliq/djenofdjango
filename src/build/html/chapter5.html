@@ -413,7 +413,7 @@ the user to the index page.</p>
     <span class="sd">&quot;&quot;&quot;Represents a wiki article&quot;&quot;&quot;</span>
     
     <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-    <span class="n">slug</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">SlugField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+    <span class="n">slug</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">SlugField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
     <span class="n">text</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">help_text</span><span class="o">=</span><span class="s">&quot;Formatted using ReST&quot;</span><span class="p">)</span>
     <span class="n">author</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">User</span><span class="p">)</span>
     <span class="n">is_published</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s">&quot;Publish?&quot;</span><span class="p">)</span>
@@ -481,7 +481,7 @@ using <tt class="docutils literal"><span class="pre">order_by</span></tt> in the
     <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^article/(?P&lt;slug&gt;[-\w]+)$&#39;</span><span class="p">,</span> 
         <span class="s">&#39;django.views.generic.list_detail.object_detail&#39;</span><span class="p">,</span>
         <span class="p">{</span>
-            <span class="s">&#39;queryset&#39;</span><span class="p">:</span> <span class="n">Article</span><span class="o">.</span><span class="n">published</span><span class="o">.</span><span class="n">all</span><span class="p">(),</span>
+            <span class="s">&#39;queryset&#39;</span><span class="p">:</span> <span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">(),</span>
         <span class="p">},</span>
         <span class="n">name</span><span class="o">=</span><span class="s">&#39;wiki_article_detail&#39;</span><span class="p">),</span>
     <span class="n">url</span><span class="p">(</span><span class="s">r&#39;^history/(?P&lt;slug&gt;[-\w]+)$&#39;</span><span class="p">,</span>
@@ -629,6 +629,10 @@ view. We also pass the <tt class="docutils literal"><span class="pre">article</s
 <span class="x">        </span><span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span><span class="x"></span>
 <span class="x">    &lt;/ul&gt;</span>
 <span class="x">    &lt;/div&gt;</span>
+<span class="cp">{%</span> <span class="k">endif</span> <span class="cp">%}</span><span class="x"></span>
+
+<span class="cp">{%</span> <span class="k">if</span> <span class="k">not</span> <span class="nv">object.is_published</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">    &lt;label&gt;Note: This article has not been published yet&lt;/label&gt;</span>
 <span class="cp">{%</span> <span class="k">endif</span> <span class="cp">%}</span><span class="x"></span>
 
 <span class="x">&lt;h2&gt;</span><span class="cp">{{</span> <span class="nv">object.title</span> <span class="cp">}}</span><span class="x">&lt;/h2&gt;</span>

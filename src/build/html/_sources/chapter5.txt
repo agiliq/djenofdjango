@@ -196,7 +196,7 @@ To demonstrate custom model managers, we would like to show only 'published' art
 Let's write down the models:
 
 .. literalinclude:: djen_project/wiki/models.py
-    :commit: 2070d53
+    :commit: 5db3e5f
 
 Most of the code should be familiar, some things that are new:
 
@@ -222,7 +222,7 @@ Most of the code should be familiar, some things that are new:
 Now, we will need urls similar to our previous app, plus we would need a url to see the article history.
 
 .. literalinclude:: djen_project/wiki/urls.py
-    :commit: 33f308c
+    :commit: 5db3e5f
 
 Note that:
 
@@ -281,7 +281,7 @@ We will include links to edit and view history in the article detail page:
 
 .. literalinclude:: djen_project/wiki/templates/wiki/article_detail.html
     :language: django
-    :commit: 39527ee
+    :commit: 5db3e5f
 
 Here we are using the ``restructuredtext`` filter provided by ``django.contrib.markup``. To use this, you will need to add 
 ``django.contrib.markup`` to INSTALLED_APPS and use the ``load`` templatetag to load ``markup`` filters.
