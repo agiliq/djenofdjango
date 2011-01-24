@@ -90,8 +90,8 @@ A template is a structure of webpage that will be *rendered* using a *context* a
 you want it to. A ``django.template.Template`` object can be rendered using the ``render`` method.
 
 Normally templates are html files with some extra django content, such as templatetags and variables. Note that our
-templates need to be publicly accessible(in fact they shouldn't be) from a webserver. They are not meant to be displayed
-directly, django will process them based on the request, context etc and respond with the rendered templates.
+templates need not be publicly accessible(in fact they shouldn't be) from a webserver. They are not meant to be displayed
+directly; django will process them based on the request, context etc and respond with the rendered templates.
 
 In case you want a template to be directly accessible (e.g. static html files), you could use the ``django.views.generic.simple.direct_to_template`` 
 generic view.
