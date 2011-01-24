@@ -175,7 +175,7 @@ Some other templates required by django-registration:
 
 At this point, a user should be able to sign-up, get the activation email, follow the activation link, complete registration and login.
 
-All this by just writing down the tempalates. Amazing, isn't it?
+All this by just writing down the templates. Amazing, isn't it?
 
 Now you would have noticed that the logged in user is redirected to ``/accounts/profile``. We would next customize the wiki app and redirect
 the user to the index page.
