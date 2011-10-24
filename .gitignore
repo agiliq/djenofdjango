@@ -5,4 +5,4 @@
 *.db
 *src/build/*
 *local_settings.py
-build/*
+src/build/*
