@@ -191,9 +191,8 @@ Models:
 
 We have already seen how to create and integrate an app into our project, so I will start with the models
 
-.. literalinclude:: djen_project/blog/models.py
+.. literalinclude:: code/models_c95309.py
     :language: python
-    :commit: c95309c1e2951c54bd25
 
 Quite a few new things here, let's analyze them:
 
@@ -238,27 +237,23 @@ We need to customize our forms to only display fields which need user input, bec
 seen how to autofill slug field. Next, we would like to autofill ``post`` for ``Comment`` and ``author`` for ``Post`` in the view. Heres our
 ``blog/forms.py``
 
-.. literalinclude:: djen_project/blog/forms.py
-    :commit: 1d155f0e5f84510002b3
+.. literalinclude:: code/forms_1d155f.py
 
 For login, we will use ``django.contrib.auth.views.login`` view which is included in the ``contrib.auth`` app. It expects a ``registration/login.html``
 which we will steal from ``django/contrib/admin/templates/admin/login.html``. We will include the login url in the project urls.
 
-.. literalinclude:: djen_project/urls.py
+.. literalinclude:: code/urls_693145.py
     :language: python
-    :commit: 69314584982bbf27530a
 
 In ``blog/templates/registration/login.html``, copy contents from ``django/contrib/admin/templates/admin/login.html``
 
-.. literalinclude:: djen_project/blog/templates/registration/login.html
+.. literalinclude:: code/login_394382.html
     :language: django
-    :commit: 394382886e3f98ba6e5f
 
 For the others, we will write custom views in ``blog/views.py``.
 
-.. literalinclude:: djen_project/blog/views.py
+.. literalinclude:: code/views_abd13c.py
     :language: python
-    :commit: abd13c713c1918bfd836
 
 Note:
 
@@ -280,15 +275,13 @@ The corresponding templates for these views would look like:
 
 ``blog/templates/blog/add_post.html``:
 
-.. literalinclude:: djen_project/blog/templates/blog/add_post.html
+.. literalinclude:: code/add_post_394382.html
     :language: django
-    :commit: 394382886e3f98ba6e5f
 
 ``blog/templates/blog/blog_post.html``:
 
-.. literalinclude:: djen_project/blog/templates/blog/blog_post.html
+.. literalinclude:: code/blog_post_394382.html
     :language: django
-    :commit: 394382886e3f98ba6e5f
 
 .. note::
 
@@ -302,9 +295,8 @@ So far we have most of the blog actions covered. Next, let's look into sessions:
 
 Suppose we want to store the commenter's details in the session so that he/she does not have to fill them again. 
 
-.. literalinclude:: djen_project/blog/views.py
+.. literalinclude:: code/views_134bb6.py
     :language: python
-    :commit: 134bb63144dfc1f94785
 
 Note that the ``form.initial`` attribute is a ``dict`` that holds initial data of the form. A session lasts until the user logs out or 
 clears the cookies (e.g. by closing the browser). django identifies the session using ``sessionid`` cookie.
@@ -318,18 +310,15 @@ Date based generic views:
 
 We will use date based generic views to get weekly/monthly archives for our blog posts:
 
-.. literalinclude:: djen_project/blog/urls.py
-    :commit: 087f567
+.. literalinclude:: code/urls_087f567.py
 
 ``archive_month`` generic views outputs to ``post_archive_month.html`` and ``archive_week`` to ``post_archive_week.html``
 
-.. literalinclude:: djen_project/blog/templates/blog/post_archive_month.html
+.. literalinclude:: code/post_archive_month_087f567.html
     :language: django
-    :commit: 087f567
 
-.. literalinclude:: djen_project/blog/templates/blog/post_archive_week.html
+.. literalinclude:: code/post_archive_week_087f567.html
     :language: django
-    :commit: 087f567
 
 Now, blog archives should be accessible from ``/blog/archive/month/2010/oct`` or ``/blog/archive/week/2010/41``
 

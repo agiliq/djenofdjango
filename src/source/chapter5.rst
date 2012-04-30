@@ -78,8 +78,7 @@ python package.
 
 Now, include ``registration`` in your ``INSTALLED_APPS``, do ``syncdb`` and include the urls:
 
-.. literalinclude:: djen_project/urls.py
-    :commit: 2bb5e33
+.. literalinclude:: code/urls_2bb5e33.py
 
 .. note:: django-registration provides views for login at ``accounts/login`` so we can omit
           our previous entry for the same.
@@ -93,8 +92,7 @@ add this setting to local_settings.py::
 
 Now, ``accounts/register/`` provides the user sign-up view and renders to ``registration/registration_form.html``, so lets write the template:
 
-.. literalinclude:: djen_project/wiki/templates/registration/registration_form.html
-    :commit: 3a0af03
+.. literalinclude:: code/registration_form_3a0af03.html
     :language: django
 
 Note that ``form`` is the user sign-up form passed as context by ``register`` of django-registration.
@@ -102,8 +100,7 @@ Note that ``form`` is the user sign-up form passed as context by ``register`` of
 To demostrate template heirarchy, we have used a base template and built all other registration templates on top of it. The base template looks like:
 ``wiki/templates/registration/base.html``
 
-.. literalinclude:: djen_project/wiki/templates/registration/base.html
-    :commit: e887a3e
+.. literalinclude:: code/base_e887a3e.html
     :language: django
 
 At the moment, we have ``extra_head`` and ``content`` blocks. You can place as many blocks as you like with careful planning and hierarchy. For example
@@ -132,20 +129,17 @@ content from ``wiki/templates/registration/activation_email.txt``. Let's write t
 
 A nice base email template would be ``wiki/templates/registration/email.txt``:
 
-.. literalinclude:: djen_project/wiki/templates/registration/email.txt
-    :commit: 3a0af03
+.. literalinclude:: code/email_3a0af03.txt
     :language: django
 
 In ``wiki/templates/registration/activation_email_subject.txt``
 
-.. literalinclude:: djen_project/wiki/templates/registration/activation_email_subject.txt
-    :commit: 3a0af03
+.. literalinclude:: code/activation_email_subject_3a0af03.txt
     :language: django
 
 In ``wiki/templates/registration/activation_email.txt``
 
-.. literalinclude:: djen_project/wiki/templates/registration/activation_email.txt
-    :commit: 21404bb
+.. literalinclude:: code/activation_email_21404bb.txt
     :language: django
 
 Note the use of ``url`` templatetag to get the activation link. Also, the tag returns a relative url, so we use the ``site`` context variable
@@ -195,8 +189,7 @@ To demonstrate custom model managers, we would like to show only 'published' art
 
 Let's write down the models:
 
-.. literalinclude:: djen_project/wiki/models.py
-    :commit: 5db3e5f
+.. literalinclude:: code/models_2070d53.py
 
 Most of the code should be familiar, some things that are new:
 
@@ -221,8 +214,7 @@ Most of the code should be familiar, some things that are new:
 
 Now, we will need urls similar to our previous app, plus we would need a url to see the article history.
 
-.. literalinclude:: djen_project/wiki/urls.py
-    :commit: 5db3e5f
+.. literalinclude:: code/urls_33f308c.py
 
 Note that:
 
@@ -271,17 +263,15 @@ To display all the articles on the index page:
 
 ``wiki/templates/wiki/article_list.html``:
 
-.. literalinclude:: djen_project/wiki/templates/wiki/article_list.html
+.. literalinclude:: code/article_list_39527ee.html
     :language: django
-    :commit: 39527ee
 
 We will include links to edit and view history in the article detail page:
 
 ``wiki/templates/wiki/article_detail.html``:
 
-.. literalinclude:: djen_project/wiki/templates/wiki/article_detail.html
+.. literalinclude:: code/article_detail_39527ee.html
     :language: django
-    :commit: 5db3e5f
 
 Here we are using the ``restructuredtext`` filter provided by ``django.contrib.markup``. To use this, you will need to add 
 ``django.contrib.markup`` to INSTALLED_APPS and use the ``load`` templatetag to load ``markup`` filters.
@@ -293,9 +283,8 @@ Here's the form that would be used to create/edit an article:
 
 ``wiki/templates/wiki/article_form.html``
 
-.. literalinclude:: djen_project/wiki/templates/wiki/article_form.html
+.. literalinclude:: code/article_form_39527ee.html
     :language: django
-    :commit: 39527ee
 
 Note that the same form is used for add article and edit article pages. We pass the ``article`` context variable from edit page, so
 we can use it to identify if this is an add or edit page. We also render the ``edit_form`` passed from edit page. Rendering an undefined
@@ -305,9 +294,8 @@ The article history template:
 
 ``wiki/templates/wiki/edit_list.html``
 
-.. literalinclude:: djen_project/wiki/templates/wiki/edit_list.html
+.. literalinclude:: code/edit_list_39527ee.html
     :language: django
-    :commit: 39527ee
 
 Displays a table with the history.
 
