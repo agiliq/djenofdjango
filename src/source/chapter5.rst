@@ -155,16 +155,13 @@ passed by the ``register`` view
 
 Some other templates required by django-registration:
 
-.. literalinclude:: djen_project/wiki/templates/registration/activate.html
-    :commit: 21404bb
+.. literalinclude:: code/activate_21404bb.html
     :language: django
 
-.. literalinclude:: djen_project/wiki/templates/registration/activation_complete.html
-    :commit: 21404bb
+.. literalinclude:: code/activation_complete_21404bb.html
     :language: django
 
-.. literalinclude:: djen_project/wiki/templates/registration/registration_complete.html
-    :commit: 21404bb
+.. literalinclude:: code/registration_complete_21404bb.html
     :language: django
 
 At this point, a user should be able to sign-up, get the activation email, follow the activation link, complete registration and login.
@@ -301,7 +298,6 @@ Displays a table with the history.
 
 Since we are done with our templates, let us redirect our logged in users to the wiki index page:
 
-.. literalinclude:: djen_project/wiki/templates/registration/activation_complete.html
-    :commit: 87106ee
+.. literalinclude:: code/activation_complete_87106ee.html
     :language: django
 
