@@ -186,7 +186,7 @@ To demonstrate custom model managers, we would like to show only 'published' art
 
 Let's write down the models:
 
-.. literalinclude:: code/models_2070d53.py
+.. literalinclude:: code/models_5db3e5f.py
 
 Most of the code should be familiar, some things that are new:
 
@@ -211,7 +211,7 @@ Most of the code should be familiar, some things that are new:
 
 Now, we will need urls similar to our previous app, plus we would need a url to see the article history.
 
-.. literalinclude:: code/urls_33f308c.py
+.. literalinclude:: code/urls_5db3e5f.py
 
 Note that:
 
@@ -267,7 +267,7 @@ We will include links to edit and view history in the article detail page:
 
 ``wiki/templates/wiki/article_detail.html``:
 
-.. literalinclude:: code/article_detail_39527ee.html
+.. literalinclude:: code/article_detail_5db3e5f.html
     :language: django
 
 Here we are using the ``restructuredtext`` filter provided by ``django.contrib.markup``. To use this, you will need to add 

@@ -6,3 +6,4 @@
 *local_settings.py
 *build/*
 src/build/doctrees/*
+src/build/html/*
