@@ -5,3 +5,4 @@
 *.db
 *local_settings.py
 *build/*
+src/build/doctrees/*
