@@ -32,12 +32,15 @@ Lets create a project called djen_project::
 
     django-admin.py startproject djen_project
 
-We can see that the subcommand creates a folder called djen_project in the working directory with the following files::
+We can see that the subcommand creates a folder called 'djen_project' in the working directory. It looks as follows::
 
-    __init__.py
-    manage.py
-    settings.py
-    urls.py
+    djen_project/
+        manage.py
+        djen_project/
+            __init__.py
+            settings.py
+            urls.py
+            wsgi.py
 
 __init__.py is an empty file required to recognize this project as a python module.
 
@@ -202,14 +205,17 @@ First, let django know that ``cd_library`` is to be used in the project. To do t
 
 to the INSTALLED_APPS list so that your settings.py looks like this::
 
-    INSTALLED_APPS = ( 
+    INSTALLED_APPS = (
         'django.contrib.auth',
         'django.contrib.contenttypes',
         'django.contrib.sessions',
         'django.contrib.sites',
         'django.contrib.messages',
+        'django.contrib.staticfiles',
         # Uncomment the next line to enable the admin:
         # 'django.contrib.admin',
+        # Uncomment the next line to enable admin documentation:
+        # 'django.contrib.admindocs',
         'cd_library',
     )
 
