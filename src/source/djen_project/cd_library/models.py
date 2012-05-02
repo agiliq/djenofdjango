@@ -2,12 +2,11 @@ from django.db import models
 
 # Create your models here.
 
-
 GENRE_CHOICES = (
-                    ('R', 'Rock'), 
-                    ('B', 'Blues'),
-                    ('J', 'Jazz'),
-                    ('P', 'Pop'),
+                 ('R', 'Rock'),
+                 ('B', 'Blues'),
+                 ('J', 'Jazz'),
+                 ('P', 'Pop'),
                 )
 
 class CD(models.Model):
@@ -19,4 +18,3 @@ class CD(models.Model):
 
     def __unicode__(self):
         return "%s by %s, %s" %(self.title, self.artist, self.date.year)
-
