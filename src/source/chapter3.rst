@@ -448,8 +448,7 @@ So let's get started::
 
 In pastebin/models.py
 
-.. literalinclude:: djen_project/pastebin/models.py
-    :commit: a9ffd8d6d733fc62afb7
+.. literalinclude:: code/models_a9ffd8.py
 
 .. note::
 
@@ -486,8 +485,7 @@ our app take control of the urls and direct them to generic views. Here's how
 
 Let's create urls.py in our app. Now our pastebin/urls.py should look like
 
-.. literalinclude:: djen_project/pastebin/urls.py
-    :commit: 749380e3986665022283
+.. literalinclude:: code/urls_749380.py
 
 Notes:
 
@@ -546,8 +544,7 @@ Now, we need a page to redirect successful submissions to. We can use the detail
 
 For this, we will use the ``django.views.generic.list_detail.object_detail`` generic view:
 
-.. literalinclude:: djen_project/pastebin/urls.py
-    :commit: 5013afc980dd97950b5c
+.. literalinclude:: code/urls_5013af.py
 
 Using this generic view we will be able to display the details about the paste object with a given id. Note that:
 
@@ -561,8 +558,7 @@ Using this generic view we will be able to display the details about the paste o
 
 In ``pastebin/templates/pastebin/paste_detail.html``:
 
-.. literalinclude:: djen_project/pastebin/templates/pastebin/paste_detail.html
-    :commit: c5f0c2d3a37c15eb7ee6
+.. literalinclude:: code/paste_detail_c5f0c2.html
     :language: django
 
 Now, that we have a create view and a detail view, we just need to glue them together. We can do this in two ways:
@@ -574,8 +570,7 @@ Now, that we have a create view and a detail view, we just need to glue them tog
 
 I would choose the latter because it is more general. To do this, change your Paste model and add the get_absolute_url property:
 
-.. literalinclude:: djen_project/pastebin/models.py
-    :commit: c0c759bd1cc6d2596c8b
+.. literalinclude:: code/models_c0c759.py
 
 Note that:
 
@@ -587,14 +582,12 @@ your paste.
 
 Now, on to our next generic view, which is object list:
 
-.. literalinclude:: djen_project/pastebin/urls.py
-    :commit: dee14b3013b9f84bfd18
+.. literalinclude:: code/urls_dee14b.py
 
 This is simpler than the detail view, since it does not take any arguments in the url. The default template for this view is ``pastebin/paste_list.html``
 so let's fill that up with:
 
-.. literalinclude:: djen_project/pastebin/templates/pastebin/paste_list.html
-    :commit: dee14b3013b9f84bfd18
+.. literalinclude:: code/paste_list_dee14b.html
     :language: django
 
 Note that
@@ -603,30 +596,26 @@ Note that
 
 Similarly, our update and delete generic views would look like:
 
-.. literalinclude:: djen_project/pastebin/urls.py
-    :commit: 17c5062a18dc4e9edfbc
+.. literalinclude:: code/urls_17c506.py
 
 Note that the ``delete_object`` generic view requires an argument called ``post_delete_redirect`` which will be used to redirect the user
 after deleting the object.
 
 We have used update_object, delete_object for the update/delete views respectively. Let's link these urls from the detail page:
 
-.. literalinclude:: djen_project/pastebin/templates/pastebin/paste_detail.html
-    :commit: 17c5062a18dc4e9edfbc
+.. literalinclude:: code/paste_detail_17c506.html
     :language: django
 
 Note that the delete view redirects to a confirmation page whose template name is ``paste_confirm_delete.html`` if called using GET method.
 Once in the confirmation page, we need need to call the same view with a POST method. The view will delete the object and pass a message using 
 the messages framework.
 
-.. literalinclude:: djen_project/pastebin/templates/pastebin/paste_confirm_delete.html
-    :commit: 17c5062a18dc4e9edfbc
+.. literalinclude:: code/paste_confirm_delete_17c506.html
     :language: django
 
 Let's handle the message and display it in the redirected page.
 
-.. literalinclude:: djen_project/pastebin/templates/pastebin/paste_list.html
-    :commit: 17c5062a18dc4e9edfbc
+.. literalinclude:: code/paste_list_17c506.html
     :language: django
 
 While we are at it, Let's also include the messages in paste detail page, where create/update view sends the messages:
