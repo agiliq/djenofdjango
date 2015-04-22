@@ -19,12 +19,3 @@ Contents:
    chapter6
    chapter7
    chapter8
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
-
