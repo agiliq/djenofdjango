@@ -12,7 +12,7 @@ What is Django?
     Brief History
     What django aims to be, what it is not (not a cms or ready to use website)
     Batteries included
-    Future (django-nonrel, django with python3.0)
+    Future
 
 Django Features:
 ================
@@ -25,10 +25,12 @@ Django Features:
 
 Why Django? Why Django instead of any other framework?
 ======================================================
-    Compare django to other lightweight frameworks like codeigniter, rails.
+
+    Compare django to other lightweight frameworks like flask and rails.
 
 Inside Django
 =============
+
     Python Philosophy
     Django Philosophy
     Request-Response cycle
