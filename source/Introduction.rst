@@ -18,7 +18,7 @@ Why Django? Why Django instead of any other framework?
 Inside Django
     Python Philosophy
     Django Philosophy
-    Request-Response cycle 
+    Request-Response cycle
     Django Architecture
     Django ORM
     DRY principle

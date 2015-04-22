@@ -4,6 +4,15 @@ Inspired by James Bennett's Practical Django projects.
 
 Generating documentation requires [Sphinx](http://pypi.python.org/pypi/Sphinx)
 
+Build it locally
+================
+
+First do this:
+
+    clone repo
+    cd djenofdjango
+    git submodule update --init --recursive
+
 To create HTML documentation, run:
 
     cd src

@@ -11,8 +11,8 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-   chapter1
-   chapter2
+   Introduction
+   models-tutorial
    chapter3
    chapter4
    chapter5
@@ -20,15 +20,6 @@ Contents:
    chapter7
    chapter8
 
-Appendices:
-
-.. toctree::
-   :maxdepth: 2
-
-   appendix1 
-   appendix2 
-   appendix3 
-   appendix4 
 
 Indices and tables
 ==================
