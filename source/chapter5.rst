@@ -40,7 +40,11 @@ Reusable Apps®:
 
 To manage user registrations, we will use ``django-registration``. You can download it from 
 
-.. note:: http://bitbucket.org/ubernostrum/django-registration/
+.. note:: https://github.com/macropin/django-registration/releases
+
+django-registration documentation is available from
+
+.. note:: http://django-registration-redux.readthedocs.io/en/latest
 
 django-registration is a great example of a reusable app, which can be customized to fit our requirements
 while providing the most common pattern by default (sign up, email activation etc)
