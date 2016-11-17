@@ -67,7 +67,7 @@ backends: ``default`` and ``simple``
 
 .. note:: 
 
-    browse through the code of django-registration to see what urls are avaialbe, what context is passed to the templates,
+    browse through the code of django-registration to see what urls are available, what context is passed to the templates,
     which urls are mapped to which views etc.
 
     Looking at named urls from ``urls.py`` would be useful for creating links to registration, login etc by using 
