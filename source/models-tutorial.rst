@@ -32,12 +32,15 @@ Lets create a project called djen_project::
 
     django-admin.py startproject djen_project
 
-We can see that the subcommand creates a folder called djen_project in the working directory with the following files::
+We can see that the subcommand creates a folder and subfolder called djen_project in the working directory with the following files::
 
-    __init__.py
-    manage.py
-    settings.py
-    urls.py
+    -- djen_project
+    - djen_project
+        __init__.py
+        settings.py
+        urls.py
+        wsgi.py
+    - manage.py
 
 __init__.py is an empty file required to recognize this project as a python module.
 
@@ -55,7 +58,7 @@ You can quickly checkout the development server at this point by running::
 
 Now open http://127.0.0.1:8000 in your browser.
 
-settings.py is a list of project wide settings with sane default values. You will need to edit this often when
+settings.py is a list of project wide settings with some default values. You will need to edit this often when
 installing new django applications, deployment etc.
 
 You can change the DATABASES settings at this point to make sure your app can be sync'ed later. The easiest 
@@ -64,7 +67,7 @@ settings would look like::
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-            'NAME': 'cd.db',                      # Or path to database file if using sqlite3.
+            'NAME': 'os.path.join(BASE_DIR, 'db.sqlite3')',      # Or path to database file if using sqlite3.
             'USER': '',                      # Not used with sqlite3.
             'PASSWORD': '',                  # Not used with sqlite3.
             'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -92,7 +95,7 @@ the settings to any other database you like. Just make sure the database exists.
 
     To verify your database settings run::
         
-        python manage.py validate
+        python manage.py check
 
     Django will validate your settings and show you errors, if any. If you get this error::
 
@@ -125,6 +128,8 @@ To start an application, cd into the project directory and use
 This will create a folder called cd_library with the  following files::
 
     __init__.py
+    admin.py
+    app.py
     models.py
     tests.py
     views.py
@@ -202,22 +207,23 @@ First, let django know that ``cd_library`` is to be used in the project. To do t
 
 to the INSTALLED_APPS list so that your settings.py looks like this::
 
-    INSTALLED_APPS = ( 
-        'django.contrib.auth',
-        'django.contrib.contenttypes',
-        'django.contrib.sessions',
-        'django.contrib.sites',
-        'django.contrib.messages',
-        # Uncomment the next line to enable the admin:
-        # 'django.contrib.admin',
-        'cd_library',
-    )
+    INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'cd_library',
+    ]
 
 .. note::
 
-    After modifying INSTALLED_APPS, it's always a good idea to run syncdb::
+    After modifying INSTALLED_APPS, it's always a good idea to run makmigrations and migrate::
 
-        python manage.py syncdb
+        $ python manage.py makemigrations
+
+        $ python manage.py migrate
 
     This lets django keep the database and your project in sync. Since we have added an app, 
     django will create that app's tables in the database. If an app is removed from the above 
@@ -235,23 +241,31 @@ A little bit about the admin interface first:
 
 * It is flexible enough to accommodate any other app's models and have admin actions for them.
 
-Since the admin is an app, it needs to be added to INSTALLED_APPS as well. You would have noticed this in the commented lines above.
-
-So just go ahead and uncomment the django.contrib.admin line in settings.py under INSTALLED_APPS. Don't forget to run syncdb.
-
-Now we have similar instructions in urls.py to uncomment a few lines to enable the admin. This will enable the urls beginning with
-``admin`` to be mapped to the admin app's urls. Note that the admin app uses a urls.py to keep its urls separate from the project
+Note that the admin app uses a urls.py to keep its urls separate from the project
 (as discussed in the note above).
 
-Just to confirm it, you can open http://127.0.0.1:8000/admin/ in your browser. You should see 'Site Administration' and actions for 'Auth'
-and 'Sites' which are enabled by default.
+
+You should create a superuser, to login to django`s inbuild admin panel. ::
+
+    $ python manage.py createsuperuser
+    Username (leave blank to use 'agiliq'):
+    Email address: user@agiliq.com
+    Password:                       # password won't be visible for security reasons.
+    Password (again):
+    Superuser created successfully.
+
+Remember username and password for logging into the admin panel.
+
+
+Just to confirm it, you can open http://127.0.0.1:8000/admin/ in your browser. You should see 'Site Administration' and actions for 'Authentication and Authorization'
+which are enabled by default.
 
 Now to enable our app's models:
 
 Go to the app's directory i.e. cd_library and create a file called admin.py and add the following lines::
 
     from django.contrib import admin
-    from models import CD
+    from .models import CD
 
     admin.site.register(CD)
 
@@ -309,7 +323,6 @@ Since we are using mysql for this example, the result is::
     +----------------------------+
     | auth_group                 |
     | auth_group_permissions     |
-    | auth_message               |
     | auth_permission            |
     | auth_user                  |
     | auth_user_groups           |
@@ -317,10 +330,10 @@ Since we are using mysql for this example, the result is::
     | cd_library_cd              |
     | django_admin_log           |
     | django_content_type        |
+    | django_migrations          |
     | django_session             |
-    | django_site                |
     +----------------------------+
-    12 rows in set (0.00 sec)
+    11 rows in set (0.00 sec)
 
 
 Each table generally represents a model from an app. You can see that the ``CD`` model is saved as
@@ -388,11 +401,11 @@ loop through the cds and print their names::
 add a new CD::
 
     new_cd = CD()
-    cd.title = "OK Computer"
-    cd.artist = "Radiohead"
-    cd.date = "2000-01-01"
-    cd.genre = "R"
-    cd.save()
+    new_cd.title = "OK Computer"
+    new_cd.artist = "Radiohead"
+    new_cd.date = "2000-01-01"
+    new_cd.genre = "R"
+    new_cd.save()
 
 .. note::
 
