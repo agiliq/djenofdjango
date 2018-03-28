@@ -30,12 +30,12 @@ A typical urlconf entry looks like this::
 urls.py and relative to the mount point in an app's urls.py
 
 ``view_function`` is a function that corresponds to this url. The function **must** return a ``HttpResponse``
-object. Usually, shortcuts such as ``render_to_response``, are used though. More about views later.
+object. Usually, shortcuts such as ``render``, are used though. More about views later.
 
 ``arg_dict`` is an optional dict of arguments that will be passed to the ``view_function``. In addition, options
 can be declared from the url regex too. For example::
 
-    (r'^object/?P<object_id>(\d+)$', 'objects.views.get_object'),
+    path('object/<int:id>/', views.get_object)
 
 will match all urls having an integer after ``object/``. Also, the value will be passed as ``object_id`` to the 
 ``get_object`` function.
@@ -44,15 +44,15 @@ Named urls:
 +++++++++++
 
 Usually, we would want an easier way to remember the urls so that we could refer them in views or templates.
-We could *name* our urls by using the ``url`` constructor. For example::
+We could *name* our urls by using the ``path`` constructor. For example::
 
-    url(r'^welcome/$', 'app.views.welcome', name='welcome'),
+    path(r'^welcome/$', 'app.views.welcome', name='welcome'),
 
 This line is similar to the previous urls, but we have an option of passing a ``name`` argument. 
 
 To get back the url from its name, django provides:
 
-* ``django.core.urlresolvers.reverse`` function for use in views
+* ``django.url.reverse`` function for use in views
 
 * ``url`` templatetag for use in templates
 
@@ -60,24 +60,7 @@ We will see how to use the templatetag in our templates.
 
 .. note:: Also see http://agiliq.com/books/djangodesignpatterns/urls.html#naming-urls
 
-Grouped urls:
-++++++++++++++
 
-Sometimes, we would want to group together logically related urls. Or just avoid writing the full function path
-over and over. We can do this by putting the common path to the view function in the first argument of
-urlpatterns::
-
-        urlpatterns = patterns('',
-            (r'^$', 'django.views.generic.create_update.create_object', { 'model': Paste }),
-        )
-
-and::
-
-        urlpatterns = patterns('django.views.generic.create_update',
-            (r'^$', 'create_object', { 'model': Paste }),
-        )
-
-are equivalent.
 
 Templates - skeletons of our website:
 ======================================
@@ -93,33 +76,48 @@ Normally templates are html files with some extra django content, such as templa
 templates need not be publicly accessible(in fact they shouldn't be) from a webserver. They are not meant to be displayed
 directly; django will process them based on the request, context etc and respond with the rendered templates.
 
-In case you want a template to be directly accessible (e.g. static html files), you could use the ``django.views.generic.simple.direct_to_template`` 
+In case you want a template to be directly accessible (e.g. static html files), you could use the ``django.views.generic.TemplateView``
 generic view.
 
 Template Loaders:
 +++++++++++++++++
 
-Django will usually look for templates in ``TEMPLATE_DIRS``  of settings.py and inside ``templates`` directory of each app.
-This is because of the ``TEMPLATE_LOADERS`` in the default settings.py::
+By default, Django uses a filesystem-based template loader, but Django comes with a few other template loaders, which know how to load templates from other sources.
 
-    # List of callables that know how to import templates from various sources.
-    TEMPLATE_LOADERS = (
-        'django.template.loaders.filesystem.Loader',
-        'django.template.loaders.app_directories.Loader',
-    #     'django.template.loaders.eggs.Loader',
-    )
+Some of these other loaders are disabled by default, but you can activate them by adding a 'loaders' option to your DjangoTemplates backend in the TEMPLATES setting or passing a loaders argument to Engine. loaders should be a list of strings or tuples, where each represents a template loader class. Here are the template loaders that come with Django:
 
-These functions fetch the template based on a given template path. To let django locate your ``hello_world.html``
-you would have to place it in ``<app>/templates`` or place it in any directory and set the ``TEMPLATE_DIRS``::
+`django.template.loaders.filesystem.Loader` ::
 
-    TEMPLATE_DIRS = (
-        # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-        # Always use forward slashes, even on Windows.
-        # Don't forget to use absolute paths, not relative paths.
-    )
+    TEMPLATES = [{
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'OPTIONS': {
+            'loaders': [
+                (
+                    'django.template.loaders.filesystem.Loader',
+                    [os.path.join(BASE_DIR, 'templates')],
+                ),
+            ],
+        },
+    }]
+
+`django.template.loaders.app_directories.Loader`
+
+Loads templates from Django apps on the filesystem. For each app in INSTALLED_APPS, the loader looks for a templates subdirectory. If the directory exists, Django looks for templates in there.
+
+This means you can store templates with your individual apps. This also makes it easy to distribute Django apps with default templates.
+
+For example, for this setting: ::
+
+    INSTALLED_APPS = ['djen_project.blog', 'djen_project.pastebin']
 
 
-to the absolute path of that directory.
+You can enable this loader simply by setting APP_DIRS to True: ::
+
+    TEMPLATES = [{
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'APP_DIRS': True,
+    }]
+
 
 Context:
 ++++++++
@@ -133,7 +131,7 @@ To display a user name in your template, suppose you provide the ``username`` in
 
     Hello {{ username }}
 
-When this template is rendered using (e.g. using ``render_to_response``), ``username`` will be replaced with its value
+When this template is rendered using (e.g. using ``render``), ``username`` will be replaced with its value
 
 You can pass any variable to the context, so you can call a dict's key, or an objects property. However you cannot pass
 any arguments to the property.
@@ -261,7 +259,7 @@ Here ``capfirst`` is a filter that will capitalize the first char our ``username
 
 
 .. note:: Reference of built-in templatetags and filters:
-          http://docs.djangoproject.com/en/1.2/ref/templates/builtins/
+          https://docs.djangoproject.com/en/2.0/ref/templates/builtins/
 
 Templates are not meant for programming:
 ++++++++++++++++++++++++++++++++++++++++
@@ -271,8 +269,6 @@ optionally making a few aesthetic changes only. Templates should not be used for
 complex queries or operations. This is also useful to keep the programming and designing aspects
 of the website separate. Template language should be easy enough to be written by designers.
 
-Generic views - commonly used views:
-====================================
 
 Views:
 ++++++
@@ -297,81 +293,23 @@ To render a template to response one would do:
 .. sourcecode:: python
 
     from django.http import HttpResponse
-    from django.template import Context, loader
+    from django.template import loader
 
     def hello_world(request):
         template = loader.get_template("hello_world.html")
-        context = Context({"username": "Monty Python"})
+        context = {"username": "Monty Python"}
         return HttpResponse(template.render(context))
 
 But there's a simpler way:
 
 .. sourcecode:: python
 
-    from django.shortcuts import render_to_response
+    from django.shortcuts import renders
 
     def hello_world(request):
-        return render_to_response("hello_world.html", { "username": "Monty Python" })
+	    return render(request,"hello_world.html", {"username": "Monty Python"})
 
 
-Generic Views:
-+++++++++++++++
-
-Generic views are commonly used view patterns that are shipped with django to make
-common operations such a list, detail, create, update delete easy. To do these operations,
-we need not even write any views, we can use generic views by passing the proper arguments.
-
-We will be using the ``create_update`` and ``list_detail`` generic views in this chapter
-
-.. note:: reference: http://docs.djangoproject.com/en/dev/ref/generic-views/
-
-``create_update.create_object``
-+++++++++++++++++++++++++++++++
-
-The ``create_object`` generic view is used to render the object creation page with the
-object form, perform form validation and save valid objects to the database.
-
-It takes a ``model`` argument which is the model that has to be created. By default, it renders
-to template with the name ``<app>/<model>_form.html``. This can be changed using the ``template_name``
-argument. (this applies to all generic views listed here)
-
-The view provides ``form`` variable in the context. This is the generated ModelForm of the ``model``.
-
-
-``create_update.update_object``
-+++++++++++++++++++++++++++++++
-
-In addition to the ``model`` argument, the ``update_object`` generic view also requires a ``object_id``
-argument which is the ``id`` of the object to be updated. This also renders to ``<app>/<model>_form.html`` template.
-
-In addition to the ``form`` variable, this view also provides the ``object`` that is being edited to the context.
-
-
-``create_update.delete_object``
-+++++++++++++++++++++++++++++++
-
-In addition to both the above arguments, this view also requires a ``post_delete_redirect`` argument
-which is the url to redirect after deleting. If called using the ``GET`` method, this view will
-redirect to ``<app>/<model>_confirm_delete.html`` template. To actually delete the object, this
-view needs to be called using the ``POST`` method. This is in accordance with the best practices that
-``GET`` requests should not modify any data.
-
-``list_detail.object_list``
-++++++++++++++++++++++++++++
-
-The ``object_list`` generic view shows the list of the ``queryset``, where ``queryset`` is the 
-queryset containing the objects we want to list.
-
-It renders the ``<app>/<model>_list.html`` template and provides ``object_list`` context
-variable by default.
-
-``list_detail.object_detail``
-+++++++++++++++++++++++++++++
-
-The ``object_detail`` generic view show details about a particular object. It takes the ``queryset`` to fetch
-the ``object_id`` from and returns ``object`` in the context.
-
-It renders to ``<app>/<model>_detail.html`` by default.
 
 Designing a pastebin app:
 =========================
@@ -466,14 +404,18 @@ Adding our app to the project
 .. literalinclude:: djen_project/settings.py
     :lines: 86-96
 
-And syncdb'ing::
+Makemigrations and Migrate::
 
-    python manage.py syncdb
+    $ python manage.py makemigrations
+    Migrations for 'pastebin':
+      pastebin/migrations/0001_initial.py
+        - Create model Paste
+    $ python manage.py migrate
+    Operations to perform:
+        Apply all migrations: admin, auth, cd_library, contenttypes, pastebin, sessions
+    Running migrations:
+        Applying pastebin.0001_initial... OK
 
-which returns::
-
-    Creating table pastebin_paste
-    No fixtures found.
 
 There, we have our pastebin models ready.
 
