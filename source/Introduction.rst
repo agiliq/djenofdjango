@@ -39,7 +39,6 @@ Downloading and Installing
 What is Django?
 ===============
 
-    * The web framework for perfectionists with deadlines.
     * Django is a free open-source web framework, written in Python, which follows the model-view-template(MVT) architectural pattern. It is maintained by Django Software Foundation(DSF). Django's primary goal is to ease the creation of complex, database-driven websites.
     * Django is a high-level Python Web framework that encourages rapid development and clean, pragmatic design. Built by experienced developers, it takes care of much of the hassle of Web development, so you can focus on writing your app without needing to reinvent the wheel.
 
@@ -63,7 +62,7 @@ Inside Django
     The web framework for perfectionists with deadlines.
 
     * **Django Architecture**
-    Django follows the MVC pattern closely, however it does use its own logic in the implementation. Because the “C” is handled by the framework itself and most of the excitement in Django happens in models, templates and views, Django is often referred to as an MTV framework. In the MTV development pattern:
+    Django follows the MVC pattern closely, however it does use its own logic in the implementation. Because the “C” is handled by the framework itself and most of the excitement in Django happens in models, templates and views, Django is often referred to as an MTV framework.
 
     * **Django ORM**
     ORMs provide a high-level abstraction upon a relational database that allows a developer to write Python code instead of SQL to create, read, update and delete data and schemas in their database. Developers can use the programming language they are comfortable with to work with a database instead of writing SQL statements or stored procedures.
@@ -80,7 +79,6 @@ Inside Django
     Django uses request and response objects to pass state through the system.
 
     When a page is requested, Django creates an HttpRequest object that contains metadata about the request. Then Django loads the appropriate view, passing the HttpRequest as the first argument to the view function. Each view is responsible for returning an HttpResponse object.
-
 
     * **Middleware**
     Middleware is a framework of hooks into Django’s request/response processing. It’s a light, low-level “plugin” system for globally altering Django’s input or output.
