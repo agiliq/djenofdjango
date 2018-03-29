@@ -11,7 +11,6 @@ First do this:
 
     clone repo
     cd djenofdjango
-    git submodule update --init --recursive
 
 To create HTML documentation, run:
 
