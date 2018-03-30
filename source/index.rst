@@ -1,12 +1,7 @@
-.. djenofdjango documentation master file, created by
-   sphinx-quickstart on Tue Jul 27 18:14:49 2010.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+Django Projects Cookbook
+============================
 
-Djen of Django
-==============
-
-Djen of Django is a book for intermediate python programmers, which will take you from where Django tutorials left to a more advanced programmer.
+Django Projects Cookbook is a book for intermediate python programmers, which will take you from where Django tutorials left to a more advanced programmer.
 
 Contents:
 
