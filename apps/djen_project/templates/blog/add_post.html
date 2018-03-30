@@ -1,0 +1,10 @@
+<h2>Hello {{ user.username }}</h2>
+<br />
+<h2>Add new post</h2>
+<form action="" method="POST">
+    {% csrf_token %}
+    <table>
+        {{ form.as_table }}
+    </table>
+    <input type="submit" name="add" value="Add" />
+</form>

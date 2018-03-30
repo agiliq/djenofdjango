@@ -1,0 +1,9 @@
+<h2>Post archives for week {{ week|date:"W" }}, {{ week|date:"Y" }}</h2>
+
+<ul>
+    {% for post in object_list %}
+        <li>
+        <a href="{% url blog_post_detail post.slug %}">{{ post.title }}</a>
+        </li>
+    {% endfor %}
+</ul>

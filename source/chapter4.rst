@@ -245,7 +245,7 @@ which we will steal from ``django/contrib/admin/templates/admin/login.html``. We
 .. literalinclude:: code/urls_693145.py
     :language: python
 
-In ``blog/templates/registration/login.html``, copy contents from ``django/contrib/admin/templates/admin/login.html``
+In ``templates/registration/login.html``, copy contents from ``django/contrib/admin/templates/admin/login.html``
 
 .. literalinclude:: code/login_394382.html
     :language: django
@@ -306,13 +306,19 @@ The default session backend is ``django.contrib.sessions.backends.db`` i.e. data
 Date based generic views:
 =========================
 
-.. note:: reference: http://docs.djangoproject.com/en/1.2/ref/generic-views/#date-based-generic-views
+.. note:: reference: https://docs.djangoproject.com/en/2.0/ref/class-based-views/generic-date-based/
+
+Add code of date based views to the :code:`blog/views.py` so as to make it work.
+
+.. literalinclude:: code/views_134bgb.py
+    :language: python
+
 
 We will use date based generic views to get weekly/monthly archives for our blog posts:
 
 .. literalinclude:: code/urls_087f567.py
 
-``archive_month`` generic views outputs to ``post_archive_month.html`` and ``archive_week`` to ``post_archive_week.html``
+``PostMonthArchiveView`` generic class based views outputs to ``post_archive_month.html`` and ``PostWeekArchiveView`` to ``post_archive_week.html``
 
 .. literalinclude:: code/post_archive_month_087f567.html
     :language: django
@@ -320,5 +326,5 @@ We will use date based generic views to get weekly/monthly archives for our blog
 .. literalinclude:: code/post_archive_week_087f567.html
     :language: django
 
-Now, blog archives should be accessible from ``/blog/archive/month/2010/oct`` or ``/blog/archive/week/2010/41``
+Now, blog archives should be accessible from ``/blog/archive/2018/month/03`` or ``/blog/archive/2018/week/16``
 
