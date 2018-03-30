@@ -13,9 +13,15 @@ the request. A request url that does not match any urlconf entry will be 404'ed.
           <http://docs.python.org/library/re.html>`_ or 
           `diveintopython <http://diveintopython.org/regular_expressions/index.html>`_
 
-As an example from our previous app:
+As an example from our previous app: ::
 
-.. literalinclude:: djen_project/urls.py
+    from django.contrib import admin
+    from django.urls import path
+
+    urlpatterns = [
+        path(r'admin/', admin.site.urls),
+    ]
+
 
 Now when we call http://127.0.0.1:8000/admin/ django matches that to the first regex. This urlconf
 has included ``admin.urls`` which means that all further regex matches will be done with the ``admin.urls``
@@ -108,7 +114,7 @@ This means you can store templates with your individual apps. This also makes it
 
 For example, for this setting: ::
 
-    INSTALLED_APPS = ['djen_project.blog', 'djen_project.pastebin']
+    INSTALLED_APPS = ['cd_library', 'pastebin']
 
 
 You can enable this loader simply by setting APP_DIRS to True: ::
@@ -270,6 +276,9 @@ complex queries or operations. This is also useful to keep the programming and d
 of the website separate. Template language should be easy enough to be written by designers.
 
 
+Generic views - commonly used views:
+====================================
+
 Views:
 ++++++
 
@@ -311,6 +320,29 @@ But there's a simpler way:
 
 
 
+Generic Views:
++++++++++++++++
+
+Django’s generic views were developed to ease that pain.They take certain common
+idioms and patterns found in view development and abstract them so that you can
+quickly write common views of data without having to write too much code.
+
+Extending Generic Views
+++++++++++++++++++++++++
+
+There’s no question that using generic views can speed up development substantially.
+In most projects, however, there comes a moment when the generic views no longer suffice.
+Indeed, the most common question asked by new Django developers is how to make generic
+views handle a wider array of situations.
+
+This is one of the reasons generic views were redesigned for the 1.3 release - previously,
+they were just view functions with a bewildering array of options; now, rather than passing
+in a large amount of configuration in the URLconf, the recommended way to extend generic views
+:Qis to subclass them, and override their attributes or methods.
+
+
+.. note:: reference: https://docs.djangoproject.com/en/2.0/topics/class-based-views/generic-display/
+
 Designing a pastebin app:
 =========================
 
@@ -333,21 +365,6 @@ Some 'views' that the user will see are
     * An entry/edit form for a text
 
     * A view to delete a text
-
-Since the list and detail views are fairly common in most apps,
-django ships with a set of 'generic views' that can be used in
-our app. We would be particularly interested in the following generic
-views
-
-    * ``django.views.generic.create_update.create_object``
-
-    * ``django.views.generic.create_update.update_object``
-
-    * ``django.views.generic.create_update.delete_object``
-
-    * ``django.views.generic.list_detail.object_list``
-
-    * ``django.views.generic.list_detail.object_detail``
 
 Our work flow for this app would be
 
@@ -384,9 +401,20 @@ So let's get started::
 
     python manage.py startapp pastebin
 
-In pastebin/models.py
+In pastebin/models.py ::
 
-.. literalinclude:: code/models_a9ffd8.py
+    from django.db import models
+
+    # Create your models here.
+    class Paste(models.Model):
+        text = models.TextField()
+        name = models.CharField(max_length=40, null=True, blank=True)
+        created_on = models.DateTimeField(auto_now_add=True)
+        updated_on = models.DateTimeField(auto_now=True)
+
+        def __unicode__(self):
+            return self.name or str(self.id)
+
 
 .. note::
 
@@ -399,10 +427,19 @@ In pastebin/models.py
     * the id field is primary key which is autocreated by django. Since
       name is optional, we fall back to the id which is guaranteed.
 
-Adding our app to the project
+Adding our app to the project ::
 
-.. literalinclude:: djen_project/settings.py
-    :lines: 86-96
+    INSTALLED_APPS = [
+        'django.contrib.admin',
+        'django.contrib.auth',
+        'django.contrib.contenttypes',
+        'django.contrib.sessions',
+        'django.contrib.messages',
+        'django.contrib.staticfiles',
+        'cd_library',
+        'pastebin',
+    ]
+
 
 Makemigrations and Migrate::
 
@@ -441,9 +478,15 @@ Notes:
 * The third value is the arguments passed to the ``create_object`` view. The view will use the ``model``
   argument to generate a form and save it to the database. In our case, this is the ``Paste`` model
 
-Let's tell the project to include our app's urls
+Let's tell the project to include our app's urls ::
 
-.. literalinclude:: djen_project/urls.py
+    from django.contrib import admin
+    from django.urls import path, include
+
+    urlpatterns = [
+        path(r'admin/', admin.site.urls),
+        path(r'^pastebin/', include('pastebin.urls')),
+    ]
 
 Now django knows to forward urls starting with ``/pastebin`` to the pastebin app. All urls relative to this url
 will be handled by the pastebin app. That's great for reusability.
@@ -484,9 +527,30 @@ Observe that:
 
 Now, we need a page to redirect successful submissions to. We can use the detail view page of a paste here.
 
-For this, we will use the ``django.views.generic.list_detail.object_detail`` generic view:
+For this, we will use the ``django.views.generic.detail.DetailView`` generic view in views: ::
 
-.. literalinclude:: code/urls_5013af.py
+    from django.views.generic.detail import DetailView
+    from .models import Paste
+    from django.views.generic.edit import CreateView
+
+    class PasteCreate(CreateView):
+        model = Paste
+        fields = ['text','name']
+
+    class PasteDetail(DetailView):
+        model = Paste
+        template_name = "pastebin/paste_detail.html"
+
+
+Related urls: ::
+
+    from django.urls import re_path
+    from .views import PasteDetail, PasteCreate
+
+    urlpatterns = [
+        re_path(r'', PasteCreate.as_view(), name='create'),
+        re_path(r'^paste/(?P<pk>\d+)$', PasteDetail.as_view(), name='pastebin_paste_detail'),
+    ]
 
 Using this generic view we will be able to display the details about the paste object with a given id. Note that:
 
@@ -522,9 +586,16 @@ Note that:
 And so, we are ready with the create object and object detail views. Try submitting any pastes and you should be redirected to the details of 
 your paste.
 
-Now, on to our next generic view, which is object list:
+Now, on to our next generic view, which is object list: ::
 
-.. literalinclude:: code/urls_dee14b.py
+    from django.urls import re_path
+    from .views import PasteList, PasteDetail, PasteCreate
+
+    urlpatterns = [
+        re_path(r'', PasteCreate.as_view(), name='create'),
+        re_path(r'^pastes/', PasteList.as_view(), name='pastebin_paste_list'),
+        re_path(r'^paste/(?P<pk>\d+)$', PasteDetail.as_view(), name='pastebin_paste_detail'),
+    ]
 
 This is simpler than the detail view, since it does not take any arguments in the url. The default template for this view is ``pastebin/paste_list.html``
 so let's fill that up with:
@@ -536,9 +607,19 @@ Note that
 
 * We have used the ``url`` template tag and passed our named view i.e. ``pastebin_paste_detail`` to get the url to a specific paste
 
-Similarly, our update and delete generic views would look like:
+Similarly, our update and delete generic views would look like ::
 
-.. literalinclude:: code/urls_17c506.py
+    from django.urls import re_path
+    from .views import PasteList, PasteDetail, PasteDelete, PasteUpdate, PasteCreate
+
+    urlpatterns = [
+        re_path(r'', PasteCreate.as_view(), name='create'),
+        re_path(r'^pastes/', PasteList.as_view(), name='pastebin_paste_list'),
+        re_path(r'^paste/(?P<pk>\d+)$', PasteDetail.as_view(), name='pastebin_paste_detail'),
+        re_path(r'^paste/delete/(?P<object_id>\d+)$', PasteUpdate.as_view()),
+        re_path(r'^paste/edit/(?P<object_id>\d+)$', PasteDelete.as_view()),
+    ]
+
 
 Note that the ``delete_object`` generic view requires an argument called ``post_delete_redirect`` which will be used to redirect the user
 after deleting the object.
@@ -547,6 +628,38 @@ We have used update_object, delete_object for the update/delete views respective
 
 .. literalinclude:: code/paste_detail_17c506.html
     :language: django
+
+Our :code:`views.py` for complete pastebin looks like ::
+
+    from django.shortcuts import render
+    from django.views.generic import DeleteView
+    from django.views.generic.edit import CreateView, UpdateView
+    from django.views.generic.detail import DetailView
+    from django.views.generic.list import ListView
+    from .models import Paste
+
+    # Create your views here
+
+    class PasteCreate(CreateView):
+        model = Paste
+        fields = ['text','name']
+
+    class PasteList(ListView):
+        model = Paste
+        template_name = "pastebin/paste_list.html"
+        queryset = Paste.objects.all()
+        context_object_name = 'queryset'
+
+    class PasteDetail(DetailView):
+        model = Paste
+        template_name = "pastebin/paste_detail.html"
+
+    class PasteDelete(DeleteView):
+        model = Paste
+
+    class PasteUpdate(UpdateView):
+        model = Paste
+
 
 Note that the delete view redirects to a confirmation page whose template name is ``paste_confirm_delete.html`` if called using GET method.
 Once in the confirmation page, we need need to call the same view with a POST method. The view will delete the object and pass a message using 
