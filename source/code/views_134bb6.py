@@ -1,11 +1,10 @@
 # Create your views here.
 
 from django.contrib.auth.decorators import user_passes_test
-from django.shortcuts import redirect, render_to_response, get_object_or_404
-from django.template import RequestContext
+from django.shortcuts import redirect, render_to_response, get_object_or_404, render
 
-from models import Post
-from forms import PostForm, CommentForm
+from .models import Post
+from .forms import PostForm, CommentForm
 
 @user_passes_test(lambda u: u.is_superuser)
 def add_post(request):
@@ -15,9 +14,7 @@ def add_post(request):
         post.author = request.user
         post.save()
         return redirect(post)
-    return render_to_response('blog/add_post.html', 
-                              { 'form': form },
-                              context_instance=RequestContext(request))
+    return render(request, 'blog/add_post.html',{ 'form': form })
 
 def view_post(request, slug):
     post = get_object_or_404(Post, slug=slug)
@@ -33,10 +30,4 @@ def view_post(request, slug):
     form.initial['name'] = request.session.get('name')
     form.initial['email'] = request.session.get('email')
     form.initial['website'] = request.session.get('website')
-    return render_to_response('blog/blog_post.html',
-                              {
-                                  'post': post,
-                                  'form': form,
-                              },
-                              context_instance=RequestContext(request))
-
+    return render(request, 'blog/blog_post.html',{'post': post,'form': form,})
