@@ -1,0 +1,14 @@
+{% if article %}
+    <h1>Edit article {{ article }}</h1>
+{% else %}
+    <h1>Create new article</h1>
+{% endif %}
+
+<form action="" method="POST">
+    {% csrf_token %}
+    <table>
+        {{ form.as_table }}
+        {{ edit_form.as_table }}
+    </table>
+    <input type="submit" name="submit" value="Submit">
+</form>

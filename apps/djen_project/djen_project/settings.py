@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'cd_library',
     'pastebin',
     'blog',
+    'wiki',
 ]
 
 MIDDLEWARE = [

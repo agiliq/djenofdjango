@@ -23,5 +23,5 @@ urlpatterns = [
     path(r'admin/', admin.site.urls),
     path(r'pastebin/', include('pastebin.urls')),
     path(r'blog/', include('blog.urls')),
-    # path(r'^wiki/', include('wiki.urls')),
+    path(r'wiki/', include('wiki.urls')),
 ]

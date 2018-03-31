@@ -10,7 +10,7 @@ class Post(models.Model):
     slug = models.SlugField(unique=True)
     text = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True)
-    author = models.ForeignKey(User)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __unicode__(self):
         return self.title
@@ -32,7 +32,7 @@ class Comment(models.Model):
     email = models.EmailField(max_length=75)
     website = models.URLField(max_length=200, null=True, blank=True)
     text = models.TextField()
-    post = models.ForeignKey(Post)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
     created_on = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):

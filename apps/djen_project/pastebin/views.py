@@ -12,10 +12,10 @@ class PasteCreate(CreateView):
 	fields = ['text','name']
 
 class PasteList(ListView):
-	model = Paste
 	template_name = "pastebin/paste_list.html"
-	queryset = Paste.objects.all()
-	context_object_name = 'queryset' 
+	def get_queryset(self):
+		return Paste.objects.all()
+
 
 class PasteDetail(DetailView):
 	model = Paste
