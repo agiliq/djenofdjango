@@ -521,13 +521,13 @@ Now, we need a page to redirect successful submissions to. We can use the detail
 
 For this, we will use the ``django.views.generic.detail.DetailView`` generic view in views:
 
-.. literalinclude:: code/view0012.html
+.. literalinclude:: code/view0012.py
     :language: django
 
 
 Related urls:
 
-.. literalinclude:: code/url0012.html
+.. literalinclude:: code/url0012.py
     :language: django
 
 
@@ -599,7 +599,7 @@ We have used update_object, delete_object for the update/delete views respective
 .. literalinclude:: code/paste_detail_17c506.html
     :language: django
 
-Our :code:`views.py` for complete pastebin looks like ::
+Our :code:`views.py` for complete pastebin looks likes
 
 .. literalinclude:: code/viewe14b.py
     :language: django
