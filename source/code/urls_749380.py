@@ -1,8 +1,6 @@
-from django.conf.urls.defaults import *
+from django.urls import re_path
+from .views import PasteCreate
 
-from models import Paste
-
-urlpatterns = patterns('',
-    (r'$', 'django.views.generic.create_update.create_object', { 'model': Paste }),
-)
-
+urlpatterns = [
+	re_path(r'^$', PasteCreate.as_view(), name='create'),
+]

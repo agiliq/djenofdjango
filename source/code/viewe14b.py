@@ -15,7 +15,7 @@ class PasteList(ListView):
 	model = Paste
 	template_name = "pastebin/paste_list.html"
 	queryset = Paste.objects.all()
-	context_object_name = 'queryset' 
+	context_object_name = 'queryset'
 
 class PasteDetail(DetailView):
 	model = Paste
