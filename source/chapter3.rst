@@ -599,7 +599,7 @@ We have used update_object, delete_object for the update/delete views respective
 .. literalinclude:: code/paste_detail_17c506.html
     :language: django
 
-Our :code:`views.py` for complete pastebin looks likes
+Our :code:`views.py` for complete pastebin looks like
 
 .. literalinclude:: code/viewe14b.py
     :language: django
@@ -648,7 +648,7 @@ For our subcommand to be registered with manage.py, we need the following struct
 
 All scripts inside ``management/commands/`` will be used as custom subcommands. Let's create ``delete_old.py`` subcommand:
 
-.. literalinclude:: djen_project/pastebin/management/commands/delete_old.py
+.. literalinclude:: code/delete_old1we3.py
 
 Here:
 
