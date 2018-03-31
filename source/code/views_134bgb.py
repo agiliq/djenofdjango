@@ -2,6 +2,7 @@
 
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import redirect, render_to_response, get_object_or_404, render
+from django.views.generic.dates import MonthArchiveView, WeekArchiveView
 
 from .models import Post
 from .forms import PostForm, CommentForm
@@ -23,5 +24,22 @@ def view_post(request, slug):
         comment = form.save(commit=False)
         comment.post = post
         comment.save()
+        request.session["name"] = comment.name
+        request.session["email"] = comment.email
+        request.session["website"] = comment.website
         return redirect(request.path)
+    form.initial['name'] = request.session.get('name')
+    form.initial['email'] = request.session.get('email')
+    form.initial['website'] = request.session.get('website')
     return render(request, 'blog/blog_post.html',{'post': post,'form': form,})
+
+class PostMonthArchiveView(MonthArchiveView):
+    queryset = Post.objects.all()
+    date_field = "created_on"
+    allow_future = True
+
+class PostWeekArchiveView(WeekArchiveView):
+    queryset = Post.objects.all()
+    date_field = "created_on"
+    week_format = "%W"
+    allow_future = True

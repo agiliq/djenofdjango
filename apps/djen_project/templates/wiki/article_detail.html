@@ -3,7 +3,7 @@
     <ul>
     {% for message in messages %}
         <li class="{{ message.tag }}">
-            {{ message }} 
+            {{ message }}
         </li>
         {% endfor %}
     </ul>
@@ -17,7 +17,7 @@
 <h2>{{ object.title }}</h2>
 
 <p>
-{{ object.text|restructuredtext }}
+{{ object.text }}
 </p>
 
 <h3>Actions<h3>
@@ -30,4 +30,4 @@
     </li>
 </ul>
 
-<a href="{% url wiki_article_index %}">See All</a>
+<a href="{% url 'wiki_article_index' %}">See All</a>

@@ -7,3 +7,4 @@
 *build/*
 src/build/doctrees/*
 src/build/html/*
+db.sqlite3

@@ -14,7 +14,6 @@ First do this:
 
 To create HTML documentation, run:
 
-    cd src
     make html
 
 To create a PDF version of the book on Ubuntu Linux:

@@ -3,7 +3,7 @@
 <ul>
     {% for paste in object_list %}
     <li>
-        <a href="{% url 'pastebin_paste_detail' paste.id  %}">{{ paste }}</a>
+        <a href="{% url 'pastebin_paste_detail paste.id'  %}">{{ paste }}</a>
     </li>
     {% endfor %}
 </ul>
