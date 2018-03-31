@@ -37,11 +37,11 @@
 <h2>Actions</h2>
     <ul>
         <li>
-            <a href="{% url pastebin_paste_edit object.id %}">Edit this paste</a>
+            <a href="{% url 'pastebin_paste_edit' object.id %}">Edit this paste</a>
         </li>
         <li>
-            <a href="{% url pastebin_paste_delete object.id %}">Delete this paste</a>
+            <a href="{% url 'pastebin_paste_delete' object.id %}">Delete this paste</a>
         </li>
     </ul>
 
-<a href="{% url pastebin_paste_list %}">View All</a>
+<a href="{% url 'pastebin_paste_list' %}">View All</a>
