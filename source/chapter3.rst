@@ -921,14 +921,33 @@ For our subcommand to be registered with manage.py, we need the following struct
     |   |   `-- __init__.py
     |   `-- __init__.py
     |-- models.py
-    |-- templates
     |-- tests.py
     |-- urls.py
     `-- views.py
 
 All scripts inside ``management/commands/`` will be used as custom subcommands. Let's create ``delete_old.py`` subcommand:
 
-.. literalinclude:: code/delete_old1we3.py
+.. sourcecode:: python
+
+    import datetime
+
+    from django.core.management.base import BaseCommand
+
+    from pastebin.models import Paste
+
+    class Command(BaseCommand):
+        help = """
+                deletes pastes not updated in last 24 hrs
+
+                Use this subcommand in a cron job
+                to clear older pastes
+               """
+
+        def handle(self, **options):
+            now = datetime.datetime.now()
+            yesterday = now - datetime.timedelta(1)
+            old_pastes = Paste.objects.filter(updated_on__lte=yesterday)
+            old_pastes.delete()
 
 Here:
 
