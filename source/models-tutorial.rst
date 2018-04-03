@@ -1,7 +1,7 @@
 Chapter 2. Building a personal CD library.
 --------------------------------------------
 
-Starting a django project:
+Starting a django project
 ==========================
 
 Now that we have installed django, we are ready to start our project.
@@ -16,15 +16,15 @@ project.
 
 .. note::
 
-    To get a full listing of available subcommands in django-admin.py, use::
+    To get a full listing of available subcommands in django-admin.py, use ::
 
         django-admin.py --help
 
-    To get help on each subcommand, use::
+    To get help on each subcommand, use ::
 
         django-admin.py help <subcommand>
 
-    For example, here's the result of ``django-admin.py help startproject``::
+    For example, here's the result of ``django-admin.py help startproject`` ::
 
         Creates a Django project directory structure for the given project name in the current directory.
 
@@ -56,7 +56,9 @@ You can quickly checkout the development server at this point by running::
 
     python manage.py runserver
 
-Now open http://127.0.0.1:8000 in your browser.
+Now open http://127.0.0.1:8000 in your browser. you will see django powered page.
+
+.. image:: images/django_first_page.png
 
 settings.py is a list of project wide settings with some default values. You will need to edit this often when
 installing new django applications, deployment etc.
@@ -116,12 +118,12 @@ and responded to.
 
 You are encouraged to go through settings.py and urls.py once to get an understanding of how settings and urls are defined.
 
-Getting started with the App:
+Getting started with the App
 =============================
 
 Now that we have setup and understood the structure of our project, we can start our application.
 
-To start an application, cd into the project directory and use
+To start an application, cd into the project directory and use ::
 
     manage.py startapp cd_library
 
@@ -155,8 +157,6 @@ Let us create our models first:
 Open models.py and define our ``CD`` model which will hold all information related to a CD. You can see that models.py has::
 
    from django.db import models
-
-   # Create your models here.
 
 So we define the ``CD`` model as::
 
@@ -260,6 +260,9 @@ Remember username and password for logging into the admin panel.
 Just to confirm it, you can open http://127.0.0.1:8000/admin/ in your browser. You should see 'Site Administration' and actions for 'Authentication and Authorization'
 which are enabled by default.
 
+.. image:: images/django_admin.png
+
+
 Now to enable our app's models:
 
 Go to the app's directory i.e. cd_library and create a file called admin.py and add the following lines::
@@ -275,6 +278,8 @@ If you refresh the admin page, you can see the 'Cd_library' header and 'Cds' und
 and we can add/edit/delete any instances of our CD model through the admin interface. Try adding a few entries using the
 ``Add`` action. You can edit entries using the ``Change`` action which will take you to the change list page. Try editing and
 deleting entries.
+
+.. image:: images/cd_admin.png
 
 Did you notice?:
 
