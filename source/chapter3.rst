@@ -502,7 +502,7 @@ Let's tell the project to include our app's urls
 
     urlpatterns = [
         path('admin/', admin.site.urls),
-        path('^pastebin/', include('pastebin.urls')),
+        path('pastebin/', include('pastebin.urls')),
     ]
 
 Now django knows to forward urls starting with ``/pastebin`` to the pastebin app. All urls relative to this url
@@ -579,13 +579,14 @@ Related urls:
 
 .. sourcecode:: python
 
-    from django.urls import re_path
-    from .views import PasteDetail, PasteCreate
+    from django.urls import path
+    from .views import PasteList, PasteDetail, PasteCreate
 
     urlpatterns = [
-        re_path(r'', PasteCreate.as_view(), name='create'),
-        re_path(r'^paste/(?P<pk>\d+)$', PasteDetail.as_view(), name='pastebin_paste_detail'),
+        path('', PasteCreate.as_view(), name='create'),
+        path('paste/<int:pk>', PasteDetail.as_view(), name='pastebin_paste_detail'),
     ]
+
 
 Using this generic view we will be able to display the details about the paste object with a given id. Note that:
 

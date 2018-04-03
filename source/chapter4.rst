@@ -191,8 +191,47 @@ Models:
 
 We have already seen how to create and integrate an app into our project, so I will start with the models
 
-.. literalinclude:: code/models_c95309.py
-    :language: python
+.. sourcecode:: python
+
+    from django.db import models
+    from django.template.defaultfilters import slugify
+
+    from django.contrib.auth.models import User
+
+    class Post(models.Model):
+        title = models.CharField(max_length=100)
+        slug = models.SlugField(unique=True)
+        text = models.TextField()
+        created_on = models.DateTimeField(auto_now_add=True)
+        author = models.ForeignKey(User, on_delete=models.CASCADE)
+
+        def __unicode__(self):
+            return self.title
+
+        @models.permalink
+        def get_absolute_url(self):
+            return ('blog_post_detail', (),
+                    {
+                        'slug' :self.slug,
+                    })
+
+        def save(self, *args, **kwargs):
+            if not self.slug:
+                self.slug = slugify(self.title)
+            super(Post, self).save(*args, **kwargs)
+
+    class Comment(models.Model):
+        name = models.CharField(max_length=42)
+        email = models.EmailField(max_length=75)
+        website = models.URLField(max_length=200, null=True, blank=True)
+        text = models.TextField()
+        post = models.ForeignKey(Post, on_delete=models.CASCADE)
+        created_on = models.DateTimeField(auto_now_add=True)
+
+        def __unicode__(self):
+            return self.text
+
+
 
 Quite a few new things here, let's analyze them:
 
@@ -237,23 +276,72 @@ We need to customize our forms to only display fields which need user input, bec
 seen how to autofill slug field. Next, we would like to autofill ``post`` for ``Comment`` and ``author`` for ``Post`` in the view. Heres our
 ``blog/forms.py``
 
-.. literalinclude:: code/forms_1d155f.py
+.. sourcecode:: python
+
+    from django import forms
+
+    from .models import Post, Comment
+
+    class PostForm(forms.ModelForm):
+        class Meta:
+            model = Post
+            exclude = ['author', 'slug']
+
+    class CommentForm(forms.ModelForm):
+        class Meta:
+            model = Comment
+            exclude = ['post']
+
 
 For login, we will use ``django.contrib.auth.views.login`` view which is included in the ``contrib.auth`` app. It expects a ``registration/login.html``
 which we will steal from ``django/contrib/admin/templates/admin/login.html``. We will include the login url in the project urls.
 
-.. literalinclude:: code/urls_693145.py
-    :language: python
+.. sourcecode:: python
+
+    from django.contrib import admin
+    from django.urls import path, include
+    from django.contrib.auth.views import login
+
+    urlpatterns = [
+        path('accounts/login/', login),
+        path('admin/', admin.site.urls),
+        path('pastebin/', include('pastebin.urls')),
+        path('blog/', include('blog.urls')),
+        ]
+
 
 In ``templates/registration/login.html``, copy contents from ``django/contrib/admin/templates/admin/login.html``
 
-.. literalinclude:: code/login_394382.html
-    :language: django
 
 For the others, we will write custom views in ``blog/views.py``.
 
-.. literalinclude:: code/views_abd13c.py
-    :language: python
+.. sourcecode:: python
+
+    from django.contrib.auth.decorators import user_passes_test
+    from django.shortcuts import redirect, render_to_response, get_object_or_404, render
+
+    from .models import Post
+    from .forms import PostForm, CommentForm
+
+    @user_passes_test(lambda u: u.is_superuser)
+    def add_post(request):
+        form = PostForm(request.POST or None)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = request.user
+            post.save()
+            return redirect(post)
+        return render(request, 'blog/add_post.html',{ 'form': form })
+
+    def view_post(request, slug):
+        post = get_object_or_404(Post, slug=slug)
+        form = CommentForm(request.POST or None)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.save()
+            return redirect(request.path)
+        return render(request, 'blog/blog_post.html',{'post': post,'form': form,})
 
 Note:
 
@@ -275,13 +363,60 @@ The corresponding templates for these views would look like:
 
 ``blog/templates/blog/add_post.html``:
 
-.. literalinclude:: code/add_post_394382.html
-    :language: django
+.. sourcecode:: html
+
+    <h2>Hello {{ user.username }}</h2>
+    <br />
+    <h2>Add new post</h2>
+    <form action="" method="POST">
+        {% csrf_token %}
+        <table>
+            {{ form.as_table }}
+        </table>
+        <input type="submit" name="add" value="Add" />
+    </form>
+
+
 
 ``blog/templates/blog/blog_post.html``:
 
-.. literalinclude:: code/blog_post_394382.html
-    :language: django
+.. sourcecode:: html
+
+    <h2>{{ post.title }}</h2>
+    <div class="content">
+        <p>
+            {{ post.text }}
+        </p>
+        <span>
+            Written by {{ post.author }}  on {{ post.created_on }}
+        </span>
+    </div>
+
+    {% if post.comment_set.all %}
+    <h2>Comments</h2>
+    <div class="comments">
+        {% for comment in post.comment_set.all %}
+            <span>
+                <a href="{{ comment.website }}">{{ comment.name }}</a> said on {{ comment.created_on }}
+            </span>
+            <p>
+                {{ comment.text }}
+            </p>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <br />
+
+    <h2>Add Comment</h2>
+
+    <form action="" method="POST">
+        {% csrf_token %}
+        <table>
+            {{ form.as_table }}
+        </table>
+        <input type="submit" name="submit" value="Submit" />
+    </form>
 
 .. note::
 
@@ -295,8 +430,39 @@ So far we have most of the blog actions covered. Next, let's look into sessions:
 
 Suppose we want to store the commenter's details in the session so that he/she does not have to fill them again. 
 
-.. literalinclude:: code/views_134bb6.py
-    :language: python
+.. sourcecode:: python
+
+    from django.contrib.auth.decorators import user_passes_test
+    from django.shortcuts import redirect, render_to_response, get_object_or_404, render
+
+    from .models import Post
+    from .forms import PostForm, CommentForm
+
+    @user_passes_test(lambda u: u.is_superuser)
+    def add_post(request):
+        form = PostForm(request.POST or None)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = request.user
+            post.save()
+            return redirect(post)
+        return render(request, 'blog/add_post.html',{ 'form': form })
+
+    def view_post(request, slug):
+        post = get_object_or_404(Post, slug=slug)
+        form = CommentForm(request.POST or None)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.save()
+            request.session["name"] = comment.name
+            request.session["email"] = comment.email
+            request.session["website"] = comment.website
+            return redirect(request.path)
+        form.initial['name'] = request.session.get('name')
+        form.initial['email'] = request.session.get('email')
+        form.initial['website'] = request.session.get('website')
+        return render(request, 'blog/blog_post.html',{'post': post,'form': form,})
 
 Note that the ``form.initial`` attribute is a ``dict`` that holds initial data of the form. A session lasts until the user logs out or 
 clears the cookies (e.g. by closing the browser). django identifies the session using ``sessionid`` cookie.
@@ -310,21 +476,96 @@ Date based generic views:
 
 Add code of date based views to the :code:`blog/views.py` so as to make it work.
 
-.. literalinclude:: code/views_134bgb.py
-    :language: python
+.. sourcecode:: python
 
+    from django.contrib.auth.decorators import user_passes_test
+    from django.shortcuts import redirect, render_to_response, get_object_or_404, render
+    from django.views.generic.dates import MonthArchiveView, WeekArchiveView
+
+    from .models import Post
+    from .forms import PostForm, CommentForm
+
+    @user_passes_test(lambda u: u.is_superuser)
+    def add_post(request):
+        form = PostForm(request.POST or None)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = request.user
+            post.save()
+            return redirect(post)
+        return render(request, 'blog/add_post.html',{ 'form': form })
+
+    def view_post(request, slug):
+        post = get_object_or_404(Post, slug=slug)
+        form = CommentForm(request.POST or None)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.save()
+            request.session["name"] = comment.name
+            request.session["email"] = comment.email
+            request.session["website"] = comment.website
+            return redirect(request.path)
+        form.initial['name'] = request.session.get('name')
+        form.initial['email'] = request.session.get('email')
+        form.initial['website'] = request.session.get('website')
+        return render(request, 'blog/blog_post.html',{'post': post,'form': form,})
+
+    class PostMonthArchiveView(MonthArchiveView):
+        queryset = Post.objects.all()
+        date_field = "created_on"
+        allow_future = True
+
+    class PostWeekArchiveView(WeekArchiveView):
+        queryset = Post.objects.all()
+        date_field = "created_on"
+        week_format = "%W"
+        allow_future = True
 
 We will use date based generic views to get weekly/monthly archives for our blog posts:
 
-.. literalinclude:: code/urls_087f567.py
+.. sourcecode:: python
+
+    from django.urls import path, include
+    from .views import view_post, add_post, PostMonthArchiveView, PostWeekArchiveView
+
+
+    urlpatterns = [
+        path('post/<str:slug>', view_post, name='blog_post_detail'),
+        path('add/post', add_post, name='blog_add_post'),
+        path('archive/<int:year>/month/<int:month>', PostMonthArchiveView.as_view(month_format='%m'), name='blog_archive_month',),
+        path('archive/<int:year>/week/<int:week>', PostWeekArchiveView.as_view(), name='blog_archive_week'),
+            ]
 
 ``PostMonthArchiveView`` generic class based views outputs to ``post_archive_month.html`` and ``PostWeekArchiveView`` to ``post_archive_week.html``
 
-.. literalinclude:: code/post_archive_month_087f567.html
-    :language: django
+.. sourcecode:: html
 
-.. literalinclude:: code/post_archive_week_087f567.html
-    :language: django
+    <h2>Post archives for {{ month|date:"F" }}, {{ month|date:"Y" }}</h2>
+
+    <ul>
+        {% for post in object_list %}
+            <li>
+            <a href="{% url 'blog_post_detail' post.slug %}">{{ post.title }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+
+.. image:: images/post_archive_month.png
+
+.. sourcecode:: html
+
+    <h2>Post archives for week {{ week|date:"W" }}, {{ week|date:"Y" }}</h2>
+
+    <ul>
+        {% for post in object_list %}
+            <li>
+            <a href="{% url 'blog_post_detail' post.slug %}">{{ post.title }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+
+.. image:: images/post_archive_week.png
 
 Now, blog archives should be accessible from ``/blog/archive/2018/month/03`` or ``/blog/archive/2018/week/16``
 
