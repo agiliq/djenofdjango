@@ -1,7 +1,0 @@
-<h1>Really delete paste {{ object }}?</h1>
-<h2>This action cannot be undone</h2>
-<form action="{% url 'pastebin_paste_delete' object.id %}" method="POST">
-    {% csrf_token %}
-    <input type="submit" value="Delete">
-</form>
-
