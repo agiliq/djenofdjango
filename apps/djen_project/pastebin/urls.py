@@ -1,10 +1,10 @@
-from django.urls import re_path
+from django.urls import path
 from .views import PasteList, PasteDetail, PasteDelete, PasteUpdate, PasteCreate
 
 urlpatterns = [
-	re_path(r'^$', PasteCreate.as_view(), name='create'),
-	re_path(r'^pastes/$', PasteList.as_view(), name='pastebin_paste_list'),
-	re_path(r'^paste/(?P<pk>\d+)$', PasteDetail.as_view(), name='pastebin_paste_detail'),
-	re_path(r'^paste/delete/(?P<pk>\d+)$', PasteDelete.as_view(), name='pastebin_paste_delete'),
-	re_path(r'^paste/edit/(?P<pk>\d+)$', PasteUpdate.as_view(), name='pastebin_paste_edit'),
+	path('', PasteCreate.as_view(), name='create'),
+	path('pastes/', PasteList.as_view(), name='pastebin_paste_list'),
+	path('paste/<int:pk>', PasteDetail.as_view(), name='pastebin_paste_detail'),
+	path('paste/delete/<int:pk>', PasteDelete.as_view(), name='pastebin_paste_delete'),
+	path('paste/edit/<int:pk>', PasteUpdate.as_view(), name='pastebin_paste_edit'),
 ]

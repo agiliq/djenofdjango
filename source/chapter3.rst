@@ -1,7 +1,7 @@
 Chapter 3. Building a Pastebin.
 --------------------------------
 
-URL configuration - entry points:
+URL configuration - entry points
 =================================
 
 We have already noticed urls.py in our project. This controls our website's
@@ -19,12 +19,12 @@ As an example from our previous app: ::
     from django.urls import path
 
     urlpatterns = [
-        path(r'admin/', admin.site.urls),
+        path('admin/', admin.site.urls),
     ]
 
 
-Now when we call http://127.0.0.1:8000/admin/ django matches that to the first regex. This urlconf
-has included ``admin.urls`` which means that all further regex matches will be done with the ``admin.urls``
+Now when we call http://127.0.0.1:8000/admin/ django matches that to the url entries. This urlconf
+has included ``admin.urls`` which means that all further paths matches will be done with the ``admin.urls``
 module. Once again, the first match will get to handle the request. You can think of this as 'mounting' the 
 admin app at ``/admin/``. You are of course free to change the 'mount point' to anything else you like.
 
@@ -201,7 +201,7 @@ This templatetag takes a named url or view function and renders the url as found
   
 .. sourcecode:: django
 
-    <a href="{% url pastebin_paste_list %}">View All</a>
+    <a href="{% url 'pastebin_paste_list' %}">View All</a>
 
 would output
 
@@ -464,37 +464,77 @@ our app take control of the urls and direct them to generic views. Here's how
 
 Let's create urls.py in our app. Now our pastebin/urls.py should look like
 
-.. literalinclude:: code/urls_749380.py
+.. sourcecode:: python
+
+    from django.urls import path
+    from .views import PasteCreate
+
+    urlpatterns = [
+        path(r'', PasteCreate.as_view(), name='create'),
+    ]
 
 Notes:
 
 * Each urlpatterns line is a mapping of urls to views
 
-  ``re_path(r'^$', PasteCreate.as_view(), name='create'),``
+  ``path(r'', PasteCreate.as_view(), name='create'),``
 
-* Here the url is ``r'^$'`` which is a regular expression that will be matched with the incoming request.
+* Here the url is ``''`` will be matched with the incoming request.
   If a match is found, the request is forwarded to the corresponding view.
 
-* The third value is the arguments passed to the ``create_object`` view. The view will use the ``model``
-  argument to generate a form and save it to the database. In our case, this is the ``Paste`` model
+* The scope goes to class based generic view, which is written in our :code:`views.py`.
+
+.. sourcecode:: python
+
+    from django.views.generic.edit import CreateView
+
+    class PasteCreate(CreateView):
+        model = Paste
+        fields = ['text','name']
+
 
 Let's tell the project to include our app's urls
 
-.. literalinclude:: code/urls_743456.py
+.. sourcecode:: python
+
+    from django.contrib import admin
+    from django.urls import path, include
+
+    urlpatterns = [
+        path('admin/', admin.site.urls),
+        path('^pastebin/', include('pastebin.urls')),
+    ]
 
 Now django knows to forward urls starting with ``/pastebin`` to the pastebin app. All urls relative to this url
 will be handled by the pastebin app. That's great for reusability.
 
 If you try to open http://127.0.0.1/pastebin at this point, you will be greeted with a TemplateDoesNotExist error.
 If you observe, the error message says that django cannot find ``pastebin/paste_form.html``. Usually getting this error means that
-django was not able to find that file. 
+django was not able to find that file.
 
-The default template used by create_object is '<app>/<model>_form.html'. In our case this would be ``pastebin/paste_form.html``.
+.. image:: images/templatenotexist.png
 
-Let's create this template. In ``pastebin/templates/pastebin/paste_form.html``:
+The default template used by CreateView is '<app>/<model>_form.html'. In our case this would be ``pastebin/paste_form.html``.
 
-.. literalinclude:: code/paste_form0012.html
-    :language: django
+Let's create this template. In ``templates/pastebin/paste_form.html``:
+
+.. sourcecode:: html
+
+    <h1>Create new Paste</h1>
+    <form action="" method="POST">
+        {% csrf_token %}
+        <table>
+            {{ form.as_table }}
+        </table>
+        <input type="submit" name="create" value="Create">
+    </form>
+
+    <a href="{% url 'pastebin_paste_list' %}">View All</a>
+
+Just after adding the template we an refresh the page. We will se our webpage as.
+
+.. image:: images/pastebincreate.png
+
 
 .. TODO::
 
@@ -519,32 +559,72 @@ Observe that:
 
 Now, we need a page to redirect successful submissions to. We can use the detail view page of a paste here.
 
-For this, we will use the ``django.views.generic.detail.DetailView`` generic view in views:
+For this, we will use the ``django.views.generic.detail.DetailView``
 
-.. literalinclude:: code/view0012.py
-    :language: django
+.. sourcecode:: python
 
+    from django.views.generic.detail import DetailView
+    from .models import Paste
+    from django.views.generic.edit import CreateView
+
+    class PasteCreate(CreateView):
+        model = Paste
+        fields = ['text','name']
+
+    class PasteDetail(DetailView):
+        model = Paste
+        template_name = "pastebin/paste_detail.html"
 
 Related urls:
 
-.. literalinclude:: code/url0012.py
-    :language: django
+.. sourcecode:: python
 
+    from django.urls import re_path
+    from .views import PasteDetail, PasteCreate
+
+    urlpatterns = [
+        re_path(r'', PasteCreate.as_view(), name='create'),
+        re_path(r'^paste/(?P<pk>\d+)$', PasteDetail.as_view(), name='pastebin_paste_detail'),
+    ]
 
 Using this generic view we will be able to display the details about the paste object with a given id. Note that:
 
-* object_id and queryset are the arguments passed to object_detail view
+* model and template_name are the arguments passed to DetailView. (ProjectDetailView)
 
 * we are naming this view using the url constructor and passing the ``name`` argument. This name can be referred to
   from views or templates and helps in keeping this DRY.
 
-* the object_detail view will render the ``pastebin/paste_detail.html`` template by default. We need to write down this
+* the DetailView view will render the ``pastebin/paste_detail.html`` template. We need to write down this
   template for this view to work.
 
-In ``pastebin/templates/pastebin/paste_detail.html``:
+In ``templates/pastebin/paste_detail.html``:
 
-.. literalinclude:: code/paste_detail_c5f0c2.html
-    :language: django
+.. sourcecode:: html
+
+    <label>Paste Details: </label>
+    <p>
+        <div>
+            <label>ID</label>
+            <span>{{ object.id }}</span>
+        </div>
+        <div>
+            <label>Name</label>
+            <span>{{ object.name }}</span>
+        </div>
+        <div>
+            <label>Text</label>
+            <span>{{ object.text }}</span>
+        </div>
+        <div>
+            <label>Created</label>
+            <span>{{ object.created_on }}</span>
+        </div>
+        <div>
+            <label>Modified</label>
+            <span>{{ object.updated_on }}</span>
+        </div>
+    </p>
+
 
 Now, that we have a create view and a detail view, we just need to glue them together. We can do this in two ways:
 
@@ -555,7 +635,25 @@ Now, that we have a create view and a detail view, we just need to glue them tog
 
 I would choose the latter because it is more general. To do this, change your Paste model and add the get_absolute_url property:
 
-.. literalinclude:: code/models_c0c759.py
+.. sourcecode:: python
+
+    from django.db import models
+
+
+    class Paste(models.Model):
+        text = models.TextField()
+        name = models.CharField(max_length=40, null=True, blank=True)
+        created_on = models.DateTimeField(auto_now_add=True)
+        updated_on = models.DateTimeField(auto_now=True)
+
+        def __unicode__(self):
+            return self.name or str(self.id)
+
+        @models.permalink
+        def get_absolute_url(self):
+            return ('pastebin_paste_detail', [self.id])
+
+
 
 Note that:
 
@@ -565,22 +663,38 @@ Note that:
 And so, we are ready with the create object and object detail views. Try submitting any pastes and you should be redirected to the details of 
 your paste.
 
-Now, on to our next generic view, which is ListView: ::
+.. image:: images/detailview.png
 
-    from django.urls import re_path
+Now, on to our next generic view, which is ListView:
+
+.. sourcecode:: python
+
+    from django.urls import path
     from .views import PasteList, PasteDetail, PasteCreate
 
     urlpatterns = [
-        re_path(r'', PasteCreate.as_view(), name='create'),
-        re_path(r'^pastes/', PasteList.as_view(), name='pastebin_paste_list'),
-        re_path(r'^paste/(?P<pk>\d+)$', PasteDetail.as_view(), name='pastebin_paste_detail'),
+        path('', PasteCreate.as_view(), name='create'),
+        path('pastes/', PasteList.as_view(), name='pastebin_paste_list'),
+        path('paste/<int:pk>', PasteDetail.as_view(), name='pastebin_paste_detail'),
     ]
 
 This is simpler than the detail view, since it does not take any arguments in the url. The default template for this view is ``pastebin/paste_list.html``
 so let's fill that up with:
 
-.. literalinclude:: code/paste_list_dee14b.html
-    :language: django
+.. sourcecode:: html
+
+    {% if object_list %}
+        <h1>Recent Pastes:</h1>
+    <ul>
+        {% for paste in object_list %}
+        <li>
+            <a href="{% url 'pastebin_paste_detail' paste.id  %}">{{ paste }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+        <h1>No recent pastes</h1>
+    {% endif %}
 
 Note that
 
@@ -588,38 +702,204 @@ Note that
 
 Similarly, our update and delete generic views would look like
 
-.. literalinclude:: code/urldee14b.py
-    :language: django
+.. sourcecode:: python
+
+    from django.urls import path
+    from .views import PasteList, PasteDetail, PasteDelete, PasteUpdate, PasteCreate
+
+    urlpatterns = [
+        path('', PasteCreate.as_view(), name='create'),
+        path('pastes/', PasteList.as_view(), name='pastebin_paste_list'),
+        path('paste/<int:pk>', PasteDetail.as_view(), name='pastebin_paste_detail'),
+        path('paste/delete/<int:pk>', PasteDelete.as_view(), name='pastebin_paste_delete'),
+        path('paste/edit/<int:pk>', PasteUpdate.as_view(), name='pastebin_paste_edit'),
+    ]
+
 
 Note that the ``delete_object`` generic view requires an argument called ``post_delete_redirect`` which will be used to redirect the user
 after deleting the object.
 
 We have used update_object, delete_object for the update/delete views respectively. Let's link these urls from the detail page:
 
-.. literalinclude:: code/paste_detail_17c506.html
-    :language: django
+.. sourcecode:: html
+
+    {% if messages %}
+        <div class="messages">
+        <ul>
+        {% for message in messages %}
+            <li class="{{ message.tag }}">
+                {{ message }}
+            </li>
+            {% endfor %}
+        </ul>
+        </div>
+    {% endif %}
+
+    <h1>Paste Details: </h1>
+    <p>
+        <div>
+            <label>ID</label>
+            <span>{{ object.id }}</span>
+        </div>
+        <div>
+            <label>Name</label>
+            <span>{{ object.name }}</span>
+        </div>
+        <div>
+            <label>Text</label>
+            <textarea rows="10" cols="50" OnClick="this.select();" readonly="true">{{ object.text }}</textarea>
+        </div>
+        <div>
+            <label>Created</label>
+            <span>{{ object.created_on }}</span>
+        </div>
+        <div>
+            <label>Modified</label>
+            <span>{{ object.updated_on }}</span>
+        </div>
+    </p>
+
+    <h2>Actions</h2>
+        <ul>
+            <li>
+                <a href="{% url 'pastebin_paste_edit' object.id %}">Edit this paste</a>
+            </li>
+            <li>
+                <a href="{% url 'pastebin_paste_delete' object.id %}">Delete this paste</a>
+            </li>
+        </ul>
+
+    <a href="{% url 'pastebin_paste_list' %}">View All</a>
+
 
 Our :code:`views.py` for complete pastebin looks like
 
-.. literalinclude:: code/viewe14b.py
-    :language: django
+.. sourcecode:: python
+
+    from django.urls import reverse_lazy
+    from django.views.generic import DeleteView
+    from django.views.generic.edit import CreateView, UpdateView
+    from django.views.generic.detail import DetailView
+    from django.views.generic.list import ListView
+    from .models import Paste
+
+    class PasteCreate(CreateView):
+        model = Paste
+        fields = ['text','name']
+
+    class PasteList(ListView):
+        model = Paste
+        template_name = "pastebin/paste_list.html"
+        queryset = Paste.objects.all()
+        context_object_name = 'queryset'
+
+    class PasteDetail(DetailView):
+        model = Paste
+        template_name = "pastebin/paste_detail.html"
+
+    class PasteDelete(DeleteView):
+        model = Paste
+        success_url = reverse_lazy('pastebin_paste_list')
+
+    class PasteUpdate(UpdateView):
+        model = Paste
+        fields = ['text', 'name']
 
 Note that the delete view redirects to a confirmation page whose template name is ``paste_confirm_delete.html`` if called using GET method.
 Once in the confirmation page, we need need to call the same view with a POST method. The view will delete the object and pass a message using 
 the messages framework.
 
-.. literalinclude:: code/paste_confirm_delete_17c506.html
-    :language: django
+.. sourcecode:: html
+
+    <h1>Really delete paste {{ object }}?</h1>
+    <h2>This action cannot be undone</h2>
+    <form action="{% url 'pastebin_paste_delete' object.id %}" method="POST">
+        {% csrf_token %}
+        <input type="submit" value="Delete">
+    </form>
 
 Let's handle the message and display it in the redirected page.
 
-.. literalinclude:: code/paste_list_17c506.html
-    :language: django
+.. sourcecode:: html
+
+    {% if messages %}
+        <div class="messages">
+        <ul>
+        {% for message in messages %}
+            <li class="{{ message.tag }}">
+                {{ message }}
+            </li>
+            {% endfor %}
+        </ul>
+        </div>
+    {% endif %}
+
+    {% if object_list %}
+        <h1>Recent Pastes:</h1>
+    <ul>
+        {% for paste in object_list %}
+        <li>
+            <a href="{% url 'pastebin_paste_detail' paste.id  %}">{{ paste }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+        <h1>No recent pastes</h1>
+    {% endif %}
+
+    <a href="{% url 'pastebin_paste_create' %}">Create new</a>
 
 While we are at it, Let's also include the messages in paste detail page, where create/update view sends the messages:
 
-.. literalinclude:: code/paste_detail_jk8904.html
-    :language: django
+.. sourcecode:: html
+
+    {% if messages %}
+        <div class="messages">
+        <ul>
+        {% for message in messages %}
+            <li class="{{ message.tag }}">
+                {{ message }}
+            </li>
+            {% endfor %}
+        </ul>
+        </div>
+    {% endif %}
+
+    <h1>Paste Details: </h1>
+    <p>
+        <div>
+            <label>ID</label>
+            <span>{{ object.id }}</span>
+        </div>
+        <div>
+            <label>Name</label>
+            <span>{{ object.name }}</span>
+        </div>
+        <div>
+            <label>Text</label>
+            <textarea rows="10" cols="50" OnClick="this.select();" readonly="true">{{ object.text }}</textarea>
+        </div>
+        <div>
+            <label>Created</label>
+            <span>{{ object.created_on }}</span>
+        </div>
+        <div>
+            <label>Modified</label>
+            <span>{{ object.updated_on }}</span>
+        </div>
+    </p>
+
+    <h2>Actions</h2>
+        <ul>
+            <li>
+                <a href="{% url 'pastebin_paste_edit' object.id %}">Edit this paste</a>
+            </li>
+            <li>
+                <a href="{% url 'pastebin_paste_delete' object.id %}">Delete this paste</a>
+            </li>
+        </ul>
+
+    <a href="{% url 'pastebin_paste_list' %}">View All</a>
 
 So we now have pages to create, update, delete and view all pastes.
 
@@ -641,14 +921,33 @@ For our subcommand to be registered with manage.py, we need the following struct
     |   |   `-- __init__.py
     |   `-- __init__.py
     |-- models.py
-    |-- templates
     |-- tests.py
     |-- urls.py
     `-- views.py
 
 All scripts inside ``management/commands/`` will be used as custom subcommands. Let's create ``delete_old.py`` subcommand:
 
-.. literalinclude:: code/delete_old1we3.py
+.. sourcecode:: python
+
+    import datetime
+
+    from django.core.management.base import BaseCommand
+
+    from pastebin.models import Paste
+
+    class Command(BaseCommand):
+        help = """
+                deletes pastes not updated in last 24 hrs
+
+                Use this subcommand in a cron job
+                to clear older pastes
+               """
+
+        def handle(self, **options):
+            now = datetime.datetime.now()
+            yesterday = now - datetime.timedelta(1)
+            old_pastes = Paste.objects.filter(updated_on__lte=yesterday)
+            old_pastes.delete()
 
 Here:
 
