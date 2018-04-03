@@ -652,10 +652,10 @@ All scripts inside ``management/commands/`` will be used as custom subcommands. 
 
 Here:
 
-* We subclass either of the ``NoArgsCommand``, ``LabelCommand`` or ``AppCommand`` from ``django.core.management.base``. ``NoArgsCommand``
+* We subclass either of the ``BaseCommand``, ``LabelCommand`` or ``AppCommand`` from ``django.core.management.base``. ``BaseCommand``
   suits our need because we dont need to pass any arguments to this subcommand.
 
-* ``handle_noargs`` will be called when the script runs. This would be ``handle`` for other Command types.
+* ``handle`` will be called when the script runs. This would be ``handle`` for other Command types.
 
 * We have used the ``lte`` lookup on ``updated_on`` field to get all posts older than a day. Then we delete them using ``delete`` method
   on the queryset.
