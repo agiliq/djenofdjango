@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'pastebin',
     'blog',
     'wiki',
+    'quora',
 ]
 
 MIDDLEWARE = [
