@@ -1,7 +1,9 @@
 Django Projects Cookbook
 ============================
 
-Django Projects Cookbook is a book for intermediate python programmers, which will take you from where Django tutorials left to a more advanced programmer.
+Django Projects Cookbook is a book for intermediate python programmers. It will take you from where Django tutorials left to a more advanced programmer.
+
+.. image:: bookcover.png
 
 Contents:
 
