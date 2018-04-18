@@ -1,19 +1,30 @@
 Chapter 6. Building a Quora like site
 --------------------------------------------------
-(Topics introduced: Transactions, Middleware, Permissions, Messages.)
 
-Diving in. [Code listing]
+Topics in this chapter:
+=======================
 
-Transactions. (Till previous chapters we were not using transactions and all database actions were in Autocommit mode. Here we want many views to work as part of a transaction.)
-  Using TransactionMiddleware  to tie Http requests to transactions.
-  Finer grained control over transaction using commit_manually
+We have covered basics in last few chapters, like Generic Views, template languages, ORM, interaction with django admin etc. Now in this chapter we will be creating :code:`Custom User`, who will be able to access the Qusetion and answers in the Quora like app.
 
-Permissions. (We would define various user levels, and different user levels have different permissions)
-  Introducing permissions.
-  Creating cutsom permissions.
-  How Groups, Users and permissions work together.
-  Using permission_required decorator.
 
-Message. (For example when the user gets a reply to her question.)
-  Using get_and_delete_messages()
+Quora like Application:
+=======================
+
+We have checked Quora for checking many qusetions in our past. Qusetions may be both technical or non technical. In this tutorial we will be creating a Qura like application but not exactly the Quora.
+
+Application Includes:
+======================
+
+* Registering custom users (Substitute of django's admin user)
+* Custom Users Login/Logout Functionality
+* Questions asked by users.
+* Answered Questions by Users
+* Dashboard user specific.
+
+Django features to learn in this chapter:
+==========================================
+* Class Based Views
+* Basics of Django Testing
+* Customising Users
+
 
