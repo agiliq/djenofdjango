@@ -1,0 +1,14 @@
+<a href='{% url "logout-view" %}'>Logout</a>
+Welcome,
+{{userdetail.username}}
+<br/>
+Asked Questions.
+<br/>
+{% for question in questions %}
+<li>{{question.title}}</li>
+{% endfor %}
+<br/>
+Answers.
+{% for answer in answers %}
+<li>{{answer.answer_text}} by {{answer.user.username}} </li>
+{% endfor %}
