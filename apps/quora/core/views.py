@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.shortcuts import render_to_response, HttpResponseRedirect, redirect
+from django.shortcuts import HttpResponseRedirect, redirect
 from django.urls import reverse
 from django.views.generic.edit import FormView
 from django.utils.decorators import method_decorator
@@ -28,6 +28,7 @@ class DashboardView(FormView):
             return render(request, 'dashboard.html', content)
         else:
             return redirect(reverse('login-view'))
+
 
 class RegisterView(FormView):
 
