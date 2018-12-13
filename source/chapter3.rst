@@ -508,7 +508,7 @@ Let's tell the project to include our app's urls
 Now django knows to forward urls starting with ``/pastebin`` to the pastebin app. All urls relative to this url
 will be handled by the pastebin app. That's great for reusability.
 
-If you try to open http://127.0.0.1/pastebin at this point, you will be greeted with a TemplateDoesNotExist error.
+If you try to open http://127.0.0.1:8000/pastebin at this point, you will be greeted with a TemplateDoesNotExist error.
 If you observe, the error message says that django cannot find ``pastebin/paste_form.html``. Usually getting this error means that
 django was not able to find that file.
 
