@@ -15,5 +15,5 @@ class CD(models.Model):
     date = models.DateField()
     genre = models.CharField(max_length=1, choices=GENRE_CHOICES)
 
-    def __unicode__(self):
+    def __str__(self):
         return "%s by %s, %s" %(self.title, self.artist, self.date.year)
