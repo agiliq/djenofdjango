@@ -476,7 +476,7 @@ the exclude method - equal to all-filter::
 
 returns::
 
-    [<CD: Kid A by Radiohead, 2010>]
+    []
 
 Now on to the lookups:
 
