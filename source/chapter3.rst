@@ -412,7 +412,7 @@ In pastebin/models.py ::
         created_on = models.DateTimeField(auto_now_add=True)
         updated_on = models.DateTimeField(auto_now=True)
 
-        def __unicode__(self):
+        def __str__(self):
             return self.name or str(self.id)
 
 
@@ -647,7 +647,7 @@ I would choose the latter because it is more general. To do this, change your Pa
         created_on = models.DateTimeField(auto_now_add=True)
         updated_on = models.DateTimeField(auto_now=True)
 
-        def __unicode__(self):
+        def __str__(self):
             return self.name or str(self.id)
 
         @models.permalink
