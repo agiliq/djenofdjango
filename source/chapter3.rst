@@ -470,14 +470,14 @@ Let's create urls.py in our app. Now our pastebin/urls.py should look like
     from .views import PasteCreate
 
     urlpatterns = [
-        path(r'', PasteCreate.as_view(), name='create'),
+        path(r'', PasteCreate.as_view(), name='pastebin_paste_create'),
     ]
 
 Notes:
 
 * Each urlpatterns line is a mapping of urls to views
 
-  ``path(r'', PasteCreate.as_view(), name='create'),``
+  ``path(r'', PasteCreate.as_view(), name='pastebin_paste_create'),``
 
 * Here the url is ``''`` will be matched with the incoming request.
   If a match is found, the request is forwarded to the corresponding view.
@@ -583,7 +583,7 @@ Related urls:
     from .views import PasteList, PasteDetail, PasteCreate
 
     urlpatterns = [
-        path('', PasteCreate.as_view(), name='create'),
+        path('', PasteCreate.as_view(), name='pastebin_paste_create'),
         path('paste/<int:pk>', PasteDetail.as_view(), name='pastebin_paste_detail'),
     ]
 
@@ -674,7 +674,7 @@ Now, on to our next generic view, which is ListView:
     from .views import PasteList, PasteDetail, PasteCreate
 
     urlpatterns = [
-        path('', PasteCreate.as_view(), name='create'),
+        path('', PasteCreate.as_view(), name='pastebin_paste_create'),
         path('pastes/', PasteList.as_view(), name='pastebin_paste_list'),
         path('paste/<int:pk>', PasteDetail.as_view(), name='pastebin_paste_detail'),
     ]
@@ -709,7 +709,7 @@ Similarly, our update and delete generic views would look like
     from .views import PasteList, PasteDetail, PasteDelete, PasteUpdate, PasteCreate
 
     urlpatterns = [
-        path('', PasteCreate.as_view(), name='create'),
+        path('', PasteCreate.as_view(), name='pastebin_paste_create'),
         path('pastes/', PasteList.as_view(), name='pastebin_paste_list'),
         path('paste/<int:pk>', PasteDetail.as_view(), name='pastebin_paste_detail'),
         path('paste/delete/<int:pk>', PasteDelete.as_view(), name='pastebin_paste_delete'),
