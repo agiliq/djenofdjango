@@ -392,7 +392,7 @@ Now in :code:`questans/models.py` lets add the below code.
             self.slug = slugify(self.title)
             super(Questions, self).save(*args, **kwargs)
 
-        def __unicode__(self):
+        def __str__(self):
             return self.title
 
 
@@ -402,14 +402,14 @@ Now in :code:`questans/models.py` lets add the below code.
         answer_text = models.TextField()
         is_anonymous = models.BooleanField(default=False)
 
-        def __unicode__(self):
+        def __str__(self):
             return self.id
 
 
     class QuestionGroups(models.Model):
         name = models.CharField(max_length=100)
 
-        def __unicode__(self):
+        def __str__(self):
             return self.name
 
 Things to note in above code
