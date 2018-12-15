@@ -303,7 +303,7 @@ We will include links to edit and view history in the article detail page:
     <h2>{{ object.title }}</h2>
 
     <p>
-    {{ object.text|restructuredtext }}
+    {{ object.text }}
     </p>
 
     <h3>Actions<h3>
