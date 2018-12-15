@@ -22,7 +22,7 @@ class Article(models.Model):
     objects = models.Manager()
     published = PublishedArticlesManager()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
     def save(self, *args, **kwargs):
@@ -46,7 +46,7 @@ class Edit(models.Model):
     class Meta:
         ordering = ['-edited_on']
 
-    def __unicode__(self):
+    def __str__(self):
         return "%s - %s - %s" % (self.summary, self.editor, self.edited_on)
 
     @models.permalink
