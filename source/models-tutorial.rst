@@ -174,7 +174,7 @@ So we define the ``CD`` model as::
         date = models.DateField()
         genre = models.CharField(max_length=1, choices=GENRE_CHOICES)
 
-        def __unicode__(self):
+        def __str__(self):
             return "%s by %s, %s" %(self.title, self.artist, self.date.year)
 
 A little explanation:
@@ -197,7 +197,7 @@ A little explanation:
 * The ``genre`` field should be restricted to a group of values and that can be accomplished by passing an iterable of 2-tuples
   for the value and representation as the choices argument of the CharField.
 
-* The __unicode__ property of the model defines it's string representation which will be used in the Admin interface, shell etc.
+* The __str__ property of the model defines it's string representation which will be used in the Admin interface, shell etc.
 
 So far, we have defined the CD model, now we need to get it rolling in django:
 
@@ -283,7 +283,7 @@ deleting entries.
 
 Did you notice?:
 
-* Django uses the models __unicode__ property to display the CD in the change list
+* Django uses the models' __str__ property to display the CD in the change list
 
 * Django used our model field types (CharField, TextField, DateField) to create HTML widgets in the admin page
 
