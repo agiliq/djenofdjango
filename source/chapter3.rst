@@ -24,7 +24,7 @@ As an example from our previous app: ::
 
 
 Now when we call http://127.0.0.1:8000/admin/ django matches that to the url entries. This urlconf
-has included ``admin.urls`` which means that all further paths matches will be done with the ``admin.urls``
+has included ``admin.urls`` which means that all further path matches will be done with the ``admin.urls``
 module. Once again, the first match will get to handle the request. You can think of this as 'mounting' the 
 admin app at ``/admin/``. You are of course free to change the 'mount point' to anything else you like.
 
@@ -221,7 +221,7 @@ would output
 
     <a href="/pastebin/paste/9">Sample Paste</a>
 
-.. note:: You must make sure the correct urlconf entry for the give url exists. If the url entry
+.. note:: You must make sure the correct urlconf entry for the given url exists. If the url entry
           does not exist, or the number of arguments does not match, this templatetag will raise a 
           ``NoReverseMatch`` exception.
 
