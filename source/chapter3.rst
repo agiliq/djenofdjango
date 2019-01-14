@@ -487,6 +487,7 @@ Notes:
 .. sourcecode:: python
 
     from django.views.generic.edit import CreateView
+    from .models import Paste
 
     class PasteCreate(CreateView):
         model = Paste
