@@ -303,7 +303,7 @@ We will include links to edit and view history in the article detail page:
     <h2>{{ object.title }}</h2>
 
     <p>
-    {{ object.text|restructuredtext }}
+    {{ object.text }}
     </p>
 
     <h3>Actions<h3>
@@ -316,7 +316,7 @@ We will include links to edit and view history in the article detail page:
         </li>
     </ul>
 
-    <a href="{% url wiki_article_index %}">See All</a>
+    <a href="{% url 'wiki_article_index' %}">See All</a>
 
 .. image:: images/wikidetail.png
 
