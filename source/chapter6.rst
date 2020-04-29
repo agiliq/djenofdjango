@@ -10,7 +10,7 @@ We have covered basics in last few chapters, like Generic Views, template langua
 Quora like Application:
 =======================
 
-We have checked Quora for checking many qusetions in our past. Qusetions may be both technical or non technical. In this tutorial we will be creating a Qura like application but not exactly the Quora.
+You might have used Quora for checking many qusetions in the past. Questions may be both technical or non technical. In this tutorial we will be creating a Quora like application but not exactly alike.
 
 Application Includes:
 ======================
