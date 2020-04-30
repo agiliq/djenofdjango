@@ -640,7 +640,7 @@ I would choose the latter because it is more general. To do this, change your Pa
 .. sourcecode:: python
 
     from django.db import models
-
+    from django.urls import reverse
 
     class Paste(models.Model):
         text = models.TextField()
@@ -651,9 +651,8 @@ I would choose the latter because it is more general. To do this, change your Pa
         def __str__(self):
             return self.name or str(self.id)
 
-        @models.permalink
         def get_absolute_url(self):
-            return ('pastebin_paste_detail', [self.id])
+            return reverse('pastebin_paste_detail', args=[self.id])
 
 
 
