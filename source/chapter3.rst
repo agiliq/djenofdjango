@@ -313,7 +313,7 @@ But there's a simpler way:
 
 .. sourcecode:: python
 
-    from django.shortcuts import renders
+    from django.shortcuts import render
 
     def hello_world(request):
 	    return render(request,"hello_world.html", {"username": "Monty Python"})
