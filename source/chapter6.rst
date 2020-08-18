@@ -4,7 +4,7 @@ Chapter 6. Building a Quora like site
 Topics in this chapter:
 =======================
 
-We have covered basics in last few chapters, like Generic Views, template languages, ORM, interaction with django admin etc. Now in this chapter we will be creating :code:`Custom User`, who will be able to access the Qusetion and answers in the Quora like app.
+We have covered basics in last few chapters, like Generic Views, template languages, ORM, interaction with django admin etc. Now in this chapter we will be creating :code:`Custom User`, who will be able to access the Question and answers in the Quora like app.
 
 
 Quora like Application:
