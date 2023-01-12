@@ -143,6 +143,7 @@ We will now use the above forms in our views, add the below code to :code:`core/
     from .forms import RegisterForm
     from django.contrib.auth import login
     from django.contrib.auth.hashers import make_password
+    from django.views.generic.edit import FormView
 
 
     class RegisterView(FormView):
